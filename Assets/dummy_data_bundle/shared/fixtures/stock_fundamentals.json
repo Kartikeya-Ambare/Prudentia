@@ -1,0 +1,1562 @@
+{
+  "TCS.NS": {
+    "ticker": "TCS.NS",
+    "as_of": "2026-08-01",
+    "income_statement": [
+      {
+        "label": "Net Profit Margin",
+        "value_str": "19.0%",
+        "badge_label": "Healthy",
+        "badge_color": "#06d6a0",
+        "tooltip": "Net Profit Margin for this stock, most recent reported figures."
+      },
+      {
+        "label": "Gross Margin",
+        "value_str": "52.0%",
+        "badge_label": "Strong",
+        "badge_color": "#06d6a0",
+        "tooltip": "Gross Margin for this stock, most recent reported figures."
+      },
+      {
+        "label": "EBITDA",
+        "value_str": "₹18,500 Cr",
+        "badge_label": "Profitable",
+        "badge_color": "#06d6a0",
+        "tooltip": "EBITDA for this stock, most recent reported figures."
+      },
+      {
+        "label": "Revenue Growth",
+        "value_str": "9.0%",
+        "badge_label": "Growing",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Revenue Growth for this stock, most recent reported figures."
+      },
+      {
+        "label": "Total Revenue",
+        "value_str": "₹64,000 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Total Revenue for this stock, most recent reported figures."
+      },
+      {
+        "label": "Net Income",
+        "value_str": "₹12,200 Cr",
+        "badge_label": "Profit",
+        "badge_color": "#06d6a0",
+        "tooltip": "Net Income for this stock, most recent reported figures."
+      },
+      {
+        "label": "Operating Margin",
+        "value_str": "24.0%",
+        "badge_label": "Strong",
+        "badge_color": "#06d6a0",
+        "tooltip": "Operating Margin for this stock, most recent reported figures."
+      },
+      {
+        "label": "Earnings Growth",
+        "value_str": "8.0%",
+        "badge_label": "Stable",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Earnings Growth for this stock, most recent reported figures."
+      }
+    ],
+    "balance_sheet": [
+      {
+        "label": "Current Ratio",
+        "value_str": "2.10x",
+        "badge_label": "Strong",
+        "badge_color": "#06d6a0",
+        "tooltip": "Current Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Quick Ratio",
+        "value_str": "2.00x",
+        "badge_label": "Liquid",
+        "badge_color": "#06d6a0",
+        "tooltip": "Quick Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Debt-to-Equity (D/E)",
+        "value_str": "8.5%",
+        "badge_label": "Conservative",
+        "badge_color": "#06d6a0",
+        "tooltip": "Debt-to-Equity (D/E) for this stock, most recent reported figures."
+      },
+      {
+        "label": "Working Capital",
+        "value_str": "₹32,000 Cr",
+        "badge_label": "Positive",
+        "badge_color": "#06d6a0",
+        "tooltip": "Working Capital for this stock, most recent reported figures."
+      },
+      {
+        "label": "Total Cash",
+        "value_str": "₹28,000 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Total Cash for this stock, most recent reported figures."
+      },
+      {
+        "label": "Total Debt",
+        "value_str": "₹2,400 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Total Debt for this stock, most recent reported figures."
+      },
+      {
+        "label": "ROE — Return on Equity",
+        "value_str": "42.0%",
+        "badge_label": "Excellent",
+        "badge_color": "#06d6a0",
+        "tooltip": "ROE — Return on Equity for this stock, most recent reported figures."
+      },
+      {
+        "label": "ROA — Return on Assets",
+        "value_str": "28.0%",
+        "badge_label": "Efficient",
+        "badge_color": "#06d6a0",
+        "tooltip": "ROA — Return on Assets for this stock, most recent reported figures."
+      }
+    ],
+    "cash_flow": [
+      {
+        "label": "Operating Cash Flow (OCF)",
+        "value_str": "₹15,200 Cr",
+        "badge_label": "Cash Generating",
+        "badge_color": "#06d6a0",
+        "tooltip": "Operating Cash Flow (OCF) for this stock, most recent reported figures."
+      },
+      {
+        "label": "Free Cash Flow (FCF)",
+        "value_str": "₹13,800 Cr",
+        "badge_label": "FCF Positive",
+        "badge_color": "#06d6a0",
+        "tooltip": "Free Cash Flow (FCF) for this stock, most recent reported figures."
+      }
+    ],
+    "valuation": [
+      {
+        "label": "P/E Ratio",
+        "value_str": "27.30x",
+        "badge_label": "Growth Premium",
+        "badge_color": "#f72585",
+        "tooltip": "P/E Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Price-to-Book (P/B)",
+        "value_str": "11.40x",
+        "badge_label": "Premium",
+        "badge_color": "#f72585",
+        "tooltip": "Price-to-Book (P/B) for this stock, most recent reported figures."
+      },
+      {
+        "label": "EV/EBITDA",
+        "value_str": "19.80x",
+        "badge_label": "Expensive",
+        "badge_color": "#f72585",
+        "tooltip": "EV/EBITDA for this stock, most recent reported figures."
+      },
+      {
+        "label": "Dividend Yield",
+        "value_str": "3.2%",
+        "badge_label": "Income Stock",
+        "badge_color": "#06d6a0",
+        "tooltip": "Dividend Yield for this stock, most recent reported figures."
+      },
+      {
+        "label": "Beta (Market Sensitivity)",
+        "value_str": "0.68",
+        "badge_label": "Defensive",
+        "badge_color": "#06d6a0",
+        "tooltip": "Beta (Market Sensitivity) for this stock, most recent reported figures."
+      },
+      {
+        "label": "PEG Ratio",
+        "value_str": "1.80",
+        "badge_label": "Fair",
+        "badge_color": "#ff9f1c",
+        "tooltip": "PEG Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Revenue per Employee",
+        "value_str": "₹1 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Revenue per Employee for this stock, most recent reported figures."
+      },
+      {
+        "label": "Payout Ratio",
+        "value_str": "72.0%",
+        "badge_label": "High",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Payout Ratio for this stock, most recent reported figures."
+      }
+    ],
+    "source": "yfinance (dummy fixture)"
+  },
+  "INFY.NS": {
+    "ticker": "INFY.NS",
+    "as_of": "2026-08-01",
+    "income_statement": [
+      {
+        "label": "Net Profit Margin",
+        "value_str": "17.0%",
+        "badge_label": "Healthy",
+        "badge_color": "#06d6a0",
+        "tooltip": "Net Profit Margin for this stock, most recent reported figures."
+      },
+      {
+        "label": "Gross Margin",
+        "value_str": "48.0%",
+        "badge_label": "Strong",
+        "badge_color": "#06d6a0",
+        "tooltip": "Gross Margin for this stock, most recent reported figures."
+      },
+      {
+        "label": "EBITDA",
+        "value_str": "₹11,200 Cr",
+        "badge_label": "Profitable",
+        "badge_color": "#06d6a0",
+        "tooltip": "EBITDA for this stock, most recent reported figures."
+      },
+      {
+        "label": "Revenue Growth",
+        "value_str": "6.0%",
+        "badge_label": "Growing",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Revenue Growth for this stock, most recent reported figures."
+      },
+      {
+        "label": "Total Revenue",
+        "value_str": "₹39,000 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Total Revenue for this stock, most recent reported figures."
+      },
+      {
+        "label": "Net Income",
+        "value_str": "₹6,600 Cr",
+        "badge_label": "Profit",
+        "badge_color": "#06d6a0",
+        "tooltip": "Net Income for this stock, most recent reported figures."
+      },
+      {
+        "label": "Operating Margin",
+        "value_str": "21.0%",
+        "badge_label": "Strong",
+        "badge_color": "#06d6a0",
+        "tooltip": "Operating Margin for this stock, most recent reported figures."
+      },
+      {
+        "label": "Earnings Growth",
+        "value_str": "4.0%",
+        "badge_label": "Stable",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Earnings Growth for this stock, most recent reported figures."
+      }
+    ],
+    "balance_sheet": [
+      {
+        "label": "Current Ratio",
+        "value_str": "2.40x",
+        "badge_label": "Strong",
+        "badge_color": "#06d6a0",
+        "tooltip": "Current Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Quick Ratio",
+        "value_str": "2.30x",
+        "badge_label": "Liquid",
+        "badge_color": "#06d6a0",
+        "tooltip": "Quick Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Debt-to-Equity (D/E)",
+        "value_str": "6.0%",
+        "badge_label": "Conservative",
+        "badge_color": "#06d6a0",
+        "tooltip": "Debt-to-Equity (D/E) for this stock, most recent reported figures."
+      },
+      {
+        "label": "Working Capital",
+        "value_str": "₹19,500 Cr",
+        "badge_label": "Positive",
+        "badge_color": "#06d6a0",
+        "tooltip": "Working Capital for this stock, most recent reported figures."
+      },
+      {
+        "label": "Total Cash",
+        "value_str": "₹15,000 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Total Cash for this stock, most recent reported figures."
+      },
+      {
+        "label": "Total Debt",
+        "value_str": "₹900 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Total Debt for this stock, most recent reported figures."
+      },
+      {
+        "label": "ROE — Return on Equity",
+        "value_str": "31.0%",
+        "badge_label": "Excellent",
+        "badge_color": "#06d6a0",
+        "tooltip": "ROE — Return on Equity for this stock, most recent reported figures."
+      },
+      {
+        "label": "ROA — Return on Assets",
+        "value_str": "19.0%",
+        "badge_label": "Efficient",
+        "badge_color": "#06d6a0",
+        "tooltip": "ROA — Return on Assets for this stock, most recent reported figures."
+      }
+    ],
+    "cash_flow": [
+      {
+        "label": "Operating Cash Flow (OCF)",
+        "value_str": "₹8,600 Cr",
+        "badge_label": "Cash Generating",
+        "badge_color": "#06d6a0",
+        "tooltip": "Operating Cash Flow (OCF) for this stock, most recent reported figures."
+      },
+      {
+        "label": "Free Cash Flow (FCF)",
+        "value_str": "₹7,300 Cr",
+        "badge_label": "FCF Positive",
+        "badge_color": "#06d6a0",
+        "tooltip": "Free Cash Flow (FCF) for this stock, most recent reported figures."
+      }
+    ],
+    "valuation": [
+      {
+        "label": "P/E Ratio",
+        "value_str": "24.10x",
+        "badge_label": "Fair",
+        "badge_color": "#ff9f1c",
+        "tooltip": "P/E Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Price-to-Book (P/B)",
+        "value_str": "7.90x",
+        "badge_label": "Premium",
+        "badge_color": "#f72585",
+        "tooltip": "Price-to-Book (P/B) for this stock, most recent reported figures."
+      },
+      {
+        "label": "EV/EBITDA",
+        "value_str": "15.20x",
+        "badge_label": "Expensive",
+        "badge_color": "#f72585",
+        "tooltip": "EV/EBITDA for this stock, most recent reported figures."
+      },
+      {
+        "label": "Dividend Yield",
+        "value_str": "2.8%",
+        "badge_label": "Modest",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Dividend Yield for this stock, most recent reported figures."
+      },
+      {
+        "label": "Beta (Market Sensitivity)",
+        "value_str": "0.72",
+        "badge_label": "Defensive",
+        "badge_color": "#06d6a0",
+        "tooltip": "Beta (Market Sensitivity) for this stock, most recent reported figures."
+      },
+      {
+        "label": "PEG Ratio",
+        "value_str": "2.10",
+        "badge_label": "Overvalued",
+        "badge_color": "#f72585",
+        "tooltip": "PEG Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Revenue per Employee",
+        "value_str": "₹1 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Revenue per Employee for this stock, most recent reported figures."
+      },
+      {
+        "label": "Payout Ratio",
+        "value_str": "68.0%",
+        "badge_label": "High",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Payout Ratio for this stock, most recent reported figures."
+      }
+    ],
+    "source": "yfinance (dummy fixture)"
+  },
+  "HDFCBANK.NS": {
+    "ticker": "HDFCBANK.NS",
+    "as_of": "2026-08-01",
+    "income_statement": [
+      {
+        "label": "Net Profit Margin",
+        "value_str": "24.0%",
+        "badge_label": "Healthy",
+        "badge_color": "#06d6a0",
+        "tooltip": "Net Profit Margin for this stock, most recent reported figures."
+      },
+      {
+        "label": "Gross Margin",
+        "value_str": "55.0%",
+        "badge_label": "Strong",
+        "badge_color": "#06d6a0",
+        "tooltip": "Gross Margin for this stock, most recent reported figures."
+      },
+      {
+        "label": "EBITDA",
+        "value_str": "₹52,000 Cr",
+        "badge_label": "Profitable",
+        "badge_color": "#06d6a0",
+        "tooltip": "EBITDA for this stock, most recent reported figures."
+      },
+      {
+        "label": "Revenue Growth",
+        "value_str": "13.0%",
+        "badge_label": "Growing",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Revenue Growth for this stock, most recent reported figures."
+      },
+      {
+        "label": "Total Revenue",
+        "value_str": "₹210,000 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Total Revenue for this stock, most recent reported figures."
+      },
+      {
+        "label": "Net Income",
+        "value_str": "₹50,400 Cr",
+        "badge_label": "Profit",
+        "badge_color": "#06d6a0",
+        "tooltip": "Net Income for this stock, most recent reported figures."
+      },
+      {
+        "label": "Operating Margin",
+        "value_str": "29.0%",
+        "badge_label": "Strong",
+        "badge_color": "#06d6a0",
+        "tooltip": "Operating Margin for this stock, most recent reported figures."
+      },
+      {
+        "label": "Earnings Growth",
+        "value_str": "12.0%",
+        "badge_label": "Accelerating",
+        "badge_color": "#06d6a0",
+        "tooltip": "Earnings Growth for this stock, most recent reported figures."
+      }
+    ],
+    "balance_sheet": [
+      {
+        "label": "Current Ratio",
+        "value_str": "1.10x",
+        "badge_label": "Adequate",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Current Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Quick Ratio",
+        "value_str": "1.00x",
+        "badge_label": "Tight",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Quick Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Debt-to-Equity (D/E)",
+        "value_str": "680.0%",
+        "badge_label": "High Leverage",
+        "badge_color": "#ff4d4d",
+        "tooltip": "Debt-to-Equity (D/E) for this stock, most recent reported figures."
+      },
+      {
+        "label": "Working Capital",
+        "value_str": "₹45,000 Cr",
+        "badge_label": "Positive",
+        "badge_color": "#06d6a0",
+        "tooltip": "Working Capital for this stock, most recent reported figures."
+      },
+      {
+        "label": "Total Cash",
+        "value_str": "₹95,000 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Total Cash for this stock, most recent reported figures."
+      },
+      {
+        "label": "Total Debt",
+        "value_str": "₹620,000 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Total Debt for this stock, most recent reported figures."
+      },
+      {
+        "label": "ROE — Return on Equity",
+        "value_str": "17.0%",
+        "badge_label": "Good",
+        "badge_color": "#ff9f1c",
+        "tooltip": "ROE — Return on Equity for this stock, most recent reported figures."
+      },
+      {
+        "label": "ROA — Return on Assets",
+        "value_str": "1.9%",
+        "badge_label": "Low",
+        "badge_color": "#ff4d4d",
+        "tooltip": "ROA — Return on Assets for this stock, most recent reported figures."
+      }
+    ],
+    "cash_flow": [
+      {
+        "label": "Operating Cash Flow (OCF)",
+        "value_str": "₹61,000 Cr",
+        "badge_label": "Cash Generating",
+        "badge_color": "#06d6a0",
+        "tooltip": "Operating Cash Flow (OCF) for this stock, most recent reported figures."
+      },
+      {
+        "label": "Free Cash Flow (FCF)",
+        "value_str": "₹52,000 Cr",
+        "badge_label": "FCF Positive",
+        "badge_color": "#06d6a0",
+        "tooltip": "Free Cash Flow (FCF) for this stock, most recent reported figures."
+      }
+    ],
+    "valuation": [
+      {
+        "label": "P/E Ratio",
+        "value_str": "19.40x",
+        "badge_label": "Fair",
+        "badge_color": "#ff9f1c",
+        "tooltip": "P/E Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Price-to-Book (P/B)",
+        "value_str": "2.80x",
+        "badge_label": "Fair",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Price-to-Book (P/B) for this stock, most recent reported figures."
+      },
+      {
+        "label": "EV/EBITDA",
+        "value_str": "11.50x",
+        "badge_label": "Fair",
+        "badge_color": "#ff9f1c",
+        "tooltip": "EV/EBITDA for this stock, most recent reported figures."
+      },
+      {
+        "label": "Dividend Yield",
+        "value_str": "1.1%",
+        "badge_label": "Modest",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Dividend Yield for this stock, most recent reported figures."
+      },
+      {
+        "label": "Beta (Market Sensitivity)",
+        "value_str": "1.05",
+        "badge_label": "Market-like",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Beta (Market Sensitivity) for this stock, most recent reported figures."
+      },
+      {
+        "label": "PEG Ratio",
+        "value_str": "1.40",
+        "badge_label": "Fair",
+        "badge_color": "#ff9f1c",
+        "tooltip": "PEG Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Revenue per Employee",
+        "value_str": "₹2 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Revenue per Employee for this stock, most recent reported figures."
+      },
+      {
+        "label": "Payout Ratio",
+        "value_str": "21.0%",
+        "badge_label": "Sustainable",
+        "badge_color": "#06d6a0",
+        "tooltip": "Payout Ratio for this stock, most recent reported figures."
+      }
+    ],
+    "source": "yfinance (dummy fixture)"
+  },
+  "ICICIBANK.NS": {
+    "ticker": "ICICIBANK.NS",
+    "as_of": "2026-08-01",
+    "income_statement": [
+      {
+        "label": "Net Profit Margin",
+        "value_str": "22.0%",
+        "badge_label": "Healthy",
+        "badge_color": "#06d6a0",
+        "tooltip": "Net Profit Margin for this stock, most recent reported figures."
+      },
+      {
+        "label": "Gross Margin",
+        "value_str": "53.0%",
+        "badge_label": "Strong",
+        "badge_color": "#06d6a0",
+        "tooltip": "Gross Margin for this stock, most recent reported figures."
+      },
+      {
+        "label": "EBITDA",
+        "value_str": "₹41,000 Cr",
+        "badge_label": "Profitable",
+        "badge_color": "#06d6a0",
+        "tooltip": "EBITDA for this stock, most recent reported figures."
+      },
+      {
+        "label": "Revenue Growth",
+        "value_str": "15.0%",
+        "badge_label": "Growing",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Revenue Growth for this stock, most recent reported figures."
+      },
+      {
+        "label": "Total Revenue",
+        "value_str": "₹165,000 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Total Revenue for this stock, most recent reported figures."
+      },
+      {
+        "label": "Net Income",
+        "value_str": "₹36,300 Cr",
+        "badge_label": "Profit",
+        "badge_color": "#06d6a0",
+        "tooltip": "Net Income for this stock, most recent reported figures."
+      },
+      {
+        "label": "Operating Margin",
+        "value_str": "27.0%",
+        "badge_label": "Strong",
+        "badge_color": "#06d6a0",
+        "tooltip": "Operating Margin for this stock, most recent reported figures."
+      },
+      {
+        "label": "Earnings Growth",
+        "value_str": "16.0%",
+        "badge_label": "Accelerating",
+        "badge_color": "#06d6a0",
+        "tooltip": "Earnings Growth for this stock, most recent reported figures."
+      }
+    ],
+    "balance_sheet": [
+      {
+        "label": "Current Ratio",
+        "value_str": "1.10x",
+        "badge_label": "Adequate",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Current Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Quick Ratio",
+        "value_str": "1.00x",
+        "badge_label": "Tight",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Quick Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Debt-to-Equity (D/E)",
+        "value_str": "710.0%",
+        "badge_label": "High Leverage",
+        "badge_color": "#ff4d4d",
+        "tooltip": "Debt-to-Equity (D/E) for this stock, most recent reported figures."
+      },
+      {
+        "label": "Working Capital",
+        "value_str": "₹38,000 Cr",
+        "badge_label": "Positive",
+        "badge_color": "#06d6a0",
+        "tooltip": "Working Capital for this stock, most recent reported figures."
+      },
+      {
+        "label": "Total Cash",
+        "value_str": "₹82,000 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Total Cash for this stock, most recent reported figures."
+      },
+      {
+        "label": "Total Debt",
+        "value_str": "₹510,000 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Total Debt for this stock, most recent reported figures."
+      },
+      {
+        "label": "ROE — Return on Equity",
+        "value_str": "18.0%",
+        "badge_label": "Good",
+        "badge_color": "#ff9f1c",
+        "tooltip": "ROE — Return on Equity for this stock, most recent reported figures."
+      },
+      {
+        "label": "ROA — Return on Assets",
+        "value_str": "2.1%",
+        "badge_label": "Low",
+        "badge_color": "#ff4d4d",
+        "tooltip": "ROA — Return on Assets for this stock, most recent reported figures."
+      }
+    ],
+    "cash_flow": [
+      {
+        "label": "Operating Cash Flow (OCF)",
+        "value_str": "₹48,000 Cr",
+        "badge_label": "Cash Generating",
+        "badge_color": "#06d6a0",
+        "tooltip": "Operating Cash Flow (OCF) for this stock, most recent reported figures."
+      },
+      {
+        "label": "Free Cash Flow (FCF)",
+        "value_str": "₹41,000 Cr",
+        "badge_label": "FCF Positive",
+        "badge_color": "#06d6a0",
+        "tooltip": "Free Cash Flow (FCF) for this stock, most recent reported figures."
+      }
+    ],
+    "valuation": [
+      {
+        "label": "P/E Ratio",
+        "value_str": "18.20x",
+        "badge_label": "Fair",
+        "badge_color": "#ff9f1c",
+        "tooltip": "P/E Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Price-to-Book (P/B)",
+        "value_str": "3.10x",
+        "badge_label": "Premium",
+        "badge_color": "#f72585",
+        "tooltip": "Price-to-Book (P/B) for this stock, most recent reported figures."
+      },
+      {
+        "label": "EV/EBITDA",
+        "value_str": "10.80x",
+        "badge_label": "Fair",
+        "badge_color": "#ff9f1c",
+        "tooltip": "EV/EBITDA for this stock, most recent reported figures."
+      },
+      {
+        "label": "Dividend Yield",
+        "value_str": "0.9%",
+        "badge_label": "Modest",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Dividend Yield for this stock, most recent reported figures."
+      },
+      {
+        "label": "Beta (Market Sensitivity)",
+        "value_str": "1.12",
+        "badge_label": "Market-like",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Beta (Market Sensitivity) for this stock, most recent reported figures."
+      },
+      {
+        "label": "PEG Ratio",
+        "value_str": "1.10",
+        "badge_label": "Fair",
+        "badge_color": "#ff9f1c",
+        "tooltip": "PEG Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Revenue per Employee",
+        "value_str": "₹2 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Revenue per Employee for this stock, most recent reported figures."
+      },
+      {
+        "label": "Payout Ratio",
+        "value_str": "18.0%",
+        "badge_label": "Sustainable",
+        "badge_color": "#06d6a0",
+        "tooltip": "Payout Ratio for this stock, most recent reported figures."
+      }
+    ],
+    "source": "yfinance (dummy fixture)"
+  },
+  "RELIANCE.NS": {
+    "ticker": "RELIANCE.NS",
+    "as_of": "2026-08-01",
+    "income_statement": [
+      {
+        "label": "Net Profit Margin",
+        "value_str": "8.0%",
+        "badge_label": "Moderate",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Net Profit Margin for this stock, most recent reported figures."
+      },
+      {
+        "label": "Gross Margin",
+        "value_str": "31.0%",
+        "badge_label": "Moderate",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Gross Margin for this stock, most recent reported figures."
+      },
+      {
+        "label": "EBITDA",
+        "value_str": "₹48,000 Cr",
+        "badge_label": "Profitable",
+        "badge_color": "#06d6a0",
+        "tooltip": "EBITDA for this stock, most recent reported figures."
+      },
+      {
+        "label": "Revenue Growth",
+        "value_str": "7.0%",
+        "badge_label": "Growing",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Revenue Growth for this stock, most recent reported figures."
+      },
+      {
+        "label": "Total Revenue",
+        "value_str": "₹900,000 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Total Revenue for this stock, most recent reported figures."
+      },
+      {
+        "label": "Net Income",
+        "value_str": "₹72,000 Cr",
+        "badge_label": "Profit",
+        "badge_color": "#06d6a0",
+        "tooltip": "Net Income for this stock, most recent reported figures."
+      },
+      {
+        "label": "Operating Margin",
+        "value_str": "13.0%",
+        "badge_label": "Fair",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Operating Margin for this stock, most recent reported figures."
+      },
+      {
+        "label": "Earnings Growth",
+        "value_str": "5.0%",
+        "badge_label": "Stable",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Earnings Growth for this stock, most recent reported figures."
+      }
+    ],
+    "balance_sheet": [
+      {
+        "label": "Current Ratio",
+        "value_str": "1.20x",
+        "badge_label": "Adequate",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Current Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Quick Ratio",
+        "value_str": "0.90x",
+        "badge_label": "Tight",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Quick Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Debt-to-Equity (D/E)",
+        "value_str": "42.0%",
+        "badge_label": "Conservative",
+        "badge_color": "#06d6a0",
+        "tooltip": "Debt-to-Equity (D/E) for this stock, most recent reported figures."
+      },
+      {
+        "label": "Working Capital",
+        "value_str": "₹28,000 Cr",
+        "badge_label": "Positive",
+        "badge_color": "#06d6a0",
+        "tooltip": "Working Capital for this stock, most recent reported figures."
+      },
+      {
+        "label": "Total Cash",
+        "value_str": "₹190,000 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Total Cash for this stock, most recent reported figures."
+      },
+      {
+        "label": "Total Debt",
+        "value_str": "₹310,000 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Total Debt for this stock, most recent reported figures."
+      },
+      {
+        "label": "ROE — Return on Equity",
+        "value_str": "9.0%",
+        "badge_label": "Low",
+        "badge_color": "#ff4d4d",
+        "tooltip": "ROE — Return on Equity for this stock, most recent reported figures."
+      },
+      {
+        "label": "ROA — Return on Assets",
+        "value_str": "4.5%",
+        "badge_label": "Low",
+        "badge_color": "#ff4d4d",
+        "tooltip": "ROA — Return on Assets for this stock, most recent reported figures."
+      }
+    ],
+    "cash_flow": [
+      {
+        "label": "Operating Cash Flow (OCF)",
+        "value_str": "₹98,000 Cr",
+        "badge_label": "Cash Generating",
+        "badge_color": "#06d6a0",
+        "tooltip": "Operating Cash Flow (OCF) for this stock, most recent reported figures."
+      },
+      {
+        "label": "Free Cash Flow (FCF)",
+        "value_str": "₹-12,000 Cr",
+        "badge_label": "FCF Negative",
+        "badge_color": "#ff4d4d",
+        "tooltip": "Free Cash Flow (FCF) for this stock, most recent reported figures."
+      }
+    ],
+    "valuation": [
+      {
+        "label": "P/E Ratio",
+        "value_str": "24.80x",
+        "badge_label": "Fair",
+        "badge_color": "#ff9f1c",
+        "tooltip": "P/E Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Price-to-Book (P/B)",
+        "value_str": "2.10x",
+        "badge_label": "Fair",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Price-to-Book (P/B) for this stock, most recent reported figures."
+      },
+      {
+        "label": "EV/EBITDA",
+        "value_str": "12.10x",
+        "badge_label": "Fair",
+        "badge_color": "#ff9f1c",
+        "tooltip": "EV/EBITDA for this stock, most recent reported figures."
+      },
+      {
+        "label": "Dividend Yield",
+        "value_str": "0.4%",
+        "badge_label": "Modest",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Dividend Yield for this stock, most recent reported figures."
+      },
+      {
+        "label": "Beta (Market Sensitivity)",
+        "value_str": "1.18",
+        "badge_label": "Market-like",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Beta (Market Sensitivity) for this stock, most recent reported figures."
+      },
+      {
+        "label": "PEG Ratio",
+        "value_str": "3.20",
+        "badge_label": "Overvalued",
+        "badge_color": "#f72585",
+        "tooltip": "PEG Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Revenue per Employee",
+        "value_str": "₹2 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Revenue per Employee for this stock, most recent reported figures."
+      },
+      {
+        "label": "Payout Ratio",
+        "value_str": "9.0%",
+        "badge_label": "Sustainable",
+        "badge_color": "#06d6a0",
+        "tooltip": "Payout Ratio for this stock, most recent reported figures."
+      }
+    ],
+    "source": "yfinance (dummy fixture)"
+  },
+  "ITC.NS": {
+    "ticker": "ITC.NS",
+    "as_of": "2026-08-01",
+    "income_statement": [
+      {
+        "label": "Net Profit Margin",
+        "value_str": "27.0%",
+        "badge_label": "Healthy",
+        "badge_color": "#06d6a0",
+        "tooltip": "Net Profit Margin for this stock, most recent reported figures."
+      },
+      {
+        "label": "Gross Margin",
+        "value_str": "61.0%",
+        "badge_label": "Strong",
+        "badge_color": "#06d6a0",
+        "tooltip": "Gross Margin for this stock, most recent reported figures."
+      },
+      {
+        "label": "EBITDA",
+        "value_str": "₹21,000 Cr",
+        "badge_label": "Profitable",
+        "badge_color": "#06d6a0",
+        "tooltip": "EBITDA for this stock, most recent reported figures."
+      },
+      {
+        "label": "Revenue Growth",
+        "value_str": "6.0%",
+        "badge_label": "Growing",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Revenue Growth for this stock, most recent reported figures."
+      },
+      {
+        "label": "Total Revenue",
+        "value_str": "₹70,000 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Total Revenue for this stock, most recent reported figures."
+      },
+      {
+        "label": "Net Income",
+        "value_str": "₹19,000 Cr",
+        "badge_label": "Profit",
+        "badge_color": "#06d6a0",
+        "tooltip": "Net Income for this stock, most recent reported figures."
+      },
+      {
+        "label": "Operating Margin",
+        "value_str": "35.0%",
+        "badge_label": "Strong",
+        "badge_color": "#06d6a0",
+        "tooltip": "Operating Margin for this stock, most recent reported figures."
+      },
+      {
+        "label": "Earnings Growth",
+        "value_str": "7.0%",
+        "badge_label": "Stable",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Earnings Growth for this stock, most recent reported figures."
+      }
+    ],
+    "balance_sheet": [
+      {
+        "label": "Current Ratio",
+        "value_str": "3.20x",
+        "badge_label": "Strong",
+        "badge_color": "#06d6a0",
+        "tooltip": "Current Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Quick Ratio",
+        "value_str": "2.60x",
+        "badge_label": "Liquid",
+        "badge_color": "#06d6a0",
+        "tooltip": "Quick Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Debt-to-Equity (D/E)",
+        "value_str": "2.1%",
+        "badge_label": "Conservative",
+        "badge_color": "#06d6a0",
+        "tooltip": "Debt-to-Equity (D/E) for this stock, most recent reported figures."
+      },
+      {
+        "label": "Working Capital",
+        "value_str": "₹18,000 Cr",
+        "badge_label": "Positive",
+        "badge_color": "#06d6a0",
+        "tooltip": "Working Capital for this stock, most recent reported figures."
+      },
+      {
+        "label": "Total Cash",
+        "value_str": "₹8,500 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Total Cash for this stock, most recent reported figures."
+      },
+      {
+        "label": "Total Debt",
+        "value_str": "₹180 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Total Debt for this stock, most recent reported figures."
+      },
+      {
+        "label": "ROE — Return on Equity",
+        "value_str": "28.0%",
+        "badge_label": "Excellent",
+        "badge_color": "#06d6a0",
+        "tooltip": "ROE — Return on Equity for this stock, most recent reported figures."
+      },
+      {
+        "label": "ROA — Return on Assets",
+        "value_str": "24.0%",
+        "badge_label": "Efficient",
+        "badge_color": "#06d6a0",
+        "tooltip": "ROA — Return on Assets for this stock, most recent reported figures."
+      }
+    ],
+    "cash_flow": [
+      {
+        "label": "Operating Cash Flow (OCF)",
+        "value_str": "₹17,500 Cr",
+        "badge_label": "Cash Generating",
+        "badge_color": "#06d6a0",
+        "tooltip": "Operating Cash Flow (OCF) for this stock, most recent reported figures."
+      },
+      {
+        "label": "Free Cash Flow (FCF)",
+        "value_str": "₹16,200 Cr",
+        "badge_label": "FCF Positive",
+        "badge_color": "#06d6a0",
+        "tooltip": "Free Cash Flow (FCF) for this stock, most recent reported figures."
+      }
+    ],
+    "valuation": [
+      {
+        "label": "P/E Ratio",
+        "value_str": "22.60x",
+        "badge_label": "Fair",
+        "badge_color": "#ff9f1c",
+        "tooltip": "P/E Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Price-to-Book (P/B)",
+        "value_str": "6.20x",
+        "badge_label": "Premium",
+        "badge_color": "#f72585",
+        "tooltip": "Price-to-Book (P/B) for this stock, most recent reported figures."
+      },
+      {
+        "label": "EV/EBITDA",
+        "value_str": "16.40x",
+        "badge_label": "Expensive",
+        "badge_color": "#f72585",
+        "tooltip": "EV/EBITDA for this stock, most recent reported figures."
+      },
+      {
+        "label": "Dividend Yield",
+        "value_str": "4.1%",
+        "badge_label": "Income Stock",
+        "badge_color": "#06d6a0",
+        "tooltip": "Dividend Yield for this stock, most recent reported figures."
+      },
+      {
+        "label": "Beta (Market Sensitivity)",
+        "value_str": "0.58",
+        "badge_label": "Defensive",
+        "badge_color": "#06d6a0",
+        "tooltip": "Beta (Market Sensitivity) for this stock, most recent reported figures."
+      },
+      {
+        "label": "PEG Ratio",
+        "value_str": "2.80",
+        "badge_label": "Overvalued",
+        "badge_color": "#f72585",
+        "tooltip": "PEG Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Revenue per Employee",
+        "value_str": "₹0 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Revenue per Employee for this stock, most recent reported figures."
+      },
+      {
+        "label": "Payout Ratio",
+        "value_str": "85.0%",
+        "badge_label": "High",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Payout Ratio for this stock, most recent reported figures."
+      }
+    ],
+    "source": "yfinance (dummy fixture)"
+  },
+  "SUNPHARMA.NS": {
+    "ticker": "SUNPHARMA.NS",
+    "as_of": "2026-08-01",
+    "income_statement": [
+      {
+        "label": "Net Profit Margin",
+        "value_str": "16.0%",
+        "badge_label": "Healthy",
+        "badge_color": "#06d6a0",
+        "tooltip": "Net Profit Margin for this stock, most recent reported figures."
+      },
+      {
+        "label": "Gross Margin",
+        "value_str": "68.0%",
+        "badge_label": "Strong",
+        "badge_color": "#06d6a0",
+        "tooltip": "Gross Margin for this stock, most recent reported figures."
+      },
+      {
+        "label": "EBITDA",
+        "value_str": "₹8,200 Cr",
+        "badge_label": "Profitable",
+        "badge_color": "#06d6a0",
+        "tooltip": "EBITDA for this stock, most recent reported figures."
+      },
+      {
+        "label": "Revenue Growth",
+        "value_str": "11.0%",
+        "badge_label": "Growing",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Revenue Growth for this stock, most recent reported figures."
+      },
+      {
+        "label": "Total Revenue",
+        "value_str": "₹48,000 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Total Revenue for this stock, most recent reported figures."
+      },
+      {
+        "label": "Net Income",
+        "value_str": "₹7,700 Cr",
+        "badge_label": "Profit",
+        "badge_color": "#06d6a0",
+        "tooltip": "Net Income for this stock, most recent reported figures."
+      },
+      {
+        "label": "Operating Margin",
+        "value_str": "19.0%",
+        "badge_label": "Strong",
+        "badge_color": "#06d6a0",
+        "tooltip": "Operating Margin for this stock, most recent reported figures."
+      },
+      {
+        "label": "Earnings Growth",
+        "value_str": "9.0%",
+        "badge_label": "Stable",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Earnings Growth for this stock, most recent reported figures."
+      }
+    ],
+    "balance_sheet": [
+      {
+        "label": "Current Ratio",
+        "value_str": "1.90x",
+        "badge_label": "Strong",
+        "badge_color": "#06d6a0",
+        "tooltip": "Current Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Quick Ratio",
+        "value_str": "1.50x",
+        "badge_label": "Liquid",
+        "badge_color": "#06d6a0",
+        "tooltip": "Quick Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Debt-to-Equity (D/E)",
+        "value_str": "15.0%",
+        "badge_label": "Conservative",
+        "badge_color": "#06d6a0",
+        "tooltip": "Debt-to-Equity (D/E) for this stock, most recent reported figures."
+      },
+      {
+        "label": "Working Capital",
+        "value_str": "₹9,200 Cr",
+        "badge_label": "Positive",
+        "badge_color": "#06d6a0",
+        "tooltip": "Working Capital for this stock, most recent reported figures."
+      },
+      {
+        "label": "Total Cash",
+        "value_str": "₹6,100 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Total Cash for this stock, most recent reported figures."
+      },
+      {
+        "label": "Total Debt",
+        "value_str": "₹2,900 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Total Debt for this stock, most recent reported figures."
+      },
+      {
+        "label": "ROE — Return on Equity",
+        "value_str": "14.0%",
+        "badge_label": "Good",
+        "badge_color": "#ff9f1c",
+        "tooltip": "ROE — Return on Equity for this stock, most recent reported figures."
+      },
+      {
+        "label": "ROA — Return on Assets",
+        "value_str": "10.0%",
+        "badge_label": "Fair",
+        "badge_color": "#ff9f1c",
+        "tooltip": "ROA — Return on Assets for this stock, most recent reported figures."
+      }
+    ],
+    "cash_flow": [
+      {
+        "label": "Operating Cash Flow (OCF)",
+        "value_str": "₹8,900 Cr",
+        "badge_label": "Cash Generating",
+        "badge_color": "#06d6a0",
+        "tooltip": "Operating Cash Flow (OCF) for this stock, most recent reported figures."
+      },
+      {
+        "label": "Free Cash Flow (FCF)",
+        "value_str": "₹6,400 Cr",
+        "badge_label": "FCF Positive",
+        "badge_color": "#06d6a0",
+        "tooltip": "Free Cash Flow (FCF) for this stock, most recent reported figures."
+      }
+    ],
+    "valuation": [
+      {
+        "label": "P/E Ratio",
+        "value_str": "34.20x",
+        "badge_label": "Growth Premium",
+        "badge_color": "#f72585",
+        "tooltip": "P/E Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Price-to-Book (P/B)",
+        "value_str": "5.10x",
+        "badge_label": "Premium",
+        "badge_color": "#f72585",
+        "tooltip": "Price-to-Book (P/B) for this stock, most recent reported figures."
+      },
+      {
+        "label": "EV/EBITDA",
+        "value_str": "21.30x",
+        "badge_label": "Expensive",
+        "badge_color": "#f72585",
+        "tooltip": "EV/EBITDA for this stock, most recent reported figures."
+      },
+      {
+        "label": "Dividend Yield",
+        "value_str": "0.8%",
+        "badge_label": "Modest",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Dividend Yield for this stock, most recent reported figures."
+      },
+      {
+        "label": "Beta (Market Sensitivity)",
+        "value_str": "0.61",
+        "badge_label": "Defensive",
+        "badge_color": "#06d6a0",
+        "tooltip": "Beta (Market Sensitivity) for this stock, most recent reported figures."
+      },
+      {
+        "label": "PEG Ratio",
+        "value_str": "2.50",
+        "badge_label": "Overvalued",
+        "badge_color": "#f72585",
+        "tooltip": "PEG Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Revenue per Employee",
+        "value_str": "₹1 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Revenue per Employee for this stock, most recent reported figures."
+      },
+      {
+        "label": "Payout Ratio",
+        "value_str": "19.0%",
+        "badge_label": "Sustainable",
+        "badge_color": "#06d6a0",
+        "tooltip": "Payout Ratio for this stock, most recent reported figures."
+      }
+    ],
+    "source": "yfinance (dummy fixture)"
+  },
+  "MARUTI.NS": {
+    "ticker": "MARUTI.NS",
+    "as_of": "2026-08-01",
+    "income_statement": [
+      {
+        "label": "Net Profit Margin",
+        "value_str": "6.0%",
+        "badge_label": "Moderate",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Net Profit Margin for this stock, most recent reported figures."
+      },
+      {
+        "label": "Gross Margin",
+        "value_str": "24.0%",
+        "badge_label": "Moderate",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Gross Margin for this stock, most recent reported figures."
+      },
+      {
+        "label": "EBITDA",
+        "value_str": "₹9,800 Cr",
+        "badge_label": "Profitable",
+        "badge_color": "#06d6a0",
+        "tooltip": "EBITDA for this stock, most recent reported figures."
+      },
+      {
+        "label": "Revenue Growth",
+        "value_str": "4.0%",
+        "badge_label": "Growing",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Revenue Growth for this stock, most recent reported figures."
+      },
+      {
+        "label": "Total Revenue",
+        "value_str": "₹145,000 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Total Revenue for this stock, most recent reported figures."
+      },
+      {
+        "label": "Net Income",
+        "value_str": "₹8,700 Cr",
+        "badge_label": "Profit",
+        "badge_color": "#06d6a0",
+        "tooltip": "Net Income for this stock, most recent reported figures."
+      },
+      {
+        "label": "Operating Margin",
+        "value_str": "8.0%",
+        "badge_label": "Fair",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Operating Margin for this stock, most recent reported figures."
+      },
+      {
+        "label": "Earnings Growth",
+        "value_str": "-3.0%",
+        "badge_label": "Declining",
+        "badge_color": "#ff4d4d",
+        "tooltip": "Earnings Growth for this stock, most recent reported figures."
+      }
+    ],
+    "balance_sheet": [
+      {
+        "label": "Current Ratio",
+        "value_str": "0.90x",
+        "badge_label": "Risky",
+        "badge_color": "#ff4d4d",
+        "tooltip": "Current Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Quick Ratio",
+        "value_str": "0.60x",
+        "badge_label": "Tight",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Quick Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Debt-to-Equity (D/E)",
+        "value_str": "5.0%",
+        "badge_label": "Conservative",
+        "badge_color": "#06d6a0",
+        "tooltip": "Debt-to-Equity (D/E) for this stock, most recent reported figures."
+      },
+      {
+        "label": "Working Capital",
+        "value_str": "₹-3,200 Cr",
+        "badge_label": "Negative",
+        "badge_color": "#ff4d4d",
+        "tooltip": "Working Capital for this stock, most recent reported figures."
+      },
+      {
+        "label": "Total Cash",
+        "value_str": "₹42,000 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Total Cash for this stock, most recent reported figures."
+      },
+      {
+        "label": "Total Debt",
+        "value_str": "₹650 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Total Debt for this stock, most recent reported figures."
+      },
+      {
+        "label": "ROE — Return on Equity",
+        "value_str": "13.0%",
+        "badge_label": "Good",
+        "badge_color": "#ff9f1c",
+        "tooltip": "ROE — Return on Equity for this stock, most recent reported figures."
+      },
+      {
+        "label": "ROA — Return on Assets",
+        "value_str": "9.0%",
+        "badge_label": "Fair",
+        "badge_color": "#ff9f1c",
+        "tooltip": "ROA — Return on Assets for this stock, most recent reported figures."
+      }
+    ],
+    "cash_flow": [
+      {
+        "label": "Operating Cash Flow (OCF)",
+        "value_str": "₹11,200 Cr",
+        "badge_label": "Cash Generating",
+        "badge_color": "#06d6a0",
+        "tooltip": "Operating Cash Flow (OCF) for this stock, most recent reported figures."
+      },
+      {
+        "label": "Free Cash Flow (FCF)",
+        "value_str": "₹3,100 Cr",
+        "badge_label": "FCF Positive",
+        "badge_color": "#06d6a0",
+        "tooltip": "Free Cash Flow (FCF) for this stock, most recent reported figures."
+      }
+    ],
+    "valuation": [
+      {
+        "label": "P/E Ratio",
+        "value_str": "28.90x",
+        "badge_label": "Growth Premium",
+        "badge_color": "#f72585",
+        "tooltip": "P/E Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Price-to-Book (P/B)",
+        "value_str": "3.60x",
+        "badge_label": "Premium",
+        "badge_color": "#f72585",
+        "tooltip": "Price-to-Book (P/B) for this stock, most recent reported figures."
+      },
+      {
+        "label": "EV/EBITDA",
+        "value_str": "17.90x",
+        "badge_label": "Expensive",
+        "badge_color": "#f72585",
+        "tooltip": "EV/EBITDA for this stock, most recent reported figures."
+      },
+      {
+        "label": "Dividend Yield",
+        "value_str": "0.7%",
+        "badge_label": "Modest",
+        "badge_color": "#ff9f1c",
+        "tooltip": "Dividend Yield for this stock, most recent reported figures."
+      },
+      {
+        "label": "Beta (Market Sensitivity)",
+        "value_str": "1.24",
+        "badge_label": "Aggressive",
+        "badge_color": "#f72585",
+        "tooltip": "Beta (Market Sensitivity) for this stock, most recent reported figures."
+      },
+      {
+        "label": "PEG Ratio",
+        "value_str": "4.60",
+        "badge_label": "Overvalued",
+        "badge_color": "#f72585",
+        "tooltip": "PEG Ratio for this stock, most recent reported figures."
+      },
+      {
+        "label": "Revenue per Employee",
+        "value_str": "₹1 Cr",
+        "badge_label": "",
+        "badge_color": "#666666",
+        "tooltip": "Revenue per Employee for this stock, most recent reported figures."
+      },
+      {
+        "label": "Payout Ratio",
+        "value_str": "24.0%",
+        "badge_label": "Sustainable",
+        "badge_color": "#06d6a0",
+        "tooltip": "Payout Ratio for this stock, most recent reported figures."
+      }
+    ],
+    "source": "yfinance (dummy fixture)"
+  }
+}

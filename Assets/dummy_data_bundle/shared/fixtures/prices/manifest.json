@@ -1,0 +1,75 @@
+{
+  "days": 300,
+  "generated_instruments": [
+    {
+      "id": "TCS.NS",
+      "type": "stock",
+      "seed": 2829898191
+    },
+    {
+      "id": "INFY.NS",
+      "type": "stock",
+      "seed": 19365030
+    },
+    {
+      "id": "HDFCBANK.NS",
+      "type": "stock",
+      "seed": 2053570066
+    },
+    {
+      "id": "ICICIBANK.NS",
+      "type": "stock",
+      "seed": 2784580336
+    },
+    {
+      "id": "RELIANCE.NS",
+      "type": "stock",
+      "seed": 2840546948
+    },
+    {
+      "id": "ITC.NS",
+      "type": "stock",
+      "seed": 1611445348
+    },
+    {
+      "id": "SUNPHARMA.NS",
+      "type": "stock",
+      "seed": 2383547768
+    },
+    {
+      "id": "MARUTI.NS",
+      "type": "stock",
+      "seed": 3688046706
+    },
+    {
+      "id": "HDFC_FLEXICAP",
+      "type": "mf",
+      "seed": 1613202986
+    },
+    {
+      "id": "SBI_BLUECHIP",
+      "type": "mf",
+      "seed": 2414153593
+    },
+    {
+      "id": "AXIS_MIDCAP",
+      "type": "mf",
+      "seed": 2077067746
+    },
+    {
+      "id": "PARAGPARIKH_FLEXICAP",
+      "type": "mf",
+      "seed": 346163469
+    },
+    {
+      "id": "ICICIPRU_SHORTDEBT",
+      "type": "mf",
+      "seed": 4246903643
+    }
+  ],
+  "correlation_test_set": {
+    "CORR_A_vs_CORR_B_correlation": 0.9911,
+    "CORR_A_vs_CORR_C_correlation": 0.0623,
+    "note": "M4's smoke test should assert A-vs-B correlation > 0.85 (dedup should trigger) and A-vs-C should not."
+  }
+}

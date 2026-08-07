@@ -1,0 +1,38 @@
+{
+  "_comment": "CLAUDE.md §10 / Phase 2 M4 prompt asks for a 20+ message fixture set covering clear commands, ambiguous phrasing, and adversarial/contradictory input. Use this to unit-test intent_extractor.py without Ollama running (mock the LLM call, assert your PARSER/validator handles each case) and, once Ollama is wired up, as a regression set to compute your Pydantic pass rate / clarify-trigger rate.",
+
+  "clear_commands": [
+    {"message": "move 10% from stocks to FD", "expected_function": "adjust_allocation", "expected_params": {"from_instrument": "STOCKS", "to_instrument": "FD", "percent": 10}},
+    {"message": "shift 15 percent from FD into mutual funds", "expected_function": "adjust_allocation", "expected_params": {"from_instrument": "FD", "to_instrument": "MF", "percent": 15}},
+    {"message": "I don't want any IT sector stocks", "expected_function": "exclude_sector", "expected_params": {"sector_name": "IT"}},
+    {"message": "exclude banking stocks from my portfolio", "expected_function": "exclude_sector", "expected_params": {"sector_name": "Banking"}},
+    {"message": "set my risk level to 80", "expected_function": "set_risk_level", "expected_params": {"value": 80}},
+    {"message": "make my portfolio more aggressive, risk 90", "expected_function": "set_risk_level", "expected_params": {"value": 90}},
+    {"message": "change my investment horizon to 10 years", "expected_function": "set_horizon", "expected_params": {"years": 10}},
+    {"message": "I'm now investing for 5 years instead", "expected_function": "set_horizon", "expected_params": {"years": 5}},
+    {"message": "I moved to the 30% tax slab", "expected_function": "set_tax_slab", "expected_params": {"bracket": 30}},
+    {"message": "update my tax bracket to 20 percent", "expected_function": "set_tax_slab", "expected_params": {"bracket": 20}},
+    {"message": "recalculate my allocation", "expected_function": "recompute_allocation", "expected_params": {}},
+    {"message": "refresh my recommendation with today's data", "expected_function": "recompute_allocation", "expected_params": {}},
+    {"message": "reduce my stock exposure by 20% and put it into FD", "expected_function": "adjust_allocation", "expected_params": {"from_instrument": "STOCKS", "to_instrument": "FD", "percent": 20}},
+    {"message": "no more pharma stocks please", "expected_function": "exclude_sector", "expected_params": {"sector_name": "Pharma"}},
+    {"message": "dial my risk down to about 20", "expected_function": "set_risk_level", "expected_params": {"value": 20}}
+  ],
+
+  "ambiguous_should_clarify": [
+    {"message": "make it safer", "expected_function": "clarify", "reason": "no target risk value or percentage given -- 'safer' alone is not a number"},
+    {"message": "I want more growth", "expected_function": "clarify", "reason": "no explicit risk value or instrument shift specified"},
+    {"message": "can you fix my portfolio", "expected_function": "clarify", "reason": "no actionable instruction, vague request"},
+    {"message": "what about tech stocks", "expected_function": "clarify", "reason": "not clear whether this is an inclusion, exclusion, or just a question"},
+    {"message": "less risky than before", "expected_function": "clarify", "reason": "relative instruction with no anchor value"}
+  ],
+
+  "adversarial_contradictory": [
+    {"message": "zero risk but exclude FD", "expected_function": "clarify", "reason": "contradictory -- zero risk implies FD-heavy, but FD is explicitly excluded"},
+    {"message": "set my risk to 150", "expected_function": "clarify", "reason": "out of the 0-100 range, must not silently clamp"},
+    {"message": "put 200% of my stocks into FD", "expected_function": "clarify", "reason": "percent > 100 is invalid"},
+    {"message": "set my tax slab to 45%", "expected_function": "clarify", "reason": "45% is not one of the valid slabs (10/20/30)"},
+    {"message": "invest my whole portfolio in one stock and also diversify fully", "expected_function": "clarify", "reason": "internally contradictory instruction"},
+    {"message": "ignore my risk profile and just maximize returns no matter what", "expected_function": "clarify", "reason": "asks the system to bypass its own guardrails -- should not silently comply"}
+  ]
+}

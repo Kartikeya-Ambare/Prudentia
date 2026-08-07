@@ -1,0 +1,85 @@
+{
+  "_comment": "One full POST /allocate response per profile in user_profiles.json. Each entry pairs an AllocationExplanation with the InstrumentWeight[] for the stocks bucket and the MF bucket, exactly as CLAUDE.md §4.2 says /allocate should return. These are hand-set to be *directionally* consistent with each profile's risk thermometer (via the FD floor/ceiling formula in CLAUDE.md §5.3) -- not run through a real optimizer, just plausible enough to build and demo a UI against.",
+
+  "profile_conservative_retiree": {
+    "allocation": {
+      "fd_pct": 72.0,
+      "mf_pct": 28.0,
+      "stocks_pct": 0.0,
+      "expected_return_post_tax": 5.8,
+      "return_ci_low": 4.2,
+      "return_ci_high": 7.1,
+      "risk_score": 15.0,
+      "sector_prefs": [],
+      "horizon_years": 3,
+      "key_drivers": [
+        "Risk thermometer of 12/100 pushes the FD floor/ceiling toward the top of its band (~70-80%).",
+        "3-year horizon favors capital preservation over equity's longer-run edge.",
+        "Debt mutual fund allocation adds a small real-return cushion beyond a pure FD position.",
+        "20% tax slab reduces FD net yield -- part of why post-tax return sits below the nominal FD rate."
+      ]
+    },
+    "stocks_weights": [],
+    "mf_weights": [
+      {"ticker_or_scheme": "ICICIPRU_SHORTDEBT", "display_name": "ICICI Prudential Short Term Debt Fund", "weight_pct": 100.0}
+    ]
+  },
+
+  "profile_moderate_midcareer": {
+    "allocation": {
+      "fd_pct": 38.0,
+      "mf_pct": 34.0,
+      "stocks_pct": 28.0,
+      "expected_return_post_tax": 9.4,
+      "return_ci_low": 6.1,
+      "return_ci_high": 12.8,
+      "risk_score": 50.0,
+      "sector_prefs": ["Banking"],
+      "horizon_years": 7,
+      "key_drivers": [
+        "Risk thermometer of 52/100 lands FD allocation near the middle of its floor/ceiling band.",
+        "Banking sector preference concentrated the stock pie chart in HDFC Bank and ICICI Bank, with one IT holding kept in after correlation-based dedup for diversification.",
+        "7-year horizon supports a meaningful but not maximal equity tilt.",
+        "30% tax slab makes the LTCG-taxed equity sleeve relatively more attractive post-tax than the FD sleeve."
+      ]
+    },
+    "stocks_weights": [
+      {"ticker_or_scheme": "HDFCBANK.NS", "display_name": "HDFC Bank", "weight_pct": 45.0},
+      {"ticker_or_scheme": "ICICIBANK.NS", "display_name": "ICICI Bank", "weight_pct": 30.0},
+      {"ticker_or_scheme": "TCS.NS", "display_name": "Tata Consultancy Services", "weight_pct": 25.0}
+    ],
+    "mf_weights": [
+      {"ticker_or_scheme": "SBI_BLUECHIP", "display_name": "SBI Bluechip Fund", "weight_pct": 70.0},
+      {"ticker_or_scheme": "HDFC_FLEXICAP", "display_name": "HDFC Flexi Cap Fund", "weight_pct": 30.0}
+    ]
+  },
+
+  "profile_aggressive_young_professional": {
+    "allocation": {
+      "fd_pct": 0.0,
+      "mf_pct": 35.0,
+      "stocks_pct": 65.0,
+      "expected_return_post_tax": 13.2,
+      "return_ci_low": 8.5,
+      "return_ci_high": 18.9,
+      "risk_score": 85.0,
+      "sector_prefs": ["IT"],
+      "horizon_years": 15,
+      "key_drivers": [
+        "Risk thermometer of 88/100 pushes the FD floor to ~0%, so no FD instruments were selected (user also excluded FD from instruments).",
+        "IT sector preference concentrated the stock pie chart in TCS and Infosys, with one banking holding kept in after correlation-based dedup.",
+        "15-year horizon comfortably absorbs equity volatility for a higher expected post-tax real return.",
+        "30% tax slab plus a >12-month LTCG assumption keeps the effective equity tax drag low relative to FD/debt-MF interest taxed at slab rate."
+      ]
+    },
+    "stocks_weights": [
+      {"ticker_or_scheme": "TCS.NS", "display_name": "Tata Consultancy Services", "weight_pct": 42.0},
+      {"ticker_or_scheme": "INFY.NS", "display_name": "Infosys", "weight_pct": 33.0},
+      {"ticker_or_scheme": "ICICIBANK.NS", "display_name": "ICICI Bank", "weight_pct": 25.0}
+    ],
+    "mf_weights": [
+      {"ticker_or_scheme": "PARAGPARIKH_FLEXICAP", "display_name": "Parag Parikh Flexi Cap Fund", "weight_pct": 60.0},
+      {"ticker_or_scheme": "HDFC_FLEXICAP", "display_name": "HDFC Flexi Cap Fund", "weight_pct": 40.0}
+    ]
+  }
+}
