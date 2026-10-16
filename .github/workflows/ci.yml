@@ -1,0 +1,58 @@
+name: CI
+
+# Proves that a fresh clone sets itself up and runs on Windows, macOS and Linux:
+# run.py creates the environments, installs everything, starts the services and checks them.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  setup-test-run:
+    name: ${{ matrix.os }} / Python ${{ matrix.python }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ["3.11", "3.14"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Set up (virtual environments and packages)
+        run: python run.py --setup-only --skip-ollama
+
+      - name: Backend tests
+        shell: bash
+        run: |
+          PY=backend/.venv/bin/python; [ -x "$PY" ] || PY=backend/.venv/Scripts/python.exe
+          cd backend && "../$PY" -m pytest -q
+
+      - name: Chat service tests
+        shell: bash
+        run: |
+          PY=chat-service/.venv/bin/python; [ -x "$PY" ] || PY=chat-service/.venv/Scripts/python.exe
+          cd chat-service && "../$PY" -m pytest -q
+
+      - name: Frontend build
+        working-directory: frontend
+        run: npm run build
+
+      - name: Start everything and check it (no Ollama on the runner)
+        run: python run.py --smoke --skip-ollama --no-browser
+
+      - name: Upload logs if something failed
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs-${{ matrix.os }}-py${{ matrix.python }}
+          path: logs/
