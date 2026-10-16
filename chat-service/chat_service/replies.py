@@ -320,6 +320,8 @@ _SMALL = [
                             r"^(where|how)\s+(do\s+i|should\s+i|to)\s+(start|begin)|^(getting\s+started|first\s+time\s+investor|i\s+am\s+new\s+here)$|"
                             r"^(i\s+(want|wish)\s+to\s+(start\s+)?invest(ing)?)$|^(help\s+me\s+(invest|start))$", re.I)),
     ("help", re.compile(r"^(help|help\s+me|what\s+can\s+you\s+do|what\s+do\s+you\s+do|how\s+does\s+this\s+work|how\s+do\s+i\s+use\s+this|"
+                        r"how\s+(does|do)\s+(this|the|you)(\s+(app|bot|chat|tool|thing|prudentia|website|site))?\s+work|what\s+is\s+(this(\s+app)?|prudentia)|"
+                        r"tell\s+me\s+about\s+(this\s+app|prudentia)|about\s+prudentia|"
                         r"how\s+to\s+use|commands?|options|menu|kya\s+kar\s+sakte\s+ho|kya\s+kar\s+sakti\s+ho|madad|help\s+karo|guide\s+me|"
                         r"how\s+can\s+you\s+help(\s+me)?|what\s+can\s+i\s+ask(\s+you)?)$", re.I)),
     ("dangling", re.compile(r"^(yes|no|yeah|yep|yup|nope|nah|haan|ha|han|nahi|nhi|all|everything|sab|half|some|more|less|maybe|hmm+|hm+|"

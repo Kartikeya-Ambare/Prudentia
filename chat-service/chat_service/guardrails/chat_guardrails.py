@@ -111,6 +111,9 @@ def words_to_digits(text: str) -> str:
 
     def _en(m: re.Match) -> str:
         tens, ones, small, article, half, unit = m.groups()
+        if article and not re.match(r"lakhs?|lacs?|crores?|thousand", unit, re.I) \
+                and not re.search(r"\b(for|over|next|within|after)\s+$", m.string[:m.start()], re.I):
+            return m.group(0)                                   # 'a year' in 'how many days in a year' is not a number; 'for a year' is
         if tens:
             v = _EN_TENS[tens.lower()] + (_EN_ONES[ones.lower()] if ones else 0)
         elif small:
@@ -204,7 +207,8 @@ _INJECTION = re.compile(
     r"|disregard\s+.{0,30}(instruction|rule|prompt)"
     r"|(reveal|show|print|repeat|leak)\s+.{0,25}(system\s+prompt|instructions|rules)"
     r"|system\s+prompt|developer\s+mode|jailbreak|\bDAN\b"
-    r"|you\s+are\s+now|pretend\s+(to\s+be|you)|\bact\s+as\b|forget\s+(everything|your)|override\s+(the\s+)?rules"
+    r"|you\s+are\s+now|\bpretend\b|role[- ]?play\w*|\byou\s+can\s+(say|do)\s+anything\b|\bwithout\s+(any\s+)?(rules|restrictions|limits)\b"
+    r"|\bno\s+restrictions?\b|\bact\s+as\b|forget\s+(everything|your)|override\s+(the\s+)?rules"
     r"|pichhle\s+(saare\s+)?(instructions?|niyam)|(instructions?|rules?|niyam)\s+(bhool|ignore|mat\s+maano)"
     r"|(system\s+prompt|instructions?)\s+(dikhao|batao)|ab\s+tum\s+.{0,20}\s+ho\b",
     re.I,
