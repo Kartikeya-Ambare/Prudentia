@@ -249,7 +249,7 @@ Open **http://localhost:5173** and say hello to Prudie. On Windows, once both vi
 ### 3. Check that it works
 
 ```bash
-curl http://127.0.0.1:8000/health          # {"status":"ok"}
+curl http://127.0.0.1:8000/health          # {"status":"ok"}  (or just open the URL in a browser)
 ```
 
 Then type *"I want to invest Rs. 5 lakh for 5 years with 50% risk"* in the chat. You should get a plan card with a split close to 42 / 38 / 20 within a few seconds. The first plan after a restart is the slowest while caches warm up.

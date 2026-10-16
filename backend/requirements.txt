@@ -27,3 +27,4 @@ python-multipart>=0.0.9
 openpyxl>=3.1                  # scripts/build_mf_sector_snapshot.py reads fund-house Excel files
 
 pytest>=8.0
+httpx>=0.27                    # FastAPI TestClient used by the tests
