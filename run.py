@@ -416,7 +416,8 @@ def start_services(bpy: Path, cpy: Path, npm: str, ports: dict[str, int]) -> Non
     ok(f"backend ready on {api}")
     cp = spawn("chat-service", [str(cpy), "-m", "uvicorn", "chat_service.main:app", "--host", "127.0.0.1", "--port", str(ports["chat"])],
                CHAT, dict(env, CHAT_ENGINE_MODE="http", CHAT_ENGINE_URL=api))
-    wait_ready("chat-service", f"{chat}/api/chat/health", cp, 120)
+    # /openapi.json answers instantly; /api/chat/health also probes Ollama, which is slow to fail on Windows when it is not installed.
+    wait_ready("chat-service", f"{chat}/openapi.json", cp, 120)
     ok(f"chat service ready on {chat}")
     fp = spawn("frontend", [npm, "run", "dev", "--", "--port", str(ports["frontend"]), "--strictPort"], FRONT,
                dict(env, VITE_API_URL=api, VITE_CHAT_URL=chat, BROWSER="none"))
