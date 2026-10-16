@@ -17,6 +17,8 @@ An asset-allocation recommender for Indian investors. It splits your money acros
 ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
 ![Ollama](https://img.shields.io/badge/Ollama-000000?style=for-the-badge&logo=ollama&logoColor=white)
 
+[![CI: Windows, macOS, Linux](https://github.com/Kartikeya-Ambare/Prudentia/actions/workflows/ci.yml/badge.svg)](https://github.com/Kartikeya-Ambare/Prudentia/actions/workflows/ci.yml)
+
 [The problem](#-the-problem) · [What it does](#-what-it-does) · [How it works](#-how-it-works) · [Architecture](#-architecture) · [Results](#-results) · [Run it](#-run-it) · [API](#-api-at-a-glance)
 
 <br/>
@@ -176,6 +178,7 @@ Small test sets mean small confidence: zero leaks in 52 messages is consistent w
 | Backend tests | 68 pass |
 | Chat service tests | 258 pass |
 | End-to-end chat flow against the live engine (plan, edit, rebalance, refuse, Hinglish) | 20 / 20 checks pass |
+| Fresh-clone setup, tests, build and start on Windows, macOS and Linux (Python 3.11 and 3.14) | 6 / 6 combinations pass in CI |
 | Coverage of the universe | 196 stocks in 12 sectors, 85 mutual funds (72 with sector tables), 16 banks |
 
 ### Known limitations
@@ -223,6 +226,8 @@ cd Prudentia
 The first run takes **5 to 15 minutes** (it downloads PyTorch and two small AI models, about 4 GB in total) and prints progress as it goes. If it is interrupted, run the same command again and it carries on. When it finishes, your browser opens at **http://localhost:5173**. Press **Ctrl+C** in the terminal to stop everything.
 
 Every run after that starts in under a minute.
+
+> **Verified, not assumed.** On every push, GitHub builds a fresh clone of this repository on **Windows, macOS and Linux, each with Python 3.11 and 3.14**, runs the setup, both test suites and the frontend build, then starts all three services and checks them end to end (see the CI badge above). The chat model itself needs Ollama and a downloaded model, which those machines don't run; that part was verified on a real Windows machine with Ollama.
 
 <details>
 <summary><b>What the launcher does for you</b></summary>
