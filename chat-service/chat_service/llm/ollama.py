@@ -9,6 +9,7 @@ from typing import Callable
 
 logger = logging.getLogger(__name__)
 
+KEEP_ALIVE = "30m"          # keep the model loaded between messages (Ollama unloads after 5 idle minutes by default)
 ChatFn = Callable[[str, str, str, dict], str]
 TextFn = Callable[[str, str], str]          # (model, prompt) -> text; used only by the optional polish
 
@@ -19,17 +20,27 @@ def make_chat_fn(host: str, timeout: float = 60.0) -> ChatFn:
         r = ollama.Client(host=host, timeout=timeout).chat(
             model=model,
             messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
-            format=schema, options={"temperature": 0.0, "num_ctx": 2048}, think=False,
+            format=schema, options={"temperature": 0.0, "num_ctx": 2048}, think=False, keep_alive=KEEP_ALIVE,
         )
         return r.message.content
     return call
+
+
+def warm_up(host: str, model: str) -> None:
+    """Load the model into memory so the first real message is not slow. Never raises (Ollama may be down)."""
+    try:
+        import ollama
+        ollama.Client(host=host, timeout=120).chat(model=model, messages=[{"role": "user", "content": "hi"}],
+                                                   options={"num_predict": 1}, keep_alive=KEEP_ALIVE)
+    except Exception as exc:
+        logger.info("model warm-up skipped: %s", exc)
 
 
 def make_text_fn(host: str, timeout: float = 60.0) -> TextFn:
     def call(model: str, prompt: str) -> str:
         import ollama
         r = ollama.Client(host=host, timeout=timeout).generate(
-            model=model, prompt=prompt, options={"temperature": 0.0, "num_ctx": 2048}, think=False)
+            model=model, prompt=prompt, options={"temperature": 0.0, "num_ctx": 2048}, think=False, keep_alive=KEEP_ALIVE)
         return r.response.strip()
     return call
 
