@@ -190,53 +190,114 @@ Honest notes, so nobody is surprised:
 
 ## 🚀 Run it
 
-You need **Python 3.11+**, **Node 20+**, **Git** and **[Ollama](https://ollama.com/download)**, plus about **3 GB** of disk space (PyTorch is the big one). Tested on Windows 11 with Python 3.14 and Node 24.
+Three steps: install four tools once, clone, run one command. The launcher (`run.py`) does everything else: virtual environments, packages, AI models, ports, starting and stopping.
 
-### 1. Get the code and the language models
+### 1. Install these four things (once)
+
+| Tool | Version | Download | Check it worked |
+|---|---|---|---|
+| **Python** | 3.11 to 3.14 | [python.org/downloads](https://www.python.org/downloads/) | `python --version` (Windows: `py --version`, macOS/Linux: `python3 --version`) |
+| **Node.js** | 20.19+ or 22.12+ (the LTS) | [nodejs.org](https://nodejs.org/) | `node --version` |
+| **Git** | any recent | [git-scm.com](https://git-scm.com/downloads) | `git --version` |
+| **Ollama** | any recent | [ollama.com/download](https://ollama.com/download) | `ollama --version` |
+
+- **Windows:** in the Python installer, tick **"Add python.exe to PATH"**. If typing `python` opens the Microsoft Store, use `py` instead.
+- **Debian / Ubuntu:** also run `sudo apt install python3-venv`.
+- After installing anything, **open a new terminal** so it is picked up.
+- You need about **6 GB of free disk space** and an internet connection for the first run.
+
+### 2. Get the code
 
 ```bash
 git clone https://github.com/Kartikeya-Ambare/Prudentia.git
 cd Prudentia
-
-ollama pull qwen2.5:1.5b-instruct
-ollama pull llama3.2:1b
 ```
 
-Make sure Ollama is running (the desktop app starts it; otherwise run `ollama serve` in a terminal).
+### 3. Run it
 
-### 2. Start the three services
+| Your system | Command |
+|---|---|
+| Windows | `py run.py` |
+| macOS / Linux | `python3 run.py` |
 
-Use three terminals, one per service, each starting from the repository root.
+The first run takes **5 to 15 minutes** (it downloads PyTorch and two small AI models, about 4 GB in total) and prints progress as it goes. If it is interrupted, run the same command again and it carries on. When it finishes, your browser opens at **http://localhost:5173**. Press **Ctrl+C** in the terminal to stop everything.
 
-**Backend** (the engine, port 8000). No database setup is needed: it ships with a ready SQLite file.
+Every run after that starts in under a minute.
+
+<details>
+<summary><b>What the launcher does for you</b></summary>
+
+1. Checks your Python, Node and free disk space, and tells you exactly what to fix if something is missing.
+2. Creates a private virtual environment for the backend and for the chat service, and installs their packages (on Linux it picks the small CPU build of PyTorch).
+3. Installs the frontend packages.
+4. Starts Ollama if it is installed but not running, and downloads the two chat models if they are missing.
+5. Finds free ports (it prefers 8000, 8001 and 5173, and moves to the next free ones if those are busy), starts the three services, waits until each is healthy and opens the app.
+6. On Ctrl+C, stops all of it cleanly.
+
+If Ollama is not installed, everything still runs; only the chat says it is unavailable (Expert mode works fully). Logs for each service are in the `logs/` folder.
+
+</details>
+
+### Options
+
+| Command | What it does |
+|---|---|
+| `python run.py --no-browser` | Start without opening the browser |
+| `python run.py --setup-only` | Install everything, then stop |
+| `python run.py --test` | Run the backend tests, chat service tests and the frontend build |
+| `python run.py --smoke` | Start everything, run quick end-to-end checks, stop (exit code 0 means all good) |
+| `python run.py --skip-ollama` | Do not touch Ollama |
+
+(Use `py` on Windows and `python3` on macOS/Linux, as above.)
+
+### Check that it works
+
+Open **http://localhost:5173**, type *"I want to invest Rs. 5 lakh for 5 years with 50% risk"* in the chat and press Enter. Within a few seconds you should get a plan card with a split close to 42% / 38% / 20% (stocks / mutual funds / FDs). The first plan after starting is the slowest while caches warm up.
+
+### Troubleshooting
+
+| What you see | What to do |
+|---|---|
+| `python` is not recognised, or the Microsoft Store opens | Use `py run.py`. If that fails, reinstall Python and tick "Add python.exe to PATH" |
+| "Could not create a virtual environment" on Linux | `sudo apt install python3-venv`, then run again |
+| "Node.js was not found" or "too old" | Install Node.js 22 LTS from nodejs.org, **open a new terminal**, run again |
+| Install fails or stalls | Check your internet, VPN or proxy and free disk space, then run the same command again; it resumes |
+| "Ollama is not installed" | Install it from ollama.com/download and run again. Until then the chat is unavailable but Expert mode works |
+| A model download was interrupted | Run `ollama pull qwen2.5:1.5b-instruct`, then start again |
+| "Port 8000 is busy" | Nothing to do; the launcher picks free ports and prints the real address |
+| A service stops with an error | The launcher prints the end of its log; the full log is `logs/backend.log`, `logs/chat-service.log` or `logs/frontend.log` |
+| Pages stay locked | Stocks, mutual funds, FD and sector pages unlock after your first plan |
+| Want a completely fresh start | Delete the folders `backend/.venv`, `chat-service/.venv`, `frontend/node_modules` and `logs`, then run again |
+
+<details>
+<summary><b>Prefer to do it by hand? Manual setup, step by step</b></summary>
+
+Run each block from the repository root. The commands call the virtual environment's Python directly, so you never need to "activate" anything (this avoids the PowerShell script-execution error on Windows).
+
+**Backend** (port 8000)
 
 ```bash
 cd backend
 python -m venv .venv
-# Windows:        .venv\Scripts\activate
-# macOS / Linux:  source .venv/bin/activate
-pip install -r requirements.txt
-python -m uvicorn backend.api.main:app --port 8000
+.venv/bin/python -m pip install -r requirements.txt        # Windows: .venv\Scripts\python -m pip install -r requirements.txt
+.venv/bin/python -m uvicorn backend.api.main:app --port 8000
 ```
 
-**Chat service** (port 8001).
+**Chat service** (port 8001), in a second terminal
 
 ```bash
 cd chat-service
 python -m venv .venv
-# Windows:        .venv\Scripts\activate
-# macOS / Linux:  source .venv/bin/activate
-pip install -r requirements.txt
+.venv/bin/python -m pip install -r requirements.txt        # Windows: .venv\Scripts\python -m pip install -r requirements.txt
+
+# macOS / Linux:
+CHAT_ENGINE_MODE=http CHAT_ENGINE_URL=http://127.0.0.1:8000 .venv/bin/python -m uvicorn chat_service.main:app --port 8001
 
 # Windows (PowerShell):
-$env:CHAT_ENGINE_MODE="http"; $env:CHAT_ENGINE_URL="http://127.0.0.1:8000"
-# macOS / Linux:
-# export CHAT_ENGINE_MODE=http CHAT_ENGINE_URL=http://127.0.0.1:8000
-
-python -m uvicorn chat_service.main:app --port 8001
+$env:CHAT_ENGINE_MODE="http"; $env:CHAT_ENGINE_URL="http://127.0.0.1:8000"; .venv\Scripts\python -m uvicorn chat_service.main:app --port 8001
 ```
 
-**Frontend** (port 5173).
+**Frontend** (port 5173), in a third terminal
 
 ```bash
 cd frontend
@@ -244,28 +305,20 @@ npm ci
 npm run dev
 ```
 
-Open **http://localhost:5173** and say hello to Prudie. On Windows, once both virtual environments exist, `start-all.cmd` launches all three for you.
-
-### 3. Check that it works
+**AI models** (once, with Ollama running)
 
 ```bash
-curl http://127.0.0.1:8000/health          # {"status":"ok"}  (or just open the URL in a browser)
+ollama pull qwen2.5:1.5b-instruct
+ollama pull llama3.2:1b
 ```
 
-Then type *"I want to invest Rs. 5 lakh for 5 years with 50% risk"* in the chat. You should get a plan card with a split close to 42 / 38 / 20 within a few seconds. The first plan after a restart is the slowest while caches warm up.
-
-### Run the tests
-
-```bash
-cd backend       && python -m pytest -q          # 68 tests
-cd chat-service  && python -m pytest -q          # 258 tests, no Ollama needed
-cd frontend      && npm run build                # type-check + production build
-```
+</details>
 
 ### Keep the data fresh
 
+Run these from the `backend` folder with the backend's Python (`.venv/bin/python`, or `.venv\Scripts\python` on Windows):
+
 ```bash
-cd backend
 python download.py                                # prices, fund NAVs, FD rates (several minutes, needs internet)
 
 # After editing data/mf_portfolios/manual_sectors.json (fund sector tables):
@@ -281,19 +334,9 @@ Defaults work out of the box. Override only if you need to.
 | Setting | Where | Default |
 |---|---|---|
 | `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` | environment or `backend/.env` (see `backend/.env.example`) | empty `DB_HOST` uses the bundled SQLite file |
-| `CHAT_ENGINE_MODE`, `CHAT_ENGINE_URL` | environment (chat service) | `fake` mode for tests, `http` to use the real backend |
-| `VITE_API_URL`, `VITE_CHAT_URL` | `frontend/.env` (see `frontend/.env.example`) | `http://127.0.0.1:8000`, `http://127.0.0.1:8001` |
+| `CHAT_ENGINE_MODE`, `CHAT_ENGINE_URL` | environment (chat service) | set automatically by `run.py` |
+| `VITE_API_URL`, `VITE_CHAT_URL` | environment or `frontend/.env` (see `frontend/.env.example`) | set automatically by `run.py` |
 | Models and limits (amount 10,000 to 10 crore, 1 to 40 years, 300 characters, 1 message per second) | `chat-service/config.yaml` | as listed |
-
-### Troubleshooting
-
-| Symptom | Fix |
-|---|---|
-| Chat says the service is unavailable | Start Ollama, and check that the backend is on port 8000 |
-| "Address already in use" | Another process holds port 8000, 8001 or 5173; stop it or pass a different `--port` |
-| Plan takes many seconds every time | The backend was just started; the first plans warm the cache. Later ones take about a second |
-| `pip install` is slow | PyTorch is a large download; it happens once per virtual environment |
-| Stocks, mutual funds, FD and sector pages are locked | They unlock after your first plan |
 
 ## 🔌 API at a glance
 
@@ -323,7 +366,8 @@ Prudentia/
 ├── chat-service/    chat_service (guardrails, engine client, pipeline), tests, evaluation tools
 ├── mascot/          Prudie
 ├── docs/            palette and screenshots
-└── start-all.cmd    one-click start on Windows
+├── .github/         CI that tests the setup on Windows, macOS and Linux
+└── run.py           one-command setup and launcher (Windows, macOS, Linux)
 ```
 
 ---

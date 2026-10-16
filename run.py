@@ -12,6 +12,7 @@ Options:
   --setup-only    install everything, then exit without starting
   --skip-ollama   do not touch Ollama (chat will be unavailable)
   --skip-models   start Ollama if needed but do not download models
+  --test          run the backend tests, the chat service tests and the frontend build, then exit
   --smoke         start everything, run quick checks, stop, and exit 0 if all passed (used by CI)
 
 Only the Python standard library is used, so this works on Windows, macOS and Linux.
@@ -239,6 +240,19 @@ def setup_frontend(npm: str) -> None:
     ok("frontend: packages installed")
 
 
+def run_tests(bpy: Path, cpy: Path, npm: str) -> bool:
+    results: list[tuple[str, bool]] = []
+    for name, py, cwd in (("backend tests", bpy, BACKEND), ("chat service tests", cpy, CHAT)):
+        step(f"Running the {name}")
+        results.append((name, subprocess.run([str(py), "-m", "pytest", "-q"], cwd=str(cwd)).returncode == 0))
+    step("Building the frontend (type-check + production build)")
+    results.append(("frontend build", subprocess.run([npm, "run", "build"], cwd=str(FRONT)).returncode == 0))
+    step("Summary")
+    for name, good in results:
+        say(f"    [{'ok' if good else 'FAIL'}] {name}")
+    return all(good for _, good in results)
+
+
 def http_json(url: str, body: dict | None = None, timeout: float = 5.0):
     data = json.dumps(body).encode() if body is not None else None
     req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"} if data else {})
@@ -459,6 +473,7 @@ def main() -> None:
     ap.add_argument("--skip-ollama", action="store_true")
     ap.add_argument("--skip-models", action="store_true")
     ap.add_argument("--smoke", action="store_true")
+    ap.add_argument("--test", action="store_true")
     args = ap.parse_args()
 
     def on_signal(*_):
@@ -482,6 +497,8 @@ def main() -> None:
     bpy = setup_python_service("backend", BACKEND, torch_cpu=True)
     cpy = setup_python_service("chat-service", CHAT)
     setup_frontend(npm)
+    if args.test:
+        sys.exit(0 if run_tests(bpy, cpy, npm) else 1)
     ollama = False if args.skip_ollama else setup_ollama(args.skip_models)
     if args.setup_only:
         say("\nSetup finished. Start the app any time with:  python run.py")
