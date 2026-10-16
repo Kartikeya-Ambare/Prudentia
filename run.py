@@ -68,19 +68,33 @@ def warn(msg: str) -> None:
     say(f"    [!]  {msg}")
 
 
+_last_tail = ""
+
+
+def ci_error(text: str) -> None:
+    """On GitHub Actions, also publish the failure as an annotation so it is visible without opening the raw logs."""
+    if os.environ.get("GITHUB_ACTIONS"):
+        text = text.replace("%", "%25").replace("\r", "").replace("\n", "%0A")
+        print(f"::error::{text[:3500]}", flush=True)
+
+
 def die(problem: str, fix: str = "") -> "None":
     say(f"\n[error] {problem}")
     if fix:
         say(f"        {fix}")
+    ci_error(f"{problem} {fix}\n--- end of log ---\n{_last_tail[-2500:]}")
     shutdown()
     sys.exit(1)
 
 
 def tail(path: Path, n: int = 25) -> str:
+    global _last_tail
     try:
-        return "\n".join(path.read_text(encoding="utf-8", errors="replace").splitlines()[-n:])
+        text = "\n".join(path.read_text(encoding="utf-8", errors="replace").splitlines()[-n:])
     except OSError:
-        return "(no log)"
+        text = "(no log)"
+    _last_tail = text
+    return text
 
 
 # ----------------------------------------------------------------------------- checks
@@ -459,6 +473,8 @@ def smoke(ports: dict[str, int], ollama: bool) -> bool:
     allgood = True
     for name, good, detail in results:
         say(f"    [{'ok' if good else 'FAIL'}] {name} {('- ' + detail) if detail else ''}")
+        if not good:
+            ci_error(f"smoke check failed: {name}: {detail}")
         allgood &= good
     return allgood
 
@@ -530,4 +546,11 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except (SystemExit, KeyboardInterrupt):
+        raise
+    except Exception:  # noqa: BLE001
+        import traceback
+        ci_error("unexpected error:\n" + traceback.format_exc())
+        raise
