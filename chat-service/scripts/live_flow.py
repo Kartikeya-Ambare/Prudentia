@@ -23,7 +23,7 @@ def say(msg, **kw):
     return d
 
 
-HINGLISH = re.compile(r"(hai|hain|karo|karna|nahi|nhi|saal|aap|aapka|aapke|kya|kitna|kitne|chahiye|rakho|hata|daal|liye|mein|abhi|dhyan|badlav|batao|likhiye|bhi|sirf|kuch|wapas|samajh|bolo)", re.I)
+HINGLISH = re.compile(r"\b(hai|hain|karo|karna|nahi|nhi|saal|aap|aapka|aapke|kya|kitna|kitne|chahiye|rakho|hata|daal|liye|mein|abhi|dhyan|badlav|batao|likhiye|bhi|sirf|kuch|wapas|samajh|bolo)\b", re.I)
 replies_seen = []
 
 

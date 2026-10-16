@@ -37,10 +37,13 @@ def _candidates(text: str, allow_bare: bool) -> list[float]:
     return out
 
 
+_AMOUNT_CUE = re.compile(r"\b(amount|capital|principal|corpus|budget)\b\s*(?:to|=|:|of|is|ko|hai)?\s*(?:rs\.?\s*|₹|inr)?\s*\d", re.I)
+
+
 def parse_amount(text: str, allow_bare: bool = False) -> Optional[float]:
     """Rupee amount in the text. Several different amounts count only when a correction marker is present
     ('5 lakh, nahi 6 lakh' -> the LAST one); otherwise None (ambiguous, ask)."""
-    c = _candidates(text, allow_bare)
+    c = _candidates(text, allow_bare or bool(_AMOUNT_CUE.search(text)))     # 'amount 100': the word says it is rupees
     if not c:
         return None
     if len(set(c)) == 1:
@@ -271,9 +274,9 @@ def parse_move_amount(text: str) -> dict:
     if _ALL_ONLY.match(t):
         return {"all": True}
     if _HALF.search(t):
-        return {"pct": 50.0}
+        return {"fraction": 0.5}            # half of what the source holds (not half of the whole portfolio)
     if _QUARTER.search(t):
-        return {"pct": 25.0}
+        return {"fraction": 0.25}
     pm = _PCT.search(t)
     if pm and 0 < float(pm.group(1)) <= 100:
         return {"pct": float(pm.group(1))}

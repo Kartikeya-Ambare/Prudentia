@@ -157,7 +157,9 @@ _RISK_LOW_NEG = re.compile(
     r"(zyada|jyada|jyaada|high|bahut|too\s+much|much)\s+risk\s+(nahi|nhi|na|not)"
     r"|risk\s+(zyada|jyada|high|bahut)\s+(nahi|nhi|na)"
     r"|(not|no|don'?t\s+want|dont\s+want)\s+(much\s+|high\s+|too\s+much\s+)?risk"
-    r"|(zero|no)\s+risk|risk\s+(nahi|nhi)\s+(lena|chahiye|leni)",
+    r"|(zero|no)\s+risk|risk\s+(nahi|nhi)\s+(lena|chahiye|leni)"
+    r"|(can'?t|cannot|can\s+not|unable\s+to|won'?t|couldn'?t|shouldn'?t)\s+(take|handle|afford|bear|tolerate|stomach|accept)\s+(much\s+|any\s+|high\s+|too\s+much\s+)?risk"
+    r"|risk[- ]averse|\bplay\s+it\s+safe\b|(low|no)\s+(risk\s+)?tolerance|(scared|afraid)\s+of\s+(losing|risk)|can'?t\s+(afford\s+to\s+)?lose",
     re.I,
 )
 _RISK_LOW = re.compile(r"\b(kam|kum|low|safe|safest|conservative|thoda\s+risk|less\s+risk|minimal)\b", re.I)

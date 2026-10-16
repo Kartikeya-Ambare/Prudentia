@@ -692,17 +692,18 @@ class ChatPipeline:
         srcs = list(mv.get("sources") or ([mv["from"]] if mv.get("from") else []))
         dst = mv.get("to")
         pct, amt, whole = mv.get("pct"), mv.get("amount"), bool(mv.get("all"))
+        frac = mv.get("fraction")                               # 'half' / 'quarter' of what the source holds
         if not srcs or not dst:                                 # one end of the move is missing: ask for it, remember the rest
             if not srcs and not dst:
                 return self._resp(s, replies.MOVE_UNCLEAR, "rebalance", missing=["move"])
-            s.pending_move = {k: mv[k] for k in ("from", "sources", "to", "pct", "amount", "all") if mv.get(k) is not None}
+            s.pending_move = {k: mv[k] for k in ("from", "sources", "to", "pct", "amount", "all", "fraction") if mv.get(k) is not None}
             s.awaiting = ["move_dest" if srcs else "move_source"]
             return self._resp(s, replies.MOVE_ASK_DEST if srcs else replies.MOVE_ASK_SOURCE, "rebalance", missing=["move"])
         if (pct is not None and not 0 < pct <= 100) or (amt is not None and amt <= 0):
             return self._resp(s, replies.MOVE_UNCLEAR, "rebalance", missing=["move"])
         if dst in srcs:
             return self._resp(s, replies.SAME_BUCKET, "rebalance")
-        if not (whole or pct is not None or amt is not None):   # how much? ('all', 10% or 5000)
+        if not (whole or frac or pct is not None or amt is not None):   # how much? ('all', 10% or 5000)
             s.pending_move = {"from": srcs[0], "sources": srcs, "to": dst}
             s.awaiting = ["move_amount"]
             if len(srcs) > 1:
@@ -710,7 +711,7 @@ class ChatPipeline:
             else:
                 ask = replies.MOVE_ASK_AMOUNT.format(src=lab[srcs[0]], dst=lab[dst])
             return self._resp(s, ask, "rebalance", missing=["move"])
-        if len(srcs) > 1 and not whole:                         # a percentage or amount cannot be split across two sources
+        if len(srcs) > 1 and not whole:                         # a percentage, fraction or amount cannot be split across two sources
             return self._resp(s, replies.MOVE_MULTI_PARTIAL, "rebalance", missing=["move"])
 
         self._ensure_loaded(s)
@@ -729,7 +730,13 @@ class ChatPipeline:
                 notes.append(f"{lab[src]} had no money, so I skipped it.")
                 continue
             try:
-                out = self.engine.rebalance(pid, src, dst, pct=float(held) if whole else pct, amount=None if whole else amt)
+                if whole:
+                    use_pct, use_amt = float(held), None
+                elif frac and held:
+                    use_pct, use_amt = float(held) * float(frac), None
+                else:
+                    use_pct, use_amt = pct, amt
+                out = self.engine.rebalance(pid, src, dst, pct=use_pct, amount=use_amt)
             except EngineError as exc:
                 if moved:
                     notes.append(f"I couldn't move the money from {lab[src]}.")
