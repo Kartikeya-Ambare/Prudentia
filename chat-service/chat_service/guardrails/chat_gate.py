@@ -44,7 +44,7 @@ _ABUSE = re.compile(
     r"|\b(chutiya|chutiye|madarchod|bhenchod|behenchod|bhosd\w*|gandu|harami|kamina|kutta|kutte|saala|saale|bekaar|bakwaas)\b|\bshut\s+up\b|\bswear\s+at\b|\bhate\s+(you|this)\b",
     re.I)
 
-from chat_service import parse
+from chat_service import parse, replies
 from chat_service.guardrails.policy_judge import PolicyJudge
 from chat_service.guardrails.scope_gate import ScopeGate
 
@@ -102,6 +102,8 @@ def screen(message: str, awaiting: Iterable[str] | None = None, gate: ScopeGate 
         return Screen("block", "abusive", REFUSALS["off_topic"], cleaned)
     if _UNSUPPORTED.search(scan):
         return Screen("block", "unsupported_topic", REFUSALS["unsupported_topic"], cleaned)
+    if replies.glossary_answer(cleaned):                              # 'what is diversification?': a term this app explains
+        return Screen("allow", "in", None, cleaned)
     aw = set(awaiting or ())
     if "move_amount" in aw and parse.parse_move_amount(scan):          # 'all' / 'half' / '10%' / '5000' after 'how much?'
         return Screen("allow", "slot_answer", None, cleaned)

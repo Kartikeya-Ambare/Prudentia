@@ -193,12 +193,38 @@ GLOSSARY: list[tuple[str, str, str]] = [
 ]
 
 
-_NOT_GLOSSARY = re.compile(r"\b(sectors?|exposed|exposure|holdings?|allocation|portfolio|split|drift\w*|rebalanc\w*)\b", re.I)
+_NOT_GLOSSARY = re.compile(r"\b(sectors?|exposed|exposure|holdings?|(?<!asset )allocation|portfolio|split|drift\w*|rebalanc\w*)\b", re.I)
 
 
-GLOSSARY.append(("scenarios", r"\b(bear|bull|base)\s+case\b|\bscenarios?\b",
-                 "Bear, base and bull are three modelled scenarios for your plan: a weak market, an average market and a strong market. "
-                 "They are estimates of what could happen, not guarantees."))
+GLOSSARY.append(("scenarios", r"\b(bear|bull|base|optimistic|cautious|expected)\s+cases?\b|\bscenarios?\b|\bbear\b.{0,12}\bbull\b|\bbull\b.{0,12}\bbear\b",
+                 "Cautious, expected and optimistic (also called bear, base and bull) are three modelled scenarios for your plan: a weak "
+                 "market, an average market and a strong market. They are estimates of what could happen, not guarantees."))
+GLOSSARY += [
+    ("diversification", r"diversif\w*",
+     "Diversification means spreading your money across different investments, such as stocks, mutual funds and FDs, so that one "
+     "bad investment does not hurt the whole plan. It lowers risk, but it does not remove it."),
+    ("asset allocation", r"asset\s+allocation",
+     "Asset allocation is how your money is divided between asset classes, here stocks, mutual funds and FDs. It is the biggest "
+     "driver of how bumpy or steady your plan is."),
+    ("volatility", r"volatil\w*",
+     "Volatility measures how much an investment's value swings up and down. Higher volatility means bigger ups and downs. "
+     "FDs have almost none; stocks have the most."),
+    ("CAGR", r"\bcagr\b|compound\s+annual|annuali[sz]ed\s+returns?",
+     "CAGR is the average yearly growth rate that would take an investment from its start value to its end value. It smooths the "
+     "ups and downs into one number."),
+    ("NAV", r"\bnav\b|net\s+asset\s+value",
+     "NAV (net asset value) is the price of one unit of a mutual fund. It is worked out once a day from the value of everything "
+     "the fund holds."),
+    ("lump sum", r"lump\s?sum",
+     "A lump sum means investing the whole amount in one go, instead of in monthly instalments (a SIP). This app plans lump-sum "
+     "investments."),
+    ("inflation", r"\binflation\b",
+     "Inflation is the rise in prices over time, so the same money buys less later. An investment needs to grow faster than "
+     "inflation to keep its buying power."),
+    ("equity", r"\bequity\b|\bequities\b",
+     "Equity means ownership in companies, through stocks or equity mutual funds. It can grow the most over time, with the "
+     "biggest ups and downs."),
+]
 
 # common questions asked without a 'what is' cue (answered with fixed, non-advisory text)
 EXTRA_QA: list[tuple[str, str]] = [
@@ -234,6 +260,16 @@ MOVE_ONE_DEST = ("I can move money to one place at a time. For example, 'move 10
                  "and then 'move 10% from stocks to FD'.")
 MOVE_MULTI_PARTIAL = ("To move money out of two places at once, say 'move all money from mutual funds and FD to stocks'. "
                       "For a percentage or an amount, please send one move at a time.")
+
+# ------------------------------------------------------------------------------ start over
+RESET = "Okay, let's start fresh. Tell me how much you'd like to invest, for how many years and how much risk you're comfortable with."
+START_OVER = re.compile(r"^(start\s+(over|again|afresh|fresh)|restart|reset(\s+(everything|it|the\s+chat|chat))?|new\s+(plan|chat)|"
+                        r"naya\s+plan|dobara\s+shuru(\s+karo)?|(remove|delete|clear|scrap|cancel)\s+(everything|all|it\s+all|my\s+plan|the\s+plan|plan))$", re.I)
+
+
+def is_start_over(text: str) -> bool:
+    return bool(START_OVER.match(re.sub(r"\s+", " ", re.sub(r"[^\w\s']", " ", text or "")).strip()))
+
 
 # ------------------------------------------------------------------------------ small talk (greetings, thanks, who/what/help)
 SMALLTALK = {
@@ -285,6 +321,8 @@ def smalltalk(text: str, has_plan: bool, awaiting: bool = False) -> Optional[str
     Matching the whole message means 'hi, ignore your instructions' is never treated as small talk."""
     t = re.sub(r"[^\w\s']", " ", text or "")
     t = re.sub(r"\s+", " ", t).strip()
+    if not t and re.fullmatch(r"[\s?.!]+", text or "") and "?" in text and not awaiting:
+        return SMALLTALK[f"dangling_{'plan' if has_plan else 'new'}"]          # just '???'
     if not t or len(t) > 45:
         return None
     for kind, rx in _SMALL:

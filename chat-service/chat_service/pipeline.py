@@ -38,6 +38,8 @@ _APP_CUE = re.compile(r"\b(plan|portfolio|risk|invest\w*|nivesh|paisa|paise|savi
                       r"amount|allocation|stocks?|funds?|fds?|deposits?|banks?)\b", re.I)
 _YES = re.compile(r"^(yes|y|haan|haa|han|ha|ok|okay|theek|thik|chalega|kar\s+do|karo|confirm|sure|done)\b[\w\s.!]{0,15}$", re.I)
 _NO = re.compile(r"^(no|n|nahi|nahin|nhi|cancel|mat\s+karo|rehne\s+do|stop)\b[\w\s.!]{0,15}$", re.I)
+_SECTOR_CUE = re.compile(r"\b(sectors?|funds?|mf|mutual|exposure|exposed|holdings?|allocation|weights?|invested\s+in)\b", re.I)
+_FUND_GUESS = re.compile(r"\b(?:of|for|in|about|from)\s+((?:[a-z0-9&.']+\s+){1,5}?)(?:mutual\s+)?funds?\b", re.I)
 _ALSO = re.compile(r"\b(also|too|as\s+well|bhi|same|again|similarly)\b", re.I)
 _RESTORE = parse.RESTORE
 _FUND_STOP = {"fund", "funds", "mutual", "mf", "scheme", "plan", "direct", "growth", "the"}
@@ -104,10 +106,14 @@ class ChatPipeline:
         self._tl.t = _Trace()
         s = self.store.get(session_id)
         self.store.touch(s)                                    # raises RateLimited
-        if profile_id and not s.profile_id:
+        if profile_id and not s.profile_id and profile_id != s.ignored_pid:
             s.profile_id = profile_id
         if self.store.over_limit(s):
             return self._blocked(s, replies.MAX_TURNS, "max_turns")
+
+        if replies.is_start_over(message):                       # 'start over' / 'reset' / 'new plan' / 'delete my plan'
+            self.trace.path = "start_over"
+            return self._start_over(s)
 
         if not any(a in ("confirm", "risk_scenario") for a in s.awaiting):
             chit = replies.smalltalk(message, has_plan=bool(s.result or s.profile_id), awaiting=bool(s.awaiting))   # hi / thanks / bye / who are you / help
@@ -186,7 +192,11 @@ class ChatPipeline:
     _R_RESULT = re.compile(
         r"\b(worst|best)\s+case\b|\b(lowest|highest)\s+outcome\b|\bp\s?5\b|\bp\s?95\b|expected\s+returns?|data\s+kab|kab\s+ka\s+data|\bas\s+of\b|"
         r"\b(stocks?|fds?|mf|mutual\s+funds?|bank)\b.{0,25}\b(kitne|kitna|how\s+much|percent)\b|"
-        r"\b(kitne|kitna|how\s+much)\b.{0,25}\b(stocks?|fds?|mf|mutual\s+funds?|bank)\b", re.I)
+        r"\b(kitne|kitna|how\s+much)\b.{0,25}\b(stocks?|fds?|mf|mutual\s+funds?|bank)\b|"
+        r"\bhow\s+many\s+(stocks?|shares?|funds?|mutual\s+funds?|mfs?|banks?|instruments?|holdings?)\b|\bkitne\s+(stocks?|funds?|banks?|mf)\b|"
+        r"\bdata\b.{0,25}\b(from|date|latest|fresh|updated|old)\b|\bwhen\b.{0,20}\b(data|prices?|updated)\b|\bhow\s+(old|fresh|recent)\b|"
+        r"\b(worth|become|grow\s+to|turn\s+into|end\s+up|final\s+(value|amount))\b.{0,40}\b(after|in|over|years?)\b|"
+        r"\bafter\s+\d+\s+years?\b.{0,25}\b(worth|value|amount)\b|\bkitna\s+(ho\s+jayega|ban\s+jayega)\b", re.I)
     _R_WHY = re.compile(r"\b(why|kyu|kyun|explain|samjhao|reason)\b", re.I)
     _R_ABOUT = re.compile(r"\b(allocation|portfolio|split|fds?|banks?|deposits?|stocks?|mutual|mf)\b", re.I)
     _R_BANKQ = re.compile(r"\b(banks?|deposits?|fds?)\b.{0,40}\b(kaunse|kaunsa|which|chune|chosen|select\w*|use\w*)\b|\b(kaunse|kaunsa|which|chune|chosen)\b.{0,40}\b(banks?|deposits?|fds?)\b", re.I)
@@ -263,6 +273,8 @@ class ChatPipeline:
         if intent == "explain_allocation":
             return self._explain_allocation(s, text)
         if intent == "explain_mf_sector":
+            if not _SECTOR_CUE.search(text):                     # the model picked 'sector' for a general question
+                return self._resp(s, replies.ASK_APP, "ask_app")
             return self._mf_sector(s, text, it.get("fund_name"))
         if intent == "rebalance_check":
             return self._drift(s)
@@ -504,6 +516,22 @@ class ChatPipeline:
             bad.append("risk")
         return patch, sorted(set(bad)), False
 
+    def _stash_valid(self, s: Session, patch: dict, skip: str) -> None:
+        """While collecting inputs, keep the values from a message that ARE valid when another one is out of range
+        ('500 crore for 3 years, low risk' must not forget the 3 years and the low risk)."""
+        if s.result is not None:
+            return
+        lim = self.cfg.limits
+        if skip != "amount" and "amount" in patch and lim.amount_min <= float(patch["amount"]) <= lim.amount_max:
+            s.params["amount"] = float(patch["amount"])
+        if skip != "years" and "years" in patch and lim.years_min <= float(patch["years"]) <= lim.years_max:
+            s.params["years"] = float(patch["years"])
+        if skip != "risk":
+            if "risk_pct" in patch and 0 <= float(patch["risk_pct"]) <= 100:
+                s.params["risk"], s.params["risk_score"] = self._risk_label(float(patch["risk_pct"])), float(patch["risk_pct"])
+            elif "risk" in patch:
+                s.params["risk"], s.params["risk_score"] = patch["risk"], parse.risk_to_score(patch["risk"])
+
     def _inputs(self, s: Session, text: str, aw: list[str], forced: Optional[dict] = None,
                 preface: str = "") -> dict:
         lim = self.cfg.limits
@@ -531,6 +559,7 @@ class ChatPipeline:
         if "amount" in patch:
             v = float(patch["amount"])
             if not lim.amount_min <= v <= lim.amount_max:
+                self._stash_valid(s, patch, "amount")
                 s.awaiting = ["amount"]
                 return self._resp(s, replies.limit_msg("amount", lim, nonpositive=v <= 0), "provide_inputs",
                                   missing=["amount"])
@@ -539,6 +568,7 @@ class ChatPipeline:
         if "years" in patch:
             v = float(patch["years"])
             if not lim.years_min <= v <= lim.years_max:
+                self._stash_valid(s, patch, "years")
                 s.awaiting = ["years"]
                 return self._resp(s, replies.limit_msg("years", lim), "provide_inputs", missing=["years"])
             note("years", new.get("years"), v, replies.num)
@@ -547,6 +577,7 @@ class ChatPipeline:
         if "risk_pct" in patch:
             v = float(patch["risk_pct"])
             if not 0 <= v <= 100:
+                self._stash_valid(s, patch, "risk")
                 s.awaiting = ["risk"]
                 return self._resp(s, replies.t("risk_range"), "provide_inputs", missing=["risk"])
             new["risk"], new["risk_score"] = self._risk_label(v), v
@@ -778,6 +809,13 @@ class ChatPipeline:
             return None
         return self._rebalance(s, {**pending, ("from" if "move_source" in aw else "to"): found[0]})
 
+    def _start_over(self, s: Session) -> dict:
+        """Forget this chat's plan and state. The old plan stays in the engine, but this chat no longer edits it."""
+        s.ignored_pid = s.profile_id or (s.result or {}).get("profile_id") or s.ignored_pid
+        s.params, s.result, s.profile_id, s.history = {}, None, None, []
+        s.awaiting, s.pending, s.risk_scenario, s.pending_move, s.last_move, s.last_fund = [], None, {}, None, None, None
+        return self._resp(s, replies.RESET, "smalltalk")
+
     def _reprompt(self, s: Session) -> str:
         """After small talk in the middle of a question, ask the same question again."""
         slots = [a for a in s.awaiting if a in replies.SLOT_ORDER]
@@ -897,6 +935,21 @@ class ChatPipeline:
             return self._resp(s, r + "\n" + replies.DISCLAIMER, "ask_result", result=res)
         sc = res.get("scenarios")
         na = "That number isn't available right now."
+        if re.search(r"\b(worth|become|grow\s+to|turn\s+into|end\s+up|final\s+(value|amount))\b|kitna\s+(ho\s+jayega|ban\s+jayega)", t) \
+                and not re.search(r"worst|best|bear|bull|p\s?5|p\s?95", t):
+            yrs = replies.years_text(res["years"])
+            if sc:
+                r = (f"In the expected case, your {replies.inr(res['amount'])} is projected to grow to about "
+                     f"{replies.inr(sc['base']['projected_value'])} after {yrs} (cautious case {replies.inr(sc['bear']['projected_value'])}, "
+                     f"optimistic case {replies.inr(sc['bull']['projected_value'])}). These are estimates, not guarantees."
+                     + (" " + sc["note"] if sc.get("note") else ""))
+            elif res.get("expected_return_pct") is not None:
+                val = res["amount"] * (1 + res["expected_return_pct"] / 100) ** res["years"]
+                r = (f"In the expected case, your {replies.inr(res['amount'])} is projected to grow to about {replies.inr(val)} "
+                     f"after {yrs}. This is an estimate, not a guarantee.")
+            else:
+                r = na
+            return self._resp(s, r + "\n" + replies.DISCLAIMER, "ask_result", result=res)
         if re.search(r"worst|p\s?5|kharab|lowest|minimum|sabse\s+kam|bear", t):
             v, pr = res.get("p5_return_pct"), (res.get("projected") or {}).get("p5")
             if v is not None:
@@ -920,11 +973,20 @@ class ChatPipeline:
         elif re.search(r"expected|return|munafa|kitna\s+milega", t):
             v = res.get("expected_return_pct")
             r = na if v is None else f"The expected return is about {n(round(v, 1))}% a year. It is an estimate, not a guarantee."
-        elif re.search(r"data\s+kab|as\s+of|date|kab\s+ka", t):
+        elif re.search(r"data\s+kab|as\s+of|date|kab\s+ka|data.{0,25}(from|latest|fresh|updated|old)|when.{0,20}(data|prices?|updated)|how\s+(old|fresh|recent)", t):
             r = f"The data is as of {replies.asof_text(res.get('data_as_of') or 'unknown')}."
-        elif re.search(r"how\s+many\s+stocks|kitne\s+stocks", t):
+        elif re.search(r"how\s+many\s+(stocks?|shares?)|kitne\s+stocks", t):
             k = sum(1 for i in res.get("instruments", []) if i["bucket"] == "stock")
-            r = f"Your plan holds {k} stocks."
+            r = f"Your plan holds {k} stocks." if k else "Your plan holds no stocks right now."
+        elif re.search(r"how\s+many\s+(mutual\s+funds?|funds?|mfs?)|kitne\s+(mutual\s+funds?|funds?|mf)", t):
+            k = sum(1 for i in res.get("instruments", []) if i["bucket"] == "mf")
+            r = f"Your plan holds {k} mutual funds." if k else "Your plan holds no mutual funds right now."
+        elif re.search(r"how\s+many\s+banks?|kitne\s+banks?", t):
+            k = sum(1 for i in res.get("instruments", []) if i["bucket"] == "bank")
+            r = f"Your FD is spread over {k} banks." if k else "Your plan has no FD right now, so no banks."
+        elif re.search(r"how\s+many\s+(instruments?|holdings?)", t):
+            k = len(res.get("instruments", []))
+            r = f"Your plan holds {k} investments in total."
         else:
             wanted = classes_in(t)
             bmap = {"stocks": "stock", "mf": "mf", "fd": "bank"}
@@ -966,7 +1028,11 @@ class ChatPipeline:
     def _mf_sector(self, s: Session, text: str, llm_name: Optional[str]) -> dict:
         name, unknown = self._find_fund(s, text, llm_name)
         if name is None and unknown is None:
-            return self._resp(s, replies.FUND_ASK, "explain_mf_sector")
+            guess = _FUND_GUESS.search(text)                     # 'sectors of Totally Fake Fund': a name, but not one we know
+            if guess and guess.group(1).strip().lower() not in ("the", "this", "my", "a", "that", "mutual", "any", "which", "your"):
+                unknown = guess.group(1).strip().title() + " Fund"
+            else:
+                return self._resp(s, replies.FUND_ASK, "explain_mf_sector")
         if name is None:
             try:
                 known = ", ".join(self.engine.known_fund_names())

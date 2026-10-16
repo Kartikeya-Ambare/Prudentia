@@ -97,8 +97,11 @@ sc("intake-multi-6", ("500 crore for 3 years low risk", {**ASK, "has": ["between
 sc("intake-multi-7", ("5 lakh for 50 years low risk", {**ASK, "has": ["years must be"]}), ("10", {**PLAN, "p": {"years": 10}}))
 sc("intake-multi-8", ("amount 5 lakh years 5", {**ASK}), ("risk 45", {**PLAN, "p": {"risk_score": 45}}))
 sc("intake-multi-9", ("mujhe invest karna hai", ASK), ("5 lakh", ASK), ("3 saal", ASK), ("kam", {**PLAN, "p": {"risk_score": 20}}))
-sc("intake-confirm-yes", ("invest 3 lakh for 1 year high risk", {**ASK, "has": ["go ahead"]}), ("yes", {**PLAN, "p": {"risk_score": 80}}))
-sc("intake-confirm-no", ("invest 3 lakh for 1 year high risk", {**ASK, "has": ["go ahead"]}), ("no", {**ASK, "has": ["haven't made"]}))
+sc("intake-short-high-risk", ("invest 3 lakh for 1 year high risk", {**PLAN, "p": {"risk_score": 80, "years": 1}}))
+sc("intake-limit-keeps-rest", ("500 crore for 3 years low risk", {**ASK, "has": ["between"]}), ("5 lakh", {**PLAN, "p": {"amount": 500000, "years": 3, "risk_score": 20}}))
+sc("intake-years-limit-keeps-rest", ("5 lakh for 50 years low risk", {**ASK, "has": ["years must be"]}), ("10", {**PLAN, "p": {"amount": 500000, "years": 10, "risk_score": 20}}))
+sc("startover", (SEED, PLAN), ("start over", {**OK, "r": False, "has": ["start fresh"]}), ("2 lakh for 3 years low risk", {**PLAN, "p": {"amount": 200000, "years": 3, "risk_score": 20}}))
+sc("startover-remove-everything", (SEED, PLAN), ("remove everything", {**OK, "r": False, "has": ["start fresh"]}))
 
 # =========================================================================================== edits after a plan
 for i, (msg, spec) in enumerate([
@@ -133,7 +136,6 @@ for i, (msg, spec) in enumerate([
     ("make it 5 years", {**ASK, "has": ["nothing changed"]}),
     ("remove FD and add FD", {**ASK, "has": ["conflicting"]}),
     ("risk 30% and risk 70%", {**ASK, "has": ["conflicting"]}),
-    ("remove everything", {"b": False, "r": False}),
 ]):
     seeded(f"edit-{i:02d}", (msg, spec))
 seeded("edit-add-fd", ("remove FD", PLAN), ("add FD", {**PLAN, "f": lambda r: "fd" in r["result"]["classes"]}))
@@ -198,19 +200,24 @@ seeded("moves-then-edit-keeps-total", ("move all money from stocks to fd", PLAN)
 sc("moves-no-plan", ("move 10% from stocks to FD", {**ASK, "has": ["create a plan first"]}))
 
 # =========================================================================================== questions about the plan
-for i, (msg, has) in enumerate([
-    ("what is the worst case", ["worst", "bear"]), ("what is the best case", ["best", "bull"]),
+for i, (msg, anyof) in enumerate([
+    ("what is the worst case", ["worst case", "bear scenario"]), ("what is the best case", ["best case", "bull scenario"]),
     ("what's my expected return", ["expected return"]), ("how much is in stocks", ["stocks is"]),
-    ("how many stocks do I hold", ["stocks"]), ("which banks did you choose", ["bank"]), ("why this allocation", ["risk"]),
+    ("how many stocks do I hold", ["holds", "no stocks"]), ("how many mutual funds do I hold", ["mutual funds"]),
+    ("how many banks is my FD in", ["banks"]), ("which banks did you choose", ["bank"]), ("why this allocation", ["risk"]),
     ("explain my plan", ["risk"]), ("when is the data from", ["data is as of"]), ("has my allocation drifted", ["drifted"]),
     ("what is the lowest outcome I should expect", ["bear", "worst", "lowest", "cautious"]),
+    ("what will my money be worth after 5 years", ["plan", "worth", "after", "expected"]),
 ]):
-    seeded(f"ask-{i:02d}", (msg, {**OK, "r": True}))
+    seeded(f"ask-{i:02d}", (msg, {**OK, "any": anyof}))
 for i, (msg, has) in enumerate([
     ("what is a mutual fund", ["pools money"]), ("what is an FD", ["fixed"]), ("what is the risk score", ["0 to 100"]),
     ("explain large cap", ["big"]), ("what is the difference between mid cap and small cap", ["mid"]),
-    ("what are bear and bull cases", ["scenarios"]), ("is an FD safe", ["low risk"]), ("what if the market falls", ["fall"]),
+    ("what are bear and bull cases", ["scenarios"]), ("what does the optimistic case mean", ["scenarios"]), ("is an FD safe", ["low risk"]), ("what if the market falls", ["fall"]),
     ("what is P5", ["range"]), ("what does expected return mean", ["average"]),
+    ("what is diversification", ["spreading"]), ("what is the meaning of volatility", ["swings"]), ("explain NAV", ["unit"]),
+    ("what is CAGR", ["growth rate"]), ("what is inflation", ["prices"]), ("what is asset allocation", ["divided"]),
+    ("what is equity", ["ownership"]), ("what is a lump sum", ["whole amount"]),
 ]):
     sc(f"explain-{i:02d}", (msg, {**OK, "r": False, "has": has}))
 sc("sectors-1", ("show sector allocation of HDFC Large Cap Fund", {**OK, "has": ["sector allocation"]}))
@@ -218,7 +225,7 @@ sc("sectors-2", ("what is the top sector in SBI Small Cap Fund", {**OK, "has": [
 sc("sectors-3", ("compare HDFC Large Cap Fund and Axis Bluechip Fund", {**OK, "has": [" vs "]}))
 sc("sectors-4", ("compare SBI Small Cap Fund vs Nippon India Small Cap Fund", {**OK, "has": [" vs "]}))
 sc("sectors-5", ("how much financial exposure does HDFC Large Cap Fund have", {**OK, "has": ["weight"]}))
-sc("sectors-6", ("show sectors of Totally Fake Fund", {**OK, "has": ["couldn't find"]}))
+sc("sectors-6", ("show sectors of Totally Fake Fund", {**OK, "has": ["couldn't find the fund"]}))
 sc("sectors-follow", ("HDFC Large Cap Fund sectors", OK), ("what is the top sector in this fund", {**OK, "has": ["largest sector"]}))
 
 # =========================================================================================== small talk
@@ -320,6 +327,8 @@ def run_scenario(item):
         for h in exp.get("has") or []:
             if h.lower() not in reply.lower():
                 why.append(f"reply lacks '{h}'")
+        if exp.get("any") and not any(h.lower() in reply.lower() for h in exp["any"]):
+            why.append(f"reply has none of {exp['any']}")
         for h in exp.get("no") or []:
             if h.lower() in reply.lower():
                 why.append(f"reply contains '{h}'")

@@ -25,7 +25,7 @@ def _candidates(text: str, allow_bare: bool) -> list[float]:
     t = words_to_digits(normalise(text))
     out: list[float] = []
     for m in _AMT.finditer(t):
-        if _NOT_AMOUNT_TAIL.match(t[m.end():]):
+        if not m.group("unit") and _NOT_AMOUNT_TAIL.match(t[m.end():]):     # '5 years' is not an amount, '5 lakh years 5' is
             continue
         val = float(m.group("num").replace(",", ""))
         unit = m.group("unit")
@@ -37,13 +37,18 @@ def _candidates(text: str, allow_bare: bool) -> list[float]:
     return out
 
 
-_AMOUNT_CUE = re.compile(r"\b(amount|capital|principal|corpus|budget)\b\s*(?:to|=|:|of|is|ko|hai)?\s*(?:rs\.?\s*|₹|inr)?\s*\d", re.I)
+_AMOUNT_CUE = re.compile(r"\b(amount|capital|principal|corpus|budget)\b\s*(?:to|=|:|of|is|ko|hai)?\s*(?:rs\.?\s*|₹|inr)?\s*"
+                         r"(?P<num>\d[\d,]*(?:\.\d+)?)(?!\s*(?:%|percent|saal|sal|years?|yrs?|lakhs?|lacs?|crores?|cr|k\b))", re.I)
 
 
 def parse_amount(text: str, allow_bare: bool = False) -> Optional[float]:
     """Rupee amount in the text. Several different amounts count only when a correction marker is present
     ('5 lakh, nahi 6 lakh' -> the LAST one); otherwise None (ambiguous, ask)."""
-    c = _candidates(text, allow_bare or bool(_AMOUNT_CUE.search(text)))     # 'amount 100': the word says it is rupees
+    c = _candidates(text, allow_bare)
+    if not c:
+        cue = _AMOUNT_CUE.search(text)                         # 'amount 100': the word says that bare number is rupees
+        if cue:
+            c = [float(cue.group("num").replace(",", ""))]
     if not c:
         return None
     if len(set(c)) == 1:
@@ -324,6 +329,10 @@ _BANK_AUTO = re.compile(r"\b(auto(?:matic(?:ally)?)?|top\s*5|best\s*5|default|re
 _BANK_QUESTION = re.compile(r"\?|\b(kaunse|kaunsa|kon\s?se|which|kyu|kyun|why|how\s+much|how\s+(does|do|is|are)|kaise|kitna|kitne|what)\b", re.I)
 _BANK_ACTION = re.compile(r"\b(chun\w*|choose|select\w*|use|only|sirf|bas|keval|rakho|rakh|lagao|lagana|karo|kar\s+do|set|pick|"
                           r"change|badal\w*|instead|replace|add|jodo|daal\w*|hata\w*|hatao|remove|exclude|drop|nikal\w*|mat)\b", re.I)
+_BANK_ALIAS_ACTION = re.compile(r"\b(remove|hata\w*|hatao|nikal\w*|add|jodo|jod\s+do|use|only|sirf|rakho|chun\w*|choose|select|exclude|"
+                                r"drop|include|set|replace)\b", re.I)
+_NOT_BANK_CONTEXT = re.compile(r"\b(funds?|caps?|mfs?|mutual|schemes?|stocks?|shares?|sectors?|compare|vs|versus|nifty|prudential|"
+                               r"bluechip|midcap|smallcap|largecap|flexi|elss)\b", re.I)
 _UNKNOWN_BANK = re.compile(r"\b([a-z][a-z&.]{2,}(?:\s+[a-z][a-z&.]{2,})?)\s+(?:small\s+finance\s+)?bank\b", re.I)
 _NOT_A_BANK_NAME = {"the", "my", "this", "that", "fd", "fds", "fixed", "deposit", "deposits", "in", "ke", "ka", "ki", "liye", "me",
                     "mein", "from", "of", "any", "other", "all", "only", "sirf", "ye", "wo", "mere", "mera", "apna", "koi",
@@ -344,7 +353,13 @@ def parse_banks(text: str) -> dict:
     t = normalise(text).lower()
     if _BANK_AUTO.search(t) and not _BANK_QUESTION.search(t):
         return {"mode": "auto"}
-    if _BANK_QUESTION.search(t) or not _BANK_WORD.search(t) or not _BANK_ACTION.search(t):
+    if not _BANK_WORD.search(t):
+        # 'remove HDFC', 'add Axis': a bank's name with an action and no 'bank' / 'FD' word. Only for short messages that do not
+        # talk about funds or stocks, since HDFC, SBI, Axis and Kotak are also fund houses.
+        named = any(re.search(rx, t, re.I) for _, rx in _BANK_ALIASES)
+        if not (named and _BANK_ALIAS_ACTION.search(t) and not _NOT_BANK_CONTEXT.search(t) and len(t.split()) <= 7):
+            return {}
+    if _BANK_QUESTION.search(t) or not _BANK_ACTION.search(t):
         return {}
     ids, rest = [], t
     for bid, rx in _BANK_ALIASES:
