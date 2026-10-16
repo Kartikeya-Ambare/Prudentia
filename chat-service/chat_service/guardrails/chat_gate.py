@@ -28,7 +28,15 @@ _ADVICE_MORE = re.compile(
     r"|\b(undervalued|overvalued|penny\s+stocks?)\b|\bgood\s+(stock|share)s?\b"
     r"|\b(sell|bech\w*)\b.{0,10}\b(karun|karu|ya|or)\b.{0,15}\b(hold|sell|bech\w*|rakh\w*)\b"
     r"|\b(double|triple|teen\s+guna|dugna)\b.{0,30}\b(tarika|kaise|how|way|trick)\b|\bpaisa\s+(jaldi\s+)?(double|dugna)\b"
-    r"|\b(right|good|best)\s+time\s+to\s+(buy|invest|enter|sell)\b|\bshould\s+i\s+(invest|buy|sell)\s+in\b", re.I)
+    r"|\b(right|good|best)\s+time\s+to\s+(buy|invest|enter|sell)\b|\bshould\s+i\s+(invest|buy|sell)\s+in\b"
+    r"|\b(recommend|suggest)\w*\b.{0,25}\b(stocks?|shares?|funds?|mutual\s+funds?|mf)\b"
+    r"|\b(give|share|send|get|need|want|tell)\b.{0,15}\b(me\s+)?(a\s+|one\s+|some\s+|any\s+)?(tips?|hot\s+tip|suggestions?)\b"
+    r"|\bpromis\w*\b.{0,25}\b(returns?|profit|gains?|\d+\s*%)", re.I)
+# 'the best stock', 'top 3 funds', 'which fund has the best returns': a pick, unless it is about the user's own plan
+_BEST_PICK = re.compile(
+    r"\b(best|top|hottest|greatest)\s+(performing\s+|performer\s+)?(\d+\s+|three\s+|five\s+|ten\s+)?(stocks?|shares?|mutual\s+funds?|funds?|mf)\b"
+    r"|\bwhich\s+(mutual\s+fund|fund|stock|share|mf)s?\b.{0,30}\b(best|highest|top|better|good|most)\b", re.I)
+_ABOUT_PLAN = re.compile(r"\b(my|this|the|your)\s+(plan|portfolio|allocation|result)\b|\byou\s+(picked|chose|selected|recommended)\b|\bin\s+my\b", re.I)
 # asking about other users / the previous conversation / internal configuration
 _ACTIONS_OUTSIDE_APP = re.compile(
     r"\b(send|email|mail|whatsapp|text)\s+(me|my|this|the)\b.{0,25}\b(email|mail|plan|pdf|report|message|whatsapp)\b|\bemail\s+me\b"
@@ -92,7 +100,8 @@ def screen(message: str, awaiting: Iterable[str] | None = None, gate: ScopeGate 
     # tier 0: high-precision category patterns (SIP / stock tips / assets the app does not cover)
     if _SIP.search(scan):
         return Screen("block", "sip_unsupported", REFUSALS["sip_unsupported"], cleaned)
-    if _ADVICE.search(scan) or _SELL_BUY.search(scan) or _ADVICE_MORE.search(scan):
+    if _ADVICE.search(scan) or _SELL_BUY.search(scan) or _ADVICE_MORE.search(scan) \
+            or (_BEST_PICK.search(scan) and not _ABOUT_PLAN.search(scan)):
         return Screen("block", "no_tips", REFUSALS["no_tips"], cleaned)
     if _ACTIONS_OUTSIDE_APP.search(scan):
         return Screen("block", "unsupported_topic", REFUSALS["unsupported_topic"], cleaned)

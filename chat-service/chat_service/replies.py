@@ -282,8 +282,11 @@ SMALLTALK = {
     "ack_new": "Okay. Tell me the amount, the years and your risk level whenever you're ready.",
     "ack_plan": "Great. Let me know if you'd like to change anything in your plan.",
     "bye": "Goodbye! Come back any time you want to adjust your plan.",
-    "who": ("I'm Prudie, the Prudentia assistant. I build an illustrative split of your money across stocks, mutual funds "
-            "and FDs and help you adjust it. I don't give stock tips or promise returns."),
+    "who": ("I'm Prudie, the Prudentia assistant. I'm an AI program, not a person. I build an illustrative split of your money "
+            "across stocks, mutual funds and FDs and help you adjust it. I don't give stock tips or promise returns."),
+    "beginner": ("No problem, I'll guide you. Just tell me three things: how much you'd like to invest, for how many years, and how "
+                 "much risk you're comfortable with (low, moderate or high). For example, '5 lakh for 5 years, moderate risk'. "
+                 "If you're not sure about the risk, say so and I'll ask three quick questions."),
     "help": ("Here is what I can do. Build a plan from an amount, years and risk (for example '5 lakh for 5 years, moderate "
              "risk'). Change it ('make it 10 years', 'risk 35%', 'remove FD', 'move 10% from stocks to FD', 'use SBI and HDFC "
              "for the FD'). Show a fund's sectors ('HDFC Large Cap sectors') or compare two funds. Explain terms such as FD, "
@@ -306,7 +309,13 @@ _SMALL = [
     ("bye", re.compile(r"^(bye+|goodbye|good\s+bye|see\s+(you|ya)(\s+later)?|take\s+care|cya|alvida|tata|ttyl|that'?s\s+all|"
                        r"that\s+is\s+all|i'?m\s+done)$", re.I)),
     ("who", re.compile(r"^(who\s+are\s+you|what\s+are\s+you|what'?s\s+your\s+name|what\s+is\s+your\s+name|your\s+name|tum\s+kaun\s+ho|"
-                       r"aap\s+kaun\s+ho|tumhara\s+naam\s+kya\s+hai|aapka\s+naam\s+kya\s+hai|introduce\s+yourself)$", re.I)),
+                       r"aap\s+kaun\s+ho|tumhara\s+naam\s+kya\s+hai|aapka\s+naam\s+kya\s+hai|introduce\s+yourself|"
+                       r"who\s+(made|created|built|developed|designed)\s+you|are\s+you\s+(a\s+|an\s+)?(bot|human|real|ai|robot|person|chat\s?gpt|gpt|alive)|"
+                       r"how\s+old\s+are\s+you|what'?s\s+your\s+age|what\s+is\s+your\s+age|are\s+you\s+(a\s+)?real\s+(person|human))$", re.I)),
+    ("beginner", re.compile(r"^(i\s+am|i'?m)\s+(a\s+)?(complete\s+)?(beginner|newbie|new(\s+to\s+(this|investing|it))?|confused|clueless)(\W+.*)?$|"
+                            r"^(i\s+(do\s*n'?t|dont)\s+know\s+(much|anything)(\s+about\s+(investing|this|money|stocks))?)|"
+                            r"^(where|how)\s+(do\s+i|should\s+i|to)\s+(start|begin)|^(getting\s+started|first\s+time\s+investor|i\s+am\s+new\s+here)$|"
+                            r"^(i\s+(want|wish)\s+to\s+(start\s+)?invest(ing)?)$|^(help\s+me\s+(invest|start))$", re.I)),
     ("help", re.compile(r"^(help|help\s+me|what\s+can\s+you\s+do|what\s+do\s+you\s+do|how\s+does\s+this\s+work|how\s+do\s+i\s+use\s+this|"
                         r"how\s+to\s+use|commands?|options|menu|kya\s+kar\s+sakte\s+ho|kya\s+kar\s+sakti\s+ho|madad|help\s+karo|guide\s+me|"
                         r"how\s+can\s+you\s+help(\s+me)?|what\s+can\s+i\s+ask(\s+you)?)$", re.I)),
@@ -329,7 +338,7 @@ def smalltalk(text: str, has_plan: bool, awaiting: bool = False) -> Optional[str
         if rx.match(t):
             if kind == "dangling" and awaiting:       # a bare 'yes' / 'all' can be the answer to a question that is open
                 return None
-            if kind in ("bye", "who", "help"):
+            if kind in ("bye", "who", "help", "beginner"):
                 return SMALLTALK[kind]
             return SMALLTALK[f"{kind}_{'plan' if has_plan else 'new'}"]
     return None
