@@ -163,6 +163,31 @@ def _explanation(req: PlanRequest, split: dict[str, float], buckets: list) -> st
     return head + body
 
 
+def _fill_bucket_targets(weights: list, projections: list, bucket_projs: dict, capital: float,
+                         split: dict[str, float]) -> None:
+    """The optimiser's cleaned weights add up to a little under 100% (for example 99.6%), so the stock bucket used to
+    end up a few hundred rupees short of its target and the plan invested less than the amount asked for. Scale each
+    equity bucket's instruments (amounts, weights and projections) up so the bucket holds exactly its share."""
+    for bucket, bp in bucket_projs.items():
+        target = capital * split[bucket]
+        mine = [w for w in weights if w.bucket == bucket]
+        actual = sum(w.amount for w in mine)
+        if target <= 0 or actual <= 0 or abs(target - actual) < 0.005:
+            continue
+        factor = target / actual
+        names = {w.display_name for w in mine}
+        for w in mine:
+            w.amount *= factor
+            w.weight_pct *= factor
+        for p in projections:
+            if p.label in names:
+                p.present_value *= factor
+                p.projected_value *= factor
+        if bp is not None:
+            bp.present_value *= factor
+            bp.projected_value *= factor
+
+
 def build_plan(req: PlanRequest, profile_id: Optional[str] = None) -> PlanResult:
     pid = profile_id or req.profile_id or str(uuid.uuid4())
     h = req.horizon_years
@@ -186,6 +211,7 @@ def build_plan(req: PlanRequest, profile_id: Optional[str] = None) -> PlanResult
         equity_ips = [p for p in res.instrument_projections if p.present_value > 0.005]
         by_label = {b.label: b for b in res.bucket_projections}
         stock_bp, mf_bp = by_label.get("Stocks"), by_label.get("Mutual Funds")
+        _fill_bucket_targets(equity_weights, equity_ips, {"stock": stock_bp, "mf": mf_bp}, req.capital, split)
         equity_present = sum(b.present_value for b in (stock_bp, mf_bp) if b)
         equity_vol = res.expected_volatility_pct
     stock_bp = stock_bp or bucket_projection("Stocks", [], h)

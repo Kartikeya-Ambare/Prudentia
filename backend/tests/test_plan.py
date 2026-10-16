@@ -24,6 +24,17 @@ def test_default_plan_uses_all_classes_and_five_auto_banks():
     assert abs(_invested(d) - BASE["capital"]) <= BASE["capital"] * 0.01  # the engine may leave up to 1% unallocated
 
 
+def test_plan_invests_the_full_amount_for_any_split():
+    """The optimiser's cleaned weights used to add up to ~99.6%, leaving a few hundred rupees uninvested."""
+    for extra in ({}, {"classes": ["stocks"]}, {"classes": ["stocks", "fd"], "manual_split": {"stocks": 70, "fd": 30}},
+                  {"classes": ["stocks", "mf"], "manual_split": {"stocks": 64.7, "mf": 35.3}}, {"risk_thermometer": 80}):
+        d = _plan(capital=500000, **extra)
+        assert abs(_invested(d) - 500000) < 0.5, (extra, _invested(d))
+        for bucket in ("stock", "mf"):
+            held = sum(w["amount"] for w in d["weights"] if w["bucket"] == bucket)
+            assert abs(held - 500000 * d["split_pct"][bucket] / 100) < 26   # split_pct is rounded to 0.01%
+
+
 def test_only_chosen_classes_receive_money():
     d = _plan(classes=["fd"])
     assert d["split_pct"] == {"stock": 0.0, "mf": 0.0, "bank": 100.0}
