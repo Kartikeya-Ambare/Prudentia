@@ -38,6 +38,7 @@ _APP_CUE = re.compile(r"\b(plan|portfolio|risk|invest\w*|nivesh|paisa|paise|savi
                       r"amount|allocation|stocks?|funds?|fds?|deposits?|banks?)\b", re.I)
 _YES = re.compile(r"^(yes|y|haan|haa|han|ha|ok|okay|theek|thik|chalega|kar\s+do|karo|confirm|sure|done)\b[\w\s.!]{0,15}$", re.I)
 _NO = re.compile(r"^(no|n|nahi|nahin|nhi|cancel|mat\s+karo|rehne\s+do|stop)\b[\w\s.!]{0,15}$", re.I)
+_ALSO = re.compile(r"\b(also|too|as\s+well|bhi|same|again|similarly)\b", re.I)
 _RESTORE = parse.RESTORE
 _FUND_STOP = {"fund", "funds", "mutual", "mf", "scheme", "plan", "direct", "growth", "the"}
 _SECTOR_ALIASES = {
@@ -108,6 +109,12 @@ class ChatPipeline:
         if self.store.over_limit(s):
             return self._blocked(s, replies.MAX_TURNS, "max_turns")
 
+        if not any(a in ("confirm", "risk_scenario") for a in s.awaiting):
+            chit = replies.smalltalk(message, has_plan=bool(s.result or s.profile_id), awaiting=bool(s.awaiting))   # hi / thanks / bye / who are you / help
+            if chit:
+                self.trace.path = "smalltalk"
+                return self._resp(s, chit + self._reprompt(s), "smalltalk")
+
         scr = self._screen(message, s)
         self.trace.gate, self.trace.category = scr.action, scr.category
         if scr.action == "block":
@@ -125,6 +132,11 @@ class ChatPipeline:
             aw = []
         if "risk_scenario" in aw:
             return self._scenario_answer(s, text)
+        if any(a.startswith("move_") for a in aw):               # the bot asked 'how much?' / 'from where?' / 'to where?'
+            follow = self._move_followup(s, text, aw)
+            if follow is not None:
+                return follow
+            aw = [a for a in aw if not a.startswith("move_")]    # the user moved on to something else
         clash = find_conflict(text)
         if clash:
             self.trace.path = "conflict"
@@ -139,6 +151,9 @@ class ChatPipeline:
         move = parse.parse_move(text)
         if move:
             self.trace.path = "rule_move"
+            if not (move.get("all") or move.get("pct") is not None or move.get("amount") is not None) \
+                    and _ALSO.search(text) and s.last_move:        # 'and from MF to stocks also': same amount as last time
+                move = {**move, **{k: v for k, v in s.last_move.items() if k in ("all", "pct", "amount")}}
             return self._rebalance(s, move)
         bank_choice = parse.parse_banks(text)
         if bank_choice:
@@ -671,38 +686,104 @@ class ChatPipeline:
         pid = self._pid(s)
         if not pid:
             return self._resp(s, replies.t("need_plan"), "rebalance")
-        src, dst = mv.get("from"), mv.get("to")
-        pct, amt = mv.get("pct"), mv.get("amount")
-        if mv.get("all") and src and self._ensure_loaded(s):         # 'move all money from mutual funds to stocks'
-            held = (s.result.get("split_pct") or {}).get(src)
-            if held is None:
-                held = (s.result["buckets"].get(src) or {}).get("weight_pct")
-            if not held:
-                return self._resp(s, replies.t("no_money_in", c=replies.BUCKET_LABEL[src]), "rebalance")
-            pct = float(held)
-        if not (src and dst) or (pct is None and amt is None) or (pct is not None and not 0 < pct <= 100) \
-                or (amt is not None and amt <= 0):
-            return self._resp(s, replies.MOVE_UNCLEAR, "rebalance", missing=["move"])
-        if src == dst:
-            return self._resp(s, replies.SAME_BUCKET, "rebalance")
         lab = replies.BUCKET_LABEL
+        if mv.get("multi_dest"):                                # 'from stocks to MF and FD': one destination at a time
+            return self._resp(s, replies.MOVE_ONE_DEST, "rebalance", missing=["move"])
+        srcs = list(mv.get("sources") or ([mv["from"]] if mv.get("from") else []))
+        dst = mv.get("to")
+        pct, amt, whole = mv.get("pct"), mv.get("amount"), bool(mv.get("all"))
+        if not srcs or not dst:                                 # one end of the move is missing: ask for it, remember the rest
+            if not srcs and not dst:
+                return self._resp(s, replies.MOVE_UNCLEAR, "rebalance", missing=["move"])
+            s.pending_move = {k: mv[k] for k in ("from", "sources", "to", "pct", "amount", "all") if mv.get(k) is not None}
+            s.awaiting = ["move_dest" if srcs else "move_source"]
+            return self._resp(s, replies.MOVE_ASK_DEST if srcs else replies.MOVE_ASK_SOURCE, "rebalance", missing=["move"])
+        if (pct is not None and not 0 < pct <= 100) or (amt is not None and amt <= 0):
+            return self._resp(s, replies.MOVE_UNCLEAR, "rebalance", missing=["move"])
+        if dst in srcs:
+            return self._resp(s, replies.SAME_BUCKET, "rebalance")
+        if not (whole or pct is not None or amt is not None):   # how much? ('all', 10% or 5000)
+            s.pending_move = {"from": srcs[0], "sources": srcs, "to": dst}
+            s.awaiting = ["move_amount"]
+            if len(srcs) > 1:
+                ask = replies.MOVE_ASK_ALL_MULTI.format(src=" and ".join(lab[b] for b in srcs), dst=lab[dst])
+            else:
+                ask = replies.MOVE_ASK_AMOUNT.format(src=lab[srcs[0]], dst=lab[dst])
+            return self._resp(s, ask, "rebalance", missing=["move"])
+        if len(srcs) > 1 and not whole:                         # a percentage or amount cannot be split across two sources
+            return self._resp(s, replies.MOVE_MULTI_PARTIAL, "rebalance", missing=["move"])
+
         self._ensure_loaded(s)
-        if s.result and not (s.result["buckets"].get(src) or {}).get("weight_pct"):
-            return self._resp(s, replies.t("no_money_in", c=lab[src]), "rebalance")
-        try:
-            out = self.engine.rebalance(pid, src, dst, pct=pct, amount=amt)
-        except EngineError as exc:
-            return self._engine_error(s, exc, "rebalance")
-        res = out["allocation"]
-        s.snapshot()
-        self._adopt(s, res)                                     # classes come from the result: a move can add or drop one
-        s.awaiting = []
-        head = f"I moved {replies.inr(out['moved_amount'])} from {lab[src]} to {lab[dst]}."
-        if out.get("capped"):
-            head += (f" You asked for {replies.inr(out['requested_amount'])}, but {lab[src]} only had "
-                     f"{replies.inr(out['moved_amount'])}.")
+        moved: list[tuple[str, dict]] = []
+        notes: list[str] = []
+        snapped = False
+        for src in srcs:
+            held = None
+            if s.result:
+                held = (s.result.get("split_pct") or {}).get(src)
+                if held is None:
+                    held = (s.result["buckets"].get(src) or {}).get("weight_pct")
+            if s.result and not held:
+                if len(srcs) == 1:
+                    return self._resp(s, replies.t("no_money_in", c=lab[src]), "rebalance")
+                notes.append(f"{lab[src]} had no money, so I skipped it.")
+                continue
+            try:
+                out = self.engine.rebalance(pid, src, dst, pct=float(held) if whole else pct, amount=None if whole else amt)
+            except EngineError as exc:
+                if moved:
+                    notes.append(f"I couldn't move the money from {lab[src]}.")
+                    break
+                return self._engine_error(s, exc, "rebalance")
+            if not snapped:
+                s.snapshot()                                    # one undo step for the whole message
+                snapped = True
+            self._adopt(s, out["allocation"])                   # classes come from the result: a move can add or drop one
+            moved.append((src, out))
+        if not moved:
+            return self._resp(s, replies.t("no_money_in", c=" or ".join(lab[b] for b in srcs)), "rebalance")
+        s.awaiting, s.pending_move = [], None
+        s.last_move = {"from": srcs[0], "to": dst, **({"all": True} if whole else {"pct": pct} if pct is not None else {"amount": amt})}
+        res = moved[-1][1]["allocation"]
+        head = "I moved " + " and ".join(f"{replies.inr(o['moved_amount'])} from {lab[b]}" for b, o in moved) + f" to {lab[dst]}."
+        if len(moved) == 1 and moved[0][1].get("capped"):
+            o = moved[0][1]
+            head += (f" You asked for {replies.inr(o['requested_amount'])}, but {lab[moved[0][0]]} only had "
+                     f"{replies.inr(o['moved_amount'])}.")
+        if notes:
+            head += " " + " ".join(notes)
         body = replies.allocation_reply(res, self._risk_text(s.params))
         return self._resp(s, head + " " + body, "rebalance", result=res, missing=[])
+
+    def _move_followup(self, s: Session, text: str, aw: list[str]) -> Optional[dict]:
+        """The bot asked for one missing piece of a move; read the answer and finish the move. None = not an answer."""
+        pending, s.pending_move = s.pending_move, None
+        s.awaiting = [a for a in s.awaiting if not a.startswith("move_")]
+        if not pending:
+            return None
+        self.trace.path = "move_followup"
+        if "move_amount" in aw:
+            got = parse.parse_move_amount(text)
+            return self._rebalance(s, {**pending, **got}) if got else None
+        bucket_of = {"stocks": "stock", "mf": "mf", "fd": "bank"}
+        found = [bucket_of[c] for c in classes_in(text)]
+        if len(found) != 1:
+            return None
+        return self._rebalance(s, {**pending, ("from" if "move_source" in aw else "to"): found[0]})
+
+    def _reprompt(self, s: Session) -> str:
+        """After small talk in the middle of a question, ask the same question again."""
+        slots = [a for a in s.awaiting if a in replies.SLOT_ORDER]
+        if slots:
+            return " " + replies.ask_for(slots)[0]
+        pm, lab = s.pending_move, replies.BUCKET_LABEL
+        if pm and "move_amount" in s.awaiting:
+            return " " + replies.MOVE_ASK_AMOUNT.format(src=lab[pm["from"]], dst=lab[pm["to"]])
+        if pm and "move_source" in s.awaiting:
+            return " " + replies.MOVE_ASK_SOURCE
+        if pm and "move_dest" in s.awaiting:
+            return " " + replies.MOVE_ASK_DEST
+        return ""
 
     def _drift(self, s: Session) -> dict:
         pid = self._pid(s)

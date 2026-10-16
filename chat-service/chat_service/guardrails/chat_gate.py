@@ -14,7 +14,7 @@ from typing import Iterable
 
 from chat_service.guardrails.chat_guardrails import (
     MAX_CHARS, REFUSALS, _ADVICE, _INJECTION, _NON_LATIN, _SIP, _SUSPICIOUS, _UNSUPPORTED,
-    looks_like_slot_answer, normalise, words_to_digits,
+    classes_in, looks_like_slot_answer, normalise, words_to_digits,
 )
 import re
 
@@ -102,6 +102,11 @@ def screen(message: str, awaiting: Iterable[str] | None = None, gate: ScopeGate 
         return Screen("block", "abusive", REFUSALS["off_topic"], cleaned)
     if _UNSUPPORTED.search(scan):
         return Screen("block", "unsupported_topic", REFUSALS["unsupported_topic"], cleaned)
+    aw = set(awaiting or ())
+    if "move_amount" in aw and parse.parse_move_amount(scan):          # 'all' / 'half' / '10%' / '5000' after 'how much?'
+        return Screen("allow", "slot_answer", None, cleaned)
+    if aw & {"move_source", "move_dest"} and len(classes_in(cleaned)) == 1:
+        return Screen("allow", "slot_answer", None, cleaned)
     if looks_like_slot_answer(cleaned, awaiting or ()):
         return Screen("allow", "slot_answer", None, cleaned)
     d = (gate or get_gate()).decide(cleaned)

@@ -217,7 +217,9 @@ def test_rebalance_percent_and_amount_with_cap(make_pipe):
 def test_rebalance_missing_pieces_ask(make_pipe):
     p = make_pipe(after_seed("rebalance"))
     _seed(p)
-    assert "Where should the money move" in p.handle(S, "FD se mutual fund me paisa shift karo")["reply"]
+    r = p.handle(S, "FD se mutual fund me paisa shift karo")
+    assert "How much should I move from FD to Mutual Funds" in r["reply"] and r["intent"] == "rebalance"
+    assert p.handle(S, "move some of my stocks money")["reply"].startswith("Where should the money move")
 
 
 def test_drift_check(make_pipe):

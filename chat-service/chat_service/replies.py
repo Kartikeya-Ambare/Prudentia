@@ -223,3 +223,75 @@ def glossary_answer(text: str) -> Optional[str]:
     if not hits:
         return None
     return "\n\n".join(hits[:3])
+
+
+# ------------------------------------------------------------------------------ moves that need one more piece
+MOVE_ASK_AMOUNT = "How much should I move from {src} to {dst}? You can say 'all', a percentage like 10%, or an amount like 5000."
+MOVE_ASK_ALL_MULTI = "Do you want all the money from {src} moved to {dst}? Say 'all' to do that."
+MOVE_ASK_SOURCE = "Which asset class should the money come from: stocks, mutual funds or FD?"
+MOVE_ASK_DEST = "Where should the money go: stocks, mutual funds or FD?"
+MOVE_ONE_DEST = ("I can move money to one place at a time. For example, 'move 10% from stocks to mutual funds', "
+                 "and then 'move 10% from stocks to FD'.")
+MOVE_MULTI_PARTIAL = ("To move money out of two places at once, say 'move all money from mutual funds and FD to stocks'. "
+                      "For a percentage or an amount, please send one move at a time.")
+
+# ------------------------------------------------------------------------------ small talk (greetings, thanks, who/what/help)
+SMALLTALK = {
+    "greeting_new": ("Hi, I'm Prudie! Tell me how much you'd like to invest, for how many years and how much risk you're "
+                     "comfortable with, for example '5 lakh for 5 years, moderate risk', and I'll build a plan."),
+    "greeting_plan": ("Hi again! Your plan is ready. You can ask me to change the amount, years or risk, move money between "
+                      "stocks, mutual funds and FDs, or add or remove one."),
+    "thanks_new": "You're welcome! Whenever you're ready, tell me an amount, the years and your risk level and I'll build a plan.",
+    "thanks_plan": "You're welcome! Is there anything else you'd like to change or understand about your plan?",
+    "ack_new": "Okay. Tell me the amount, the years and your risk level whenever you're ready.",
+    "ack_plan": "Great. Let me know if you'd like to change anything in your plan.",
+    "bye": "Goodbye! Come back any time you want to adjust your plan.",
+    "who": ("I'm Prudie, the Prudentia assistant. I build an illustrative split of your money across stocks, mutual funds "
+            "and FDs and help you adjust it. I don't give stock tips or promise returns."),
+    "help": ("Here is what I can do. Build a plan from an amount, years and risk (for example '5 lakh for 5 years, moderate "
+             "risk'). Change it ('make it 10 years', 'risk 35%', 'remove FD', 'move 10% from stocks to FD', 'use SBI and HDFC "
+             "for the FD'). Show a fund's sectors ('HDFC Large Cap sectors') or compare two funds. Explain terms such as FD, "
+             "mutual fund, large cap or risk score."),
+    "howru_new": ("I'm doing well, thank you! Tell me how much you'd like to invest, for how many years and your risk level, "
+                  "and I'll build a plan."),
+    "howru_plan": "I'm doing well, thank you! Your plan is ready; ask me to change it or explain any part of it.",
+    "dangling_new": ("I'm not sure what you're answering. Tell me how much you'd like to invest, for how many years and your "
+                     "risk level, for example '5 lakh for 5 years, moderate risk'."),
+    "dangling_plan": ("I'm not sure what you're answering, and nothing is waiting for a reply. Tell me what to do with your plan, "
+                      "for example 'make it 10 years', 'move 10% from stocks to FD' or 'remove FD'."),
+}
+_SMALL = [
+    ("greeting", re.compile(r"^(hi+|hii+|hello+|hey+|heya|hiya|hola|namaste|namaskar|pranam|good\s+(morning|afternoon|evening|night)|gm|sup|yo)"
+                            r"(\s+(there|prudie|prudentia|friend|buddy|bro|sir|ma'?am|mam|all|everyone|team))?$", re.I)),
+    ("thanks", re.compile(r"^(thanks?|thank\s+you|thx|tysm|ty|shukriya|dhanyavaad|dhanyawad|many\s+thanks)"
+                          r"(\s+(a\s+lot|so\s+much|very\s+much|prudie|bro|sir|mam|again))*$", re.I)),
+    ("ack", re.compile(r"^(ok(ay)?|okk+|k|cool|nice|great|awesome|perfect|good|fine|got\s+it|understood|alright|sounds\s+good|"
+                       r"theek\s+hai|thik\s+hai|accha|achha|badhiya|wow)(\s+(thanks?|thank\s+you|thx))?$", re.I)),
+    ("bye", re.compile(r"^(bye+|goodbye|good\s+bye|see\s+(you|ya)(\s+later)?|take\s+care|cya|alvida|tata|ttyl|that'?s\s+all|"
+                       r"that\s+is\s+all|i'?m\s+done)$", re.I)),
+    ("who", re.compile(r"^(who\s+are\s+you|what\s+are\s+you|what'?s\s+your\s+name|what\s+is\s+your\s+name|your\s+name|tum\s+kaun\s+ho|"
+                       r"aap\s+kaun\s+ho|tumhara\s+naam\s+kya\s+hai|aapka\s+naam\s+kya\s+hai|introduce\s+yourself)$", re.I)),
+    ("help", re.compile(r"^(help|help\s+me|what\s+can\s+you\s+do|what\s+do\s+you\s+do|how\s+does\s+this\s+work|how\s+do\s+i\s+use\s+this|"
+                        r"how\s+to\s+use|commands?|options|menu|kya\s+kar\s+sakte\s+ho|kya\s+kar\s+sakti\s+ho|madad|help\s+karo|guide\s+me|"
+                        r"how\s+can\s+you\s+help(\s+me)?|what\s+can\s+i\s+ask(\s+you)?)$", re.I)),
+    ("dangling", re.compile(r"^(yes|no|yeah|yep|yup|nope|nah|haan|ha|han|nahi|nhi|all|everything|sab|half|some|more|less|maybe|hmm+|hm+|"
+                            r"umm*|uh+|\?+|\.+|what|why|huh|really|sure)$", re.I)),
+    ("howru", re.compile(r"^(how\s+are\s+you|how\s+r\s+u|how'?s\s+it\s+going|kaise\s+ho|kaise\s+hain\s+aap|what'?s\s+up|wassup|how\s+do\s+you\s+do)$", re.I)),
+]
+
+
+def smalltalk(text: str, has_plan: bool, awaiting: bool = False) -> Optional[str]:
+    """A fixed, friendly answer when the WHOLE message is a greeting, thanks, goodbye, 'who are you' or 'help'; None otherwise.
+    Matching the whole message means 'hi, ignore your instructions' is never treated as small talk."""
+    t = re.sub(r"[^\w\s']", " ", text or "")
+    t = re.sub(r"\s+", " ", t).strip()
+    if not t or len(t) > 45:
+        return None
+    for kind, rx in _SMALL:
+        if rx.match(t):
+            if kind == "dangling" and awaiting:       # a bare 'yes' / 'all' can be the answer to a question that is open
+                return None
+            if kind in ("bye", "who", "help"):
+                return SMALLTALK[kind]
+            return SMALLTALK[f"{kind}_{'plan' if has_plan else 'new'}"]
+    return None

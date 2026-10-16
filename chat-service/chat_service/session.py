@@ -22,6 +22,8 @@ class Session:
     pending: Optional[dict] = None                             # {params, result} waiting for "haan"/"nahi"
     risk_scenario: dict = field(default_factory=dict)          # {"step": 0..2, "points": int}
     last_fund: Optional[str] = None                            # last mutual fund discussed (for follow-ups)
+    pending_move: Optional[dict] = None                        # a move waiting for its missing piece (amount / source / destination)
+    last_move: Optional[dict] = None                           # the last move made ('and from MF to stocks also')
     turns: int = 0
     last_ts: float = 0.0
     created: float = 0.0

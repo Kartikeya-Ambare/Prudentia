@@ -141,6 +141,7 @@ def parse_class_ops(text: str) -> dict:
     if not mentioned:
         if _ALL.search(t):
             ops["only"] = {"stocks", "mf", "fd"}
+            ops["explicit"] = False    # a bare "all" is not a plan change (it is usually the answer to "how much?")
         return ops
     if _REMOVE.search(t):
         ops["remove"] = mentioned
@@ -167,6 +168,7 @@ _MOVE_E = re.compile(rf"\b(reduce|decrease|cut|lower)\s+{_CL}\b.{{0,18}}\b(incre
 _MOVE_F = re.compile(rf"\b{_CL}\s+(?:me|mein)\s+se\b.{{0,25}}?\b{_CL}\s+(?:me|mein|ko)\b", re.I)
 _MOVE_G = re.compile(rf"\bto\s+{_CL}\b.{{0,25}}?\bfrom\s+{_CL}\b", re.I)          # 'all money to stocks from mutual funds'
 _ALL_MONEY = re.compile(r"\b(all|everything|entire|whole|sab|saara|sara|poora|pura|sabhi)\b", re.I)
+_MOVE_VERB = re.compile(r"\b(move|shift|transfer|switch|convert|swap)\b", re.I)
 _MOVE_CUE = re.compile(r"\b(move|shift|transfer|rebalance|daal\w*|dal\s?do|badal\w*|convert|switch|swap|bhej\w*)\b", re.I)
 _PCT = re.compile(r"(\d+(?:\.\d+)?)\s*(?:%|percent|pratishat|prati\s?shat)", re.I)
 
@@ -179,9 +181,37 @@ def _bucket(word: str) -> Optional[str]:
     return None
 
 
+_SEP = r"(?:,|&|\+|\band\b|\baur\b)"
+_MOVE_MULTI_SRC = re.compile(rf"(?:from\s+)?\b{_CL}\s*{_SEP}\s*{_CL}\s+(?:se|to|into|->|→)\s+{_CL}\b", re.I)
+_MOVE_MULTI_DST = re.compile(rf"\b{_CL}\s+(?:se|to|into|->|→)\s+{_CL}\s*{_SEP}\s*{_CL}\b", re.I)
+
+
 def parse_move(text: str) -> dict:
-    """{'from','to','pct','amount'} (values may be None). Empty dict if this is not a move request."""
+    """{'from','to','pct','amount'} (values may be None); 'sources' lists every source when money comes from two classes
+    and 'multi_dest' is True when it should go to two (not supported: one move at a time). Empty dict if this is not a
+    move request."""
     t = words_to_digits(normalise(text))
+    mm = _MOVE_MULTI_SRC.search(t)
+    if mm:
+        srcs = [b for b in (_bucket(mm.group(1)), _bucket(mm.group(2))) if b]
+        dst = _bucket(mm.group(3))
+        if len(set(srcs)) == 2 and dst and dst not in srcs:
+            pm = _PCT.search(t)
+            pct = float(pm.group(1)) if pm else None
+            amt = None
+            if pct is None:
+                c = _candidates(t, allow_bare=True)
+                amt = c[-1] if c else None
+            out = {"from": srcs[0], "sources": srcs, "to": dst, "pct": pct, "amount": amt}
+            if pct is None and amt is None and _ALL_MONEY.search(t):
+                out["all"] = True
+            return out
+    md = _MOVE_MULTI_DST.search(t)
+    if md:
+        dsts = [b for b in (_bucket(md.group(2)), _bucket(md.group(3))) if b]
+        src = _bucket(md.group(1))
+        if src and len(set(dsts)) == 2 and src not in dsts:
+            return {"from": src, "to": None, "pct": None, "amount": None, "multi_dest": True}
     m = _MOVE_A.search(t)
     src = dst = None
     mg = _MOVE_G.search(t)
@@ -206,6 +236,11 @@ def parse_move(text: str) -> dict:
             m5 = _MOVE_E.search(t)
             if m5:
                 src, dst = _bucket(m5.group(2)), _bucket(m5.group(4))
+    if not (src or dst) and _MOVE_VERB.search(t):       # only one end named: 'move 10% to stocks' / 'move 5000 from fd'
+        mt = re.search(rf"\bto\s+{_CL}\b", t, re.I) or re.search(rf"\b{_CL}\s+(?:me|mein|ko|mai)\b", t, re.I)
+        mf = re.search(rf"\bfrom\s+{_CL}\b", t, re.I) or re.search(rf"\b{_CL}\s+se\b", t, re.I)
+        dst = _bucket(mt.group(1)) if mt else None
+        src = _bucket(mf.group(1)) if mf else None
     if not (src and dst) and not _MOVE_CUE.search(t):
         return {}
     if not (src or dst) :
@@ -218,9 +253,32 @@ def parse_move(text: str) -> dict:
         c = _candidates(stripped, allow_bare=True)
         amount = c[-1] if c else None
     out = {"from": src, "to": dst, "pct": pct, "amount": amount}
-    if pct is None and amount is None and src and dst and _ALL_MONEY.search(t):
+    if pct is None and amount is None and (src or dst) and _ALL_MONEY.search(t):
         out["all"] = True                                    # 'move all money from mutual funds to stocks'
     return out
+
+
+_HALF = re.compile(r"\b(half|aadha|adha|aadhe|adhe)\b", re.I)
+_QUARTER = re.compile(r"\b(quarter|chauthai|chauthaai)\b", re.I)
+_ALL_ONLY = re.compile(r"^\W*(?:the\s+)?(?:all|everything|entire|whole|sab|saara|sara|poora|pura|sabhi|sab\s+kuch|"
+                       r"all\s+of\s+it|all\s+the\s+money|all\s+money|whole\s+amount|the\s+lot|full)\W*$", re.I)
+
+
+def parse_move_amount(text: str) -> dict:
+    """The answer to 'how much should I move?': {'all': True} | {'pct': x} | {'amount': x}; {} when it is not an answer.
+    A bare number below 1,000 is ambiguous (percent or rupees?) and is not accepted."""
+    t = words_to_digits(normalise(text))
+    if _ALL_ONLY.match(t):
+        return {"all": True}
+    if _HALF.search(t):
+        return {"pct": 50.0}
+    if _QUARTER.search(t):
+        return {"pct": 25.0}
+    pm = _PCT.search(t)
+    if pm and 0 < float(pm.group(1)) <= 100:
+        return {"pct": float(pm.group(1))}
+    c = [v for v in _candidates(t, allow_bare=False) if v > 0]
+    return {"amount": c[-1]} if c else {}
 
 
 # ------------------------------------------------------------------------------ explicit risk %
@@ -233,7 +291,7 @@ _RISK_PCT_B = re.compile(r"(\d{1,3}(?:\.\d+)?)\s*(?:%|percent|pratishat|prati\s?
 def parse_risk_pct(text: str, allow_bare: bool = False) -> Optional[float]:
     """'risk 35%', 'risk to 70', '65 percent risk' -> 35 / 70 / 65. Not range-checked here (caller rejects >100).
     allow_bare: the bot just asked for the risk, so a lone '35%' is the answer."""
-    t = normalise(text)
+    t = words_to_digits(normalise(text))
     if allow_bare:
         b = re.fullmatch(r"(\d{1,3}(?:\.\d+)?)\s*(?:%|percent|pratishat)", t, re.I)
         if b:

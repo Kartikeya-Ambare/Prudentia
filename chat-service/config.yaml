@@ -11,7 +11,7 @@ chat:
   request_timeout_seconds: 60
   max_chars: 300
   session_ttl_minutes: 120
-  max_turns: 30
+  max_turns: 200
   min_interval_seconds: 1.0                    # per-session rate limit (1 msg/sec)
   polish: false                                # optional LLM polish of template replies (grounding-checked)
 engine:

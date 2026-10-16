@@ -91,12 +91,34 @@ def normalise(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+_EN_ONES = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
+            "eleven": 11, "twelve": 12, "thirteen": 13, "fourteen": 14, "fifteen": 15, "sixteen": 16, "seventeen": 17,
+            "eighteen": 18, "nineteen": 19}
+_EN_TENS = {"twenty": 20, "thirty": 30, "forty": 40, "fifty": 50, "sixty": 60, "seventy": 70, "eighty": 80, "ninety": 90}
+_EN_UNITS = r"lakhs?|lacs?|crores?|thousand|years?|yrs?|percent|per\s?cent"
+_EN_WORD_BEFORE_UNIT = re.compile(
+    r"\b(?:(" + "|".join(_EN_TENS) + r")(?:[\s-](" + "|".join(k for k, v in _EN_ONES.items() if v < 10) + r"))?"
+    r"|(" + "|".join(sorted(_EN_ONES, key=len, reverse=True)) + r")|(a))"
+    r"(\s+and\s+(?:a\s+)?half)?\s+(" + _EN_UNITS + r")\b", re.I
+)
+
+
 def words_to_digits(text: str) -> str:
-    """'paanch lakh' -> '5 lakh', 'teen saal' -> '3 saal'."""
-    def _sub(m: re.Match) -> str:
+    """'paanch lakh' -> '5 lakh', 'teen saal' -> '3 saal', 'five lakh' -> '5 lakh', 'twenty five percent' -> '25 percent'."""
+    def _hi(m: re.Match) -> str:
         v = _HI_NUM[m.group(1).lower()]
         return f"{v:g} {m.group(2)}"
-    return _HI_WORD_BEFORE_UNIT.sub(_sub, text)
+
+    def _en(m: re.Match) -> str:
+        tens, ones, small, article, half, unit = m.groups()
+        if tens:
+            v = _EN_TENS[tens.lower()] + (_EN_ONES[ones.lower()] if ones else 0)
+        elif small:
+            v = _EN_ONES[small.lower()]
+        else:
+            v = 1
+        return f"{v + (0.5 if half else 0):g} {unit}"
+    return _EN_WORD_BEFORE_UNIT.sub(_en, _HI_WORD_BEFORE_UNIT.sub(_hi, text))
 
 
 # --------------------------------------------------------------------------- numbers
