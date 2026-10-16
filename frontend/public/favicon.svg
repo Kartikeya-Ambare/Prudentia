@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Prudentia: one ring, three buckets (stocks, funds, bank FD). No background, so it sits on any tab colour;
+       the three mid-tone colours keep at least 3:1 on a white tab and on a dark tab. -->
+  <circle cx="32" cy="32" r="24" fill="none" stroke="#6a7cd6" stroke-width="11" stroke-linecap="round" stroke-dasharray="44.00 106.80" stroke-dashoffset="-5.50" transform="rotate(-90 32 32)"/>
+  <circle cx="32" cy="32" r="24" fill="none" stroke="#339286" stroke-width="11" stroke-linecap="round" stroke-dasharray="36.00 114.80" stroke-dashoffset="-66.10" transform="rotate(-90 32 32)"/>
+  <circle cx="32" cy="32" r="24" fill="none" stroke="#bf7f15" stroke-width="11" stroke-linecap="round" stroke-dasharray="21.00 129.80" stroke-dashoffset="-118.70" transform="rotate(-90 32 32)"/>
+</svg>

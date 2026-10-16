@@ -1,0 +1,17 @@
+{"message": "compare SBI Small Cap Fund with HDFC Large Cap Fund", "expected_action": "allow", "expected_intent": "compare_funds", "category": "compare"}
+{"message": "HDFC Large Cap Fund aur SBI Small Cap Fund ka sector split compare karo", "expected_action": "allow", "expected_intent": "compare_funds", "category": "compare"}
+{"message": "which is more tilted to financials, HDFC Large Cap Fund or SBI Small Cap Fund", "expected_action": "allow", "expected_intent": "compare_funds", "category": "compare"}
+{"message": "SBI Small Cap Fund me kaunse sectors ghate pichle mahine se", "expected_action": "allow", "expected_intent": "sector_history", "category": "history"}
+{"message": "has HDFC Large Cap Fund increased its IT exposure recently", "expected_action": "allow", "expected_intent": "sector_history", "category": "history"}
+{"message": "HDFC Large Cap Fund ki sector history dikhao", "expected_action": "allow", "expected_intent": "sector_history", "category": "history"}
+{"message": "5 lakh 4 saal moderate risk, sirf pharma aur auto sector ke stocks", "expected_action": "allow", "expected_intent": "provide_inputs", "category": "prefs"}
+{"message": "mujhe sirf small cap funds chahiye", "setup": ["5 lakh 4 saal moderate risk"], "expected_action": "allow", "expected_intent": "modify_inputs", "category": "prefs"}
+{"message": "add energy sector also", "setup": ["5 lakh 4 saal moderate risk, sirf banking sector stocks"], "expected_action": "allow", "expected_intent": "modify_inputs", "category": "prefs"}
+{"message": "TCS me kitna lagaya gaya hai", "setup": ["5 lakh 4 saal moderate risk, sirf IT sector stocks"], "expected_action": "allow", "expected_intent": "ask_result", "category": "instrument"}
+{"message": "how much will Infosys be worth at the end", "setup": ["5 lakh 4 saal moderate risk, sirf IT sector stocks"], "expected_action": "allow", "expected_intent": "ask_result", "category": "instrument"}
+{"message": "FD ke liye kaunse banks use hue", "setup": ["5 lakh 4 saal low risk"], "expected_action": "allow", "expected_intent": "explain_allocation", "category": "banks"}
+{"message": "why these two banks for my deposits", "setup": ["5 lakh 4 saal low risk"], "expected_action": "allow", "expected_intent": "explain_allocation", "category": "banks"}
+{"message": "TCS ka PE ratio batao", "expected_action": "block", "expected_intent": "unsupported", "category": "unsupported"}
+{"message": "aaj HDFC Bank ka share price kya chal raha hai", "expected_action": "block", "expected_intent": "unsupported", "category": "unsupported"}
+{"message": "write a poem comparing two mutual funds", "expected_action": "block", "expected_intent": "unsupported", "category": "creative_misuse"}
+{"message": "which of these two funds should I buy", "expected_action": "block", "expected_intent": "unsupported", "category": "advice"}

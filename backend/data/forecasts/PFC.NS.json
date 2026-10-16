@@ -1,0 +1,79 @@
+{
+  "mu": 0.03508771324663574,
+  "sigma": 0.3598520612353794,
+  "n_obs": 1256,
+  "method": "transformer",
+  "final_train_loss": 0.9916978478431702,
+  "raw_mu": 0.03508771324663574,
+  "current_price": 342.04998779296875,
+  "raw_terminal_price": 406.4202572602215,
+  "guarded_terminal_price": 406.4202572602215,
+  "raw_cagr_pct": 3.508771324663574,
+  "guarded_cagr_pct": 3.508771324663574,
+  "historical_cagr_pct": 34.28019561977096,
+  "historical_cagr_years": 4.984126984126984,
+  "historical_max_drawdown_pct": -38.52251178165365,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 342.05,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 354.0517,
+      "annual_return_pct": 3.5088,
+      "cumulative_return_pct": 3.5088
+    },
+    {
+      "year": 2,
+      "projected_price": 366.4746,
+      "annual_return_pct": 3.5088,
+      "cumulative_return_pct": 7.1407
+    },
+    {
+      "year": 3,
+      "projected_price": 379.3334,
+      "annual_return_pct": 3.5088,
+      "cumulative_return_pct": 10.9
+    },
+    {
+      "year": 4,
+      "projected_price": 392.6433,
+      "annual_return_pct": 3.5088,
+      "cumulative_return_pct": 14.7912
+    },
+    {
+      "year": 5,
+      "projected_price": 406.4203,
+      "annual_return_pct": 3.5088,
+      "cumulative_return_pct": 18.819
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 222.271,
+      "cagr_pct": -8.26
+    },
+    "base": {
+      "terminal_price": 406.4203,
+      "cagr_pct": 3.5088
+    },
+    "bull": {
+      "terminal_price": 743.1352,
+      "cagr_pct": 16.7873
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-16T10:55:56.566784"
+}

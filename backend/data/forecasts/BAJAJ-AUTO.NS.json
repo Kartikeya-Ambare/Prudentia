@@ -1,0 +1,79 @@
+{
+  "mu": 0.0611615729729066,
+  "sigma": 0.24525196216213577,
+  "n_obs": 1256,
+  "method": "transformer",
+  "final_train_loss": 0.9975936412811279,
+  "raw_mu": 0.0611615729729066,
+  "current_price": 10318.0,
+  "raw_terminal_price": 13883.632125492113,
+  "guarded_terminal_price": 13883.632125492113,
+  "raw_cagr_pct": 6.11615729729066,
+  "guarded_cagr_pct": 6.11615729729066,
+  "historical_cagr_pct": 25.179127559181236,
+  "historical_cagr_years": 4.984126984126984,
+  "historical_max_drawdown_pct": -42.313526174411855,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 10318.0,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 10949.0651,
+      "annual_return_pct": 6.1162,
+      "cumulative_return_pct": 6.1162
+    },
+    {
+      "year": 2,
+      "projected_price": 11618.7272,
+      "annual_return_pct": 6.1162,
+      "cumulative_return_pct": 12.6064
+    },
+    {
+      "year": 3,
+      "projected_price": 12329.3468,
+      "annual_return_pct": 6.1162,
+      "cumulative_return_pct": 19.4936
+    },
+    {
+      "year": 4,
+      "projected_price": 13083.429,
+      "annual_return_pct": 6.1162,
+      "cumulative_return_pct": 26.802
+    },
+    {
+      "year": 5,
+      "projected_price": 13883.6321,
+      "annual_return_pct": 6.1162,
+      "cumulative_return_pct": 34.5574
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 9201.9053,
+      "cagr_pct": -2.2636
+    },
+    "base": {
+      "terminal_price": 13883.6321,
+      "cagr_pct": 6.1162
+    },
+    "bull": {
+      "terminal_price": 20947.3186,
+      "cagr_pct": 15.2144
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-16T10:55:54.731695"
+}

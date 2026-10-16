@@ -1,0 +1,79 @@
+{
+  "mu": 0.01436421344842394,
+  "sigma": 0.23998871432570112,
+  "n_obs": 1256,
+  "method": "transformer",
+  "final_train_loss": 0.9509294629096985,
+  "raw_mu": 0.01436421344842394,
+  "current_price": 4487.0,
+  "raw_terminal_price": 4818.653126529576,
+  "guarded_terminal_price": 4818.653126529576,
+  "raw_cagr_pct": 1.436421344842394,
+  "guarded_cagr_pct": 1.436421344842394,
+  "historical_cagr_pct": 17.091080381994317,
+  "historical_cagr_years": 4.984126984126984,
+  "historical_max_drawdown_pct": -28.62778144806637,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 4487.0,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 4551.4522,
+      "annual_return_pct": 1.4364,
+      "cumulative_return_pct": 1.4364
+    },
+    {
+      "year": 2,
+      "projected_price": 4616.8303,
+      "annual_return_pct": 1.4364,
+      "cumulative_return_pct": 2.8935
+    },
+    {
+      "year": 3,
+      "projected_price": 4683.1474,
+      "annual_return_pct": 1.4364,
+      "cumulative_return_pct": 4.3715
+    },
+    {
+      "year": 4,
+      "projected_price": 4750.4171,
+      "annual_return_pct": 1.4364,
+      "cumulative_return_pct": 5.8707
+    },
+    {
+      "year": 5,
+      "projected_price": 4818.6531,
+      "annual_return_pct": 1.4364,
+      "cumulative_return_pct": 7.3914
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 3222.0608,
+      "cagr_pct": -6.4087
+    },
+    "base": {
+      "terminal_price": 4818.6531,
+      "cagr_pct": 1.4364
+    },
+    "bull": {
+      "terminal_price": 7206.3873,
+      "cagr_pct": 9.9391
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-16T01:05:18.752057"
+}

@@ -1,0 +1,25 @@
+# Prudentia Chat service config
+service:
+  host: 127.0.0.1
+  port: 8001
+  allowed_origins: ["http://localhost:5173"]   # Vite dev server
+chat:
+  ollama_host: http://localhost:11434
+  intent_model: qwen2.5:1.5b-instruct          # same as the backend today; swap after eval
+  judge_model: qwen2.5:1.5b-instruct           # tier-2 policy judge (defaults to intent_model)
+  explain_model: llama3.2:1b                   # may only ever see numbers/tables, never user text
+  request_timeout_seconds: 60
+  max_chars: 300
+  session_ttl_minutes: 120
+  max_turns: 30
+  min_interval_seconds: 1.0                    # per-session rate limit (1 msg/sec)
+  polish: false                                # optional LLM polish of template replies (grounding-checked)
+engine:
+  mode: fake                                   # fake | http   (http = Prudentia backend API)
+  base_url: http://127.0.0.1:8000
+  timeout_seconds: 60                          # /plan takes ~4 s (forecasts); give it room
+limits:
+  amount_min: 10000
+  amount_max: 100000000
+  years_min: 1
+  years_max: 40

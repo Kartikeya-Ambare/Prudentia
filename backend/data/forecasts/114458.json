@@ -1,0 +1,79 @@
+{
+  "mu": 0.11848760257904155,
+  "sigma": 0.15596802622947012,
+  "n_obs": 3882,
+  "method": "transformer",
+  "final_train_loss": 0.9806262850761414,
+  "raw_mu": 0.11848760257904155,
+  "current_price": 538.758,
+  "raw_terminal_price": 943.0823250820717,
+  "guarded_terminal_price": 943.0823250820717,
+  "raw_cagr_pct": 11.848760257904155,
+  "guarded_cagr_pct": 11.848760257904155,
+  "historical_cagr_pct": 7.583526270242613,
+  "historical_cagr_years": 5.0,
+  "historical_max_drawdown_pct": -37.05922290547225,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 538.758,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 602.5941,
+      "annual_return_pct": 11.8488,
+      "cumulative_return_pct": 11.8488
+    },
+    {
+      "year": 2,
+      "projected_price": 673.9941,
+      "annual_return_pct": 11.8488,
+      "cumulative_return_pct": 25.1015
+    },
+    {
+      "year": 3,
+      "projected_price": 753.854,
+      "annual_return_pct": 11.8488,
+      "cumulative_return_pct": 39.9244
+    },
+    {
+      "year": 4,
+      "projected_price": 843.1764,
+      "annual_return_pct": 11.8488,
+      "cumulative_return_pct": 56.5037
+    },
+    {
+      "year": 5,
+      "projected_price": 943.0823,
+      "annual_return_pct": 11.8488,
+      "cumulative_return_pct": 75.0475
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 726.027,
+      "cagr_pct": 6.148
+    },
+    "base": {
+      "terminal_price": 943.0823,
+      "cagr_pct": 11.8488
+    },
+    "bull": {
+      "terminal_price": 1225.0291,
+      "cagr_pct": 17.8557
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-16T19:31:14.329504"
+}

@@ -1,0 +1,107 @@
+# Bank universe for the FD/deposit leg.
+# rate_pct is a static seed; download.py's FD-rate lookup refreshes it
+# monthly and writes actuals into the bank_rates table —
+# these values are only the fallback used before the first refresh.
+#
+# "major" tier = the 10 nationalized (PSU) banks + the top 5-6 private banks
+# by size, per the project's bank-selection scope. "category" is informational
+# only (nationalized vs. private) and isn't read by bank_selector.py.
+banks:
+  # --- Nationalized (PSU) banks — 10 ---
+  - id: sbin
+    display_name: "State Bank of India"
+    ticker: SBIN.NS
+    tier: major
+    category: nationalized
+    rate_pct: 6.75
+  - id: bankbaroda
+    display_name: "Bank of Baroda"
+    ticker: BANKBARODA.NS
+    tier: major
+    category: nationalized
+    rate_pct: 6.85
+  - id: pnb
+    display_name: "Punjab National Bank"
+    ticker: PNB.NS
+    tier: major
+    category: nationalized
+    rate_pct: 6.75
+  - id: canbk
+    display_name: "Canara Bank"
+    ticker: CANBK.NS
+    tier: major
+    category: nationalized
+    rate_pct: 6.80
+  - id: unionbank
+    display_name: "Union Bank of India"
+    ticker: UNIONBANK.NS
+    tier: major
+    category: nationalized
+    rate_pct: 6.80
+  - id: bankindia
+    display_name: "Bank of India"
+    ticker: BANKINDIA.NS
+    tier: major
+    category: nationalized
+    rate_pct: 6.75
+  - id: indianb
+    display_name: "Indian Bank"
+    ticker: INDIANB.NS
+    tier: major
+    category: nationalized
+    rate_pct: 6.80
+  - id: centralbk
+    display_name: "Central Bank of India"
+    ticker: CENTRALBK.NS
+    tier: major
+    category: nationalized
+    rate_pct: 6.75
+  - id: iob
+    display_name: "Indian Overseas Bank"
+    ticker: IOB.NS
+    tier: major
+    category: nationalized
+    rate_pct: 6.75
+  - id: ucobank
+    display_name: "UCO Bank"
+    ticker: UCOBANK.NS
+    tier: major
+    category: nationalized
+    rate_pct: 6.70
+  # --- Top private banks — 6 ---
+  - id: hdfcbank
+    display_name: "HDFC Bank"
+    ticker: HDFCBANK.NS
+    tier: major
+    category: private
+    rate_pct: 7.00
+  - id: icicibank
+    display_name: "ICICI Bank"
+    ticker: ICICIBANK.NS
+    tier: major
+    category: private
+    rate_pct: 7.00
+  - id: axisbank
+    display_name: "Axis Bank"
+    ticker: AXISBANK.NS
+    tier: major
+    category: private
+    rate_pct: 7.10
+  - id: kotakbank
+    display_name: "Kotak Mahindra Bank"
+    ticker: KOTAKBANK.NS
+    tier: major
+    category: private
+    rate_pct: 7.10
+  - id: indusindbk
+    display_name: "IndusInd Bank"
+    ticker: INDUSINDBK.NS
+    tier: major
+    category: private
+    rate_pct: 7.25
+  - id: idfcfirstb
+    display_name: "IDFC First Bank"
+    ticker: IDFCFIRSTB.NS
+    tier: major
+    category: private
+    rate_pct: 7.50

@@ -1,0 +1,79 @@
+{
+  "mu": -0.024513635332937468,
+  "sigma": 0.2299375012757536,
+  "n_obs": 1255,
+  "method": "transformer",
+  "final_train_loss": 0.9282962679862976,
+  "raw_mu": -0.024513635332937468,
+  "current_price": 25695.0,
+  "raw_terminal_price": 22696.277776013114,
+  "guarded_terminal_price": 22696.277776013114,
+  "raw_cagr_pct": -2.4513635332937467,
+  "guarded_cagr_pct": -2.4513635332937467,
+  "historical_cagr_pct": 6.242972259195834,
+  "historical_cagr_years": 4.98015873015873,
+  "historical_max_drawdown_pct": -32.87497844726241,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 25695.0,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 25065.1221,
+      "annual_return_pct": -2.4514,
+      "cumulative_return_pct": -2.4514
+    },
+    {
+      "year": 2,
+      "projected_price": 24450.6849,
+      "annual_return_pct": -2.4514,
+      "cumulative_return_pct": -4.8426
+    },
+    {
+      "year": 3,
+      "projected_price": 23851.3097,
+      "annual_return_pct": -2.4514,
+      "cumulative_return_pct": -7.1753
+    },
+    {
+      "year": 4,
+      "projected_price": 23266.6274,
+      "annual_return_pct": -2.4514,
+      "cumulative_return_pct": -9.4508
+    },
+    {
+      "year": 5,
+      "projected_price": 22696.2778,
+      "annual_return_pct": -2.4514,
+      "cumulative_return_pct": -11.6705
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 15434.1722,
+      "cagr_pct": -9.6919
+    },
+    "base": {
+      "terminal_price": 22696.2778,
+      "cagr_pct": -2.4514
+    },
+    "bull": {
+      "terminal_price": 33375.3582,
+      "cagr_pct": 5.3696
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-16T01:05:31.136069"
+}

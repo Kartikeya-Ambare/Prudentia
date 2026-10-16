@@ -1,0 +1,79 @@
+{
+  "mu": 0.11358229640511693,
+  "sigma": 0.14812237133453832,
+  "n_obs": 3169,
+  "method": "transformer",
+  "final_train_loss": 0.9783451557159424,
+  "raw_mu": 0.11358229640511693,
+  "current_price": 114.34,
+  "raw_terminal_price": 195.79868813932083,
+  "guarded_terminal_price": 195.79868813932083,
+  "raw_cagr_pct": 11.358229640511693,
+  "guarded_cagr_pct": 11.358229640511693,
+  "historical_cagr_pct": 14.323169854592388,
+  "historical_cagr_years": 5.0,
+  "historical_max_drawdown_pct": -34.781382228490834,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 114.34,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 127.327,
+      "annual_return_pct": 11.3582,
+      "cumulative_return_pct": 11.3582
+    },
+    {
+      "year": 2,
+      "projected_price": 141.7891,
+      "annual_return_pct": 11.3582,
+      "cumulative_return_pct": 24.0066
+    },
+    {
+      "year": 3,
+      "projected_price": 157.8938,
+      "annual_return_pct": 11.3582,
+      "cumulative_return_pct": 38.0915
+    },
+    {
+      "year": 4,
+      "projected_price": 175.8278,
+      "annual_return_pct": 11.3582,
+      "cumulative_return_pct": 53.7763
+    },
+    {
+      "year": 5,
+      "projected_price": 195.7987,
+      "annual_return_pct": 11.3582,
+      "cumulative_return_pct": 71.2425
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 152.731,
+      "cagr_pct": 5.9609
+    },
+    "base": {
+      "terminal_price": 195.7987,
+      "cagr_pct": 11.3582
+    },
+    "bull": {
+      "terminal_price": 251.0108,
+      "cagr_pct": 17.0304
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-16T10:56:30.407434"
+}

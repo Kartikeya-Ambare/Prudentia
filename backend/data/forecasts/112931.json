@@ -1,0 +1,79 @@
+{
+  "mu": -0.10535694478191356,
+  "sigma": 0.17796151564335247,
+  "n_obs": 4004,
+  "method": "transformer",
+  "final_train_loss": 1.003527045249939,
+  "raw_mu": -0.10535694478191356,
+  "current_price": 45.62,
+  "raw_terminal_price": 26.145939746666542,
+  "guarded_terminal_price": 26.145939746666542,
+  "raw_cagr_pct": -10.535694478191356,
+  "guarded_cagr_pct": -10.535694478191356,
+  "historical_cagr_pct": 0.5676280199577111,
+  "historical_cagr_years": 5.0,
+  "historical_max_drawdown_pct": -41.77068391979737,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 45.62,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 40.8136,
+      "annual_return_pct": -10.5357,
+      "cumulative_return_pct": -10.5357
+    },
+    {
+      "year": 2,
+      "projected_price": 36.5136,
+      "annual_return_pct": -10.5357,
+      "cumulative_return_pct": -19.9614
+    },
+    {
+      "year": 3,
+      "projected_price": 32.6667,
+      "annual_return_pct": -10.5357,
+      "cumulative_return_pct": -28.394
+    },
+    {
+      "year": 4,
+      "projected_price": 29.225,
+      "annual_return_pct": -10.5357,
+      "cumulative_return_pct": -35.9382
+    },
+    {
+      "year": 5,
+      "projected_price": 26.1459,
+      "annual_return_pct": -10.5357,
+      "cumulative_return_pct": -42.6875
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 19.3994,
+      "cagr_pct": -15.7196
+    },
+    "base": {
+      "terminal_price": 26.1459,
+      "cagr_pct": -10.5357
+    },
+    "bull": {
+      "terminal_price": 35.2387,
+      "cagr_pct": -5.033
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-16T10:56:26.201373"
+}

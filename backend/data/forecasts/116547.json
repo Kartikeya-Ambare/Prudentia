@@ -1,0 +1,79 @@
+{
+  "mu": -0.013898423509786696,
+  "sigma": 0.16079364847847177,
+  "n_obs": 3608,
+  "method": "transformer",
+  "final_train_loss": 0.9928327202796936,
+  "raw_mu": -0.013898423509786694,
+  "current_price": 40.73,
+  "raw_terminal_price": 37.977176732967266,
+  "guarded_terminal_price": 37.977176732967266,
+  "raw_cagr_pct": -1.3898423509786695,
+  "guarded_cagr_pct": -1.3898423509786695,
+  "historical_cagr_pct": 7.364735740773876,
+  "historical_cagr_years": 5.0,
+  "historical_max_drawdown_pct": -36.81679055531264,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 40.73,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 40.1639,
+      "annual_return_pct": -1.3898,
+      "cumulative_return_pct": -1.3898
+    },
+    {
+      "year": 2,
+      "projected_price": 39.6057,
+      "annual_return_pct": -1.3898,
+      "cumulative_return_pct": -2.7604
+    },
+    {
+      "year": 3,
+      "projected_price": 39.0552,
+      "annual_return_pct": -1.3898,
+      "cumulative_return_pct": -4.1118
+    },
+    {
+      "year": 4,
+      "projected_price": 38.5124,
+      "annual_return_pct": -1.3898,
+      "cumulative_return_pct": -5.4445
+    },
+    {
+      "year": 5,
+      "projected_price": 37.9772,
+      "annual_return_pct": -1.3898,
+      "cumulative_return_pct": -6.7587
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 29.0009,
+      "cagr_pct": -6.5672
+    },
+    "base": {
+      "terminal_price": 37.9772,
+      "cagr_pct": -1.3898
+    },
+    "bull": {
+      "terminal_price": 49.7318,
+      "cagr_pct": 4.0744
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-16T16:24:18.278591"
+}

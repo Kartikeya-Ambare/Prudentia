@@ -1,0 +1,29 @@
+# Engine API. Install with:  pip install -r requirements.txt
+# `torch` is the standard wheel: it uses CUDA automatically when available and falls back to CPU otherwise.
+
+pandas>=2.1
+numpy>=1.26
+pyyaml>=6.0
+python-dotenv>=1.0
+requests>=2.31
+python-dateutil>=2.8
+tenacity>=8.2                  # retry/backoff for download.py
+jinja2>=3.1                    # explanation templates
+
+sqlalchemy>=2.0
+psycopg2-binary>=2.9           # Postgres driver; SQLite is used when DB_HOST is empty (see .env.example)
+
+yfinance>=0.2.40               # stock price downloader
+torch                          # return forecaster
+scipy>=1.11
+scikit-learn>=1.4
+PyPortfolioOpt>=1.5.5          # Black-Litterman optimiser
+
+fastapi>=0.110
+uvicorn[standard]>=0.29
+pydantic>=2.6
+python-multipart>=0.0.9
+
+openpyxl>=3.1                  # scripts/build_mf_sector_snapshot.py reads fund-house Excel files
+
+pytest>=8.0

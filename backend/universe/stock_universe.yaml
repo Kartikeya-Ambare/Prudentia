@@ -1,0 +1,80 @@
+# Investment universe — stocks. 12 sectors, ~15-18 NSE tickers each
+# (yfinance .NS format). download.py, the correlation selector, and nothing
+# else treat this file as the single source of truth for what's investable.
+sectors:
+  banking:
+    display_name: "Banking"
+    tickers: [HDFCBANK.NS, ICICIBANK.NS, SBIN.NS, KOTAKBANK.NS, AXISBANK.NS,
+              INDUSINDBK.NS, AUBANK.NS, BANDHANBNK.NS, FEDERALBNK.NS, IDFCFIRSTB.NS,
+              BANKBARODA.NS, PNB.NS, CANBK.NS, UNIONBANK.NS, INDIANB.NS, YESBANK.NS]
+
+  nbfc_insurance_amc:
+    display_name: "NBFC, Insurance & Asset Management"
+    tickers: [BAJFINANCE.NS, BAJAJFINSV.NS, HDFCLIFE.NS, SBILIFE.NS, ICICIPRULI.NS,
+              ICICIGI.NS, CHOLAFIN.NS, SHRIRAMFIN.NS, MUTHOOTFIN.NS, LICI.NS,
+              PFC.NS, RECLTD.NS, SBICARD.NS, HDFCAMC.NS, NAM-INDIA.NS, LTF.NS,
+              MFSL.NS, PNBHOUSING.NS]
+
+  it_technology:
+    display_name: "Information Technology"
+    tickers: [INFY.NS, TCS.NS, HCLTECH.NS, WIPRO.NS, LTIM.NS, TECHM.NS,
+              PERSISTENT.NS, COFORGE.NS, MPHASIS.NS, LTTS.NS, OFSS.NS, KPITTECH.NS,
+              TATAELXSI.NS, CYIENT.NS, ZENSARTECH.NS, BIRLASOFT.NS, INTELLECT.NS,
+              NEWGEN.NS]
+
+  pharma_healthcare:
+    display_name: "Pharma & Healthcare"
+    tickers: [SUNPHARMA.NS, CIPLA.NS, DRREDDY.NS, DIVISLAB.NS, LUPIN.NS,
+              AUROPHARMA.NS, ZYDUSLIFE.NS, TORNTPHARM.NS, ALKEM.NS, IPCALAB.NS,
+              MANKIND.NS, LAURUSLABS.NS, GLENMARK.NS, ABBOTINDIA.NS, BIOCON.NS,
+              JBCHEPHARM.NS, GLAND.NS, NATCOPHARM.NS, SANOFI.NS, GRANULES.NS]
+
+  auto_ancillary:
+    display_name: "Automobile & Auto Ancillaries"
+    tickers: [ASHOKLEY.NS, BAJAJ-AUTO.NS, BHARATFORG.NS, BOSCHLTD.NS, EICHERMOT.NS,
+              EXIDEIND.NS, HEROMOTOCO.NS, "M&M.NS", MARUTI.NS, MOTHERSON.NS,
+              SONACOMS.NS, TVSMOTOR.NS, TATAMOTORS.NS, TIINDIA.NS, UNOMINDA.NS]
+
+  fmcg:
+    display_name: "FMCG & Consumer Staples"
+    tickers: [HINDUNILVR.NS, ITC.NS, NESTLEIND.NS, BRITANNIA.NS, DABUR.NS,
+              GODREJCP.NS, MARICO.NS, TATACONSUM.NS, COLPAL.NS, VBL.NS,
+              MCDOWELL-N.NS, EMAMILTD.NS, BIKAJI.NS, PATANJALI.NS, RADICO.NS,
+              GILLETTE.NS]
+
+  metals_mining:
+    display_name: "Metals & Mining"
+    tickers: [TATASTEEL.NS, JSWSTEEL.NS, HINDALCO.NS, VEDL.NS, JINDALSTEL.NS,
+              SAIL.NS, NMDC.NS, NATIONALUM.NS, HINDZINC.NS, JSL.NS, APLAPOLLO.NS,
+              RATNAMANI.NS, WELCORP.NS, HINDCOPPER.NS, MOIL.NS]
+
+  energy_power:
+    display_name: "Energy, Oil & Gas, Power"
+    tickers: [RELIANCE.NS, ONGC.NS, IOC.NS, BPCL.NS, HPCL.NS, GAIL.NS, NTPC.NS,
+              POWERGRID.NS, TATAPOWER.NS, COALINDIA.NS, OIL.NS, ADANIGREEN.NS,
+              ADANIENSOL.NS, ADANIPOWER.NS, JSWENERGY.NS, TORNTPOWER.NS, NHPC.NS,
+              SJVN.NS]
+
+  realty_infra:
+    display_name: "Realty & Infrastructure"
+    tickers: [DLF.NS, GODREJPROP.NS, OBEROIRLTY.NS, PRESTIGE.NS, PHOENIXLTD.NS,
+              BRIGADE.NS, SOBHA.NS, LODHA.NS, SUNTECK.NS, MAHLIFE.NS, IRB.NS,
+              NBCC.NS, RVNL.NS, IRCON.NS, NCC.NS]
+
+  capital_goods_defence:
+    display_name: "Capital Goods, Industrials & Defence"
+    tickers: [LT.NS, SIEMENS.NS, ABB.NS, BHEL.NS, CUMMINSIND.NS, THERMAX.NS,
+              BEL.NS, HAL.NS, CGPOWER.NS, HONAUT.NS, POLYCAB.NS, KEI.NS,
+              SKFINDIA.NS, GRINDWELL.NS, TIMKEN.NS, KIRLOSENG.NS, TRITURBINE.NS]
+
+  consumer_durables_retail:
+    display_name: "Consumer Durables & Retail"
+    tickers: [TITAN.NS, HAVELLS.NS, VOLTAS.NS, WHIRLPOOL.NS, BLUESTARCO.NS,
+              CROMPTON.NS, DIXON.NS, BATAINDIA.NS, RELAXO.NS, TRENT.NS, DMART.NS,
+              ABFRL.NS, VMART.NS, SYMPHONY.NS, RAJESHEXPO.NS]
+
+  media_digital:
+    display_name: "Media & Digital / New-Age Internet"
+    tickers: [ZEEL.NS, SUNTV.NS, PVRINOX.NS, NETWORK18.NS, TV18BRDCST.NS,
+              NAZARA.NS, SAREGAMA.NS, TIPSMUSIC.NS, NYKAA.NS, ZOMATO.NS,
+              PAYTM.NS, POLICYBZR.NS, IRCTC.NS]

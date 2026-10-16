@@ -1,0 +1,79 @@
+{
+  "mu": -0.006684933915547513,
+  "sigma": 0.34047936337357715,
+  "n_obs": 1239,
+  "method": "transformer",
+  "final_train_loss": 1.0011115074157715,
+  "raw_mu": -0.006684933915547513,
+  "current_price": 813.4000244140625,
+  "raw_terminal_price": 786.5734705150189,
+  "guarded_terminal_price": 786.5734705150189,
+  "raw_cagr_pct": -0.6684933915547513,
+  "guarded_cagr_pct": -0.6684933915547513,
+  "historical_cagr_pct": -1.85703768063602,
+  "historical_cagr_years": 4.916666666666667,
+  "historical_max_drawdown_pct": -53.001400579527726,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 813.4,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 807.9625,
+      "annual_return_pct": -0.6685,
+      "cumulative_return_pct": -0.6685
+    },
+    {
+      "year": 2,
+      "projected_price": 802.5613,
+      "annual_return_pct": -0.6685,
+      "cumulative_return_pct": -1.3325
+    },
+    {
+      "year": 3,
+      "projected_price": 797.1963,
+      "annual_return_pct": -0.6685,
+      "cumulative_return_pct": -1.9921
+    },
+    {
+      "year": 4,
+      "projected_price": 791.867,
+      "annual_return_pct": -0.6685,
+      "cumulative_return_pct": -2.6473
+    },
+    {
+      "year": 5,
+      "projected_price": 786.5735,
+      "annual_return_pct": -0.6685,
+      "cumulative_return_pct": -3.2981
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 444.3821,
+      "cagr_pct": -11.3884
+    },
+    "base": {
+      "terminal_price": 786.5735,
+      "cagr_pct": -0.6685
+    },
+    "bull": {
+      "terminal_price": 1392.2653,
+      "cagr_pct": 11.3483
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-14T14:41:32.182191"
+}

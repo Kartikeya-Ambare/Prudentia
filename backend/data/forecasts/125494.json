@@ -1,0 +1,79 @@
+{
+  "mu": 0.12460583978986525,
+  "sigma": 0.15180378272153502,
+  "n_obs": 3183,
+  "method": "transformer",
+  "final_train_loss": 0.983597457408905,
+  "raw_mu": 0.12460583978986525,
+  "current_price": 179.1751,
+  "raw_terminal_price": 322.31411683567194,
+  "guarded_terminal_price": 322.31411683567194,
+  "raw_cagr_pct": 12.460583978986525,
+  "guarded_cagr_pct": 12.460583978986525,
+  "historical_cagr_pct": 12.500192669377208,
+  "historical_cagr_years": 5.0,
+  "historical_max_drawdown_pct": -41.84871047738083,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 179.1751,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 201.5014,
+      "annual_return_pct": 12.4606,
+      "cumulative_return_pct": 12.4606
+    },
+    {
+      "year": 2,
+      "projected_price": 226.6096,
+      "annual_return_pct": 12.4606,
+      "cumulative_return_pct": 26.4738
+    },
+    {
+      "year": 3,
+      "projected_price": 254.8465,
+      "annual_return_pct": 12.4606,
+      "cumulative_return_pct": 42.2332
+    },
+    {
+      "year": 4,
+      "projected_price": 286.6019,
+      "annual_return_pct": 12.4606,
+      "cumulative_return_pct": 59.9563
+    },
+    {
+      "year": 5,
+      "projected_price": 322.3141,
+      "annual_return_pct": 12.4606,
+      "cumulative_return_pct": 79.8878
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 249.8708,
+      "cagr_pct": 6.8778
+    },
+    "base": {
+      "terminal_price": 322.3141,
+      "cagr_pct": 12.4606
+    },
+    "bull": {
+      "terminal_price": 415.7605,
+      "cagr_pct": 18.335
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-16T10:56:28.780264"
+}

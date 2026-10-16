@@ -1,0 +1,79 @@
+{
+  "mu": 0.059174578228138076,
+  "sigma": 0.30304373222003084,
+  "n_obs": 851,
+  "method": "transformer",
+  "final_train_loss": 0.9710585474967957,
+  "raw_mu": 0.05917457822813808,
+  "current_price": 2372.0,
+  "raw_terminal_price": 3161.931282023251,
+  "guarded_terminal_price": 3161.931282023251,
+  "raw_cagr_pct": 5.917457822813808,
+  "guarded_cagr_pct": 5.917457822813808,
+  "historical_cagr_pct": 16.3660715798863,
+  "historical_cagr_years": 3.376984126984127,
+  "historical_max_drawdown_pct": -35.693709996581305,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 2372.0,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 2512.3621,
+      "annual_return_pct": 5.9175,
+      "cumulative_return_pct": 5.9175
+    },
+    {
+      "year": 2,
+      "projected_price": 2661.0301,
+      "annual_return_pct": 5.9175,
+      "cumulative_return_pct": 12.1851
+    },
+    {
+      "year": 3,
+      "projected_price": 2818.4954,
+      "annual_return_pct": 5.9175,
+      "cumulative_return_pct": 18.8236
+    },
+    {
+      "year": 4,
+      "projected_price": 2985.2787,
+      "annual_return_pct": 5.9175,
+      "cumulative_return_pct": 25.8549
+    },
+    {
+      "year": 5,
+      "projected_price": 3161.9313,
+      "annual_return_pct": 5.9175,
+      "cumulative_return_pct": 33.3023
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 1902.1089,
+      "cagr_pct": -4.3193
+    },
+    "base": {
+      "terminal_price": 3161.9313,
+      "cagr_pct": 5.9175
+    },
+    "bull": {
+      "terminal_price": 5256.1709,
+      "cagr_pct": 17.2495
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-16T14:09:46.051680"
+}

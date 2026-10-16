@@ -1,0 +1,83 @@
+{
+  "mu": 0.08293908930625184,
+  "sigma": 0.20354211305841682,
+  "n_obs": 4798,
+  "method": "transformer",
+  "final_train_loss": 0.9944907426834106,
+  "raw_mu": 0.08293908930625184,
+  "current_price": 31.3802,
+  "raw_terminal_price": 46.73861703247995,
+  "guarded_terminal_price": 46.73861703247995,
+  "raw_cagr_pct": 8.293908930625184,
+  "guarded_cagr_pct": 8.293908930625184,
+  "historical_cagr_pct": 6.35515075413049,
+  "historical_cagr_years": 5.0,
+  "historical_max_drawdown_pct": -69.99220933962697,
+  "confidence_score": 60.0,
+  "confidence_status": "MODERATE_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "DEGRADED",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [
+    "NON_POSITIVE_PRICES"
+  ],
+  "warnings": [
+    "Price history contains zero/negative values; those rows were dropped before forecasting."
+  ],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 31.3802,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 33.9828,
+      "annual_return_pct": 8.2939,
+      "cumulative_return_pct": 8.2939
+    },
+    {
+      "year": 2,
+      "projected_price": 36.8014,
+      "annual_return_pct": 8.2939,
+      "cumulative_return_pct": 17.2757
+    },
+    {
+      "year": 3,
+      "projected_price": 39.8536,
+      "annual_return_pct": 8.2939,
+      "cumulative_return_pct": 27.0024
+    },
+    {
+      "year": 4,
+      "projected_price": 43.159,
+      "annual_return_pct": 8.2939,
+      "cumulative_return_pct": 37.5359
+    },
+    {
+      "year": 5,
+      "projected_price": 46.7386,
+      "annual_return_pct": 8.2939,
+      "cumulative_return_pct": 48.943
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 33.2223,
+      "cagr_pct": 1.1474
+    },
+    "base": {
+      "terminal_price": 46.7386,
+      "cagr_pct": 8.2939
+    },
+    "bull": {
+      "terminal_price": 65.754,
+      "cagr_pct": 15.9454
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-14T14:41:37.682387"
+}

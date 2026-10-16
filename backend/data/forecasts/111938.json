@@ -1,0 +1,79 @@
+{
+  "mu": -0.055621130339071435,
+  "sigma": 0.1577346741228472,
+  "n_obs": 4287,
+  "method": "transformer",
+  "final_train_loss": 0.9701384902000427,
+  "raw_mu": -0.055621130339071435,
+  "current_price": 73.37,
+  "raw_terminal_price": 55.11246363517978,
+  "guarded_terminal_price": 55.11246363517978,
+  "raw_cagr_pct": -5.562113033907144,
+  "guarded_cagr_pct": -5.562113033907144,
+  "historical_cagr_pct": 5.909876692744653,
+  "historical_cagr_years": 5.0,
+  "historical_max_drawdown_pct": -35.247975708502025,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 73.37,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 69.2891,
+      "annual_return_pct": -5.5621,
+      "cumulative_return_pct": -5.5621
+    },
+    {
+      "year": 2,
+      "projected_price": 65.4351,
+      "annual_return_pct": -5.5621,
+      "cumulative_return_pct": -10.8149
+    },
+    {
+      "year": 3,
+      "projected_price": 61.7956,
+      "annual_return_pct": -5.5621,
+      "cumulative_return_pct": -15.7754
+    },
+    {
+      "year": 4,
+      "projected_price": 58.3584,
+      "annual_return_pct": -5.5621,
+      "cumulative_return_pct": -20.4601
+    },
+    {
+      "year": 5,
+      "projected_price": 55.1125,
+      "annual_return_pct": -5.5621,
+      "cumulative_return_pct": -24.8842
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 42.3025,
+      "cagr_pct": -10.4286
+    },
+    "base": {
+      "terminal_price": 55.1125,
+      "cagr_pct": -5.5621
+    },
+    "bull": {
+      "terminal_price": 71.8015,
+      "cagr_pct": -0.4313
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-16T10:56:10.777233"
+}

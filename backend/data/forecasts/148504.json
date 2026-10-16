@@ -1,0 +1,79 @@
+{
+  "mu": 0.020795880665140452,
+  "sigma": 0.13568151234852327,
+  "n_obs": 1478,
+  "method": "transformer",
+  "final_train_loss": 0.9904176592826843,
+  "raw_mu": 0.020795880665140452,
+  "current_price": 19.8499,
+  "raw_terminal_price": 22.00152920686313,
+  "guarded_terminal_price": 22.00152920686313,
+  "raw_cagr_pct": 2.079588066514045,
+  "guarded_cagr_pct": 2.079588066514045,
+  "historical_cagr_pct": 6.381403566445165,
+  "historical_cagr_years": 5.0,
+  "historical_max_drawdown_pct": -16.80543044653198,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 19.8499,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 20.2627,
+      "annual_return_pct": 2.0796,
+      "cumulative_return_pct": 2.0796
+    },
+    {
+      "year": 2,
+      "projected_price": 20.6841,
+      "annual_return_pct": 2.0796,
+      "cumulative_return_pct": 4.2024
+    },
+    {
+      "year": 3,
+      "projected_price": 21.1142,
+      "annual_return_pct": 2.0796,
+      "cumulative_return_pct": 6.3694
+    },
+    {
+      "year": 4,
+      "projected_price": 21.5533,
+      "annual_return_pct": 2.0796,
+      "cumulative_return_pct": 8.5814
+    },
+    {
+      "year": 5,
+      "projected_price": 22.0015,
+      "annual_return_pct": 2.0796,
+      "cumulative_return_pct": 10.8395
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 17.5239,
+      "cagr_pct": -2.4618
+    },
+    "base": {
+      "terminal_price": 22.0015,
+      "cagr_pct": 2.0796
+    },
+    "bull": {
+      "terminal_price": 27.6232,
+      "cagr_pct": 6.8325
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-16T00:31:28.801853"
+}

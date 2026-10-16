@@ -1,0 +1,175 @@
+# ============================================================================
+# Asset Allocation Recommender — config.yaml
+# Single source of runtime configuration. Secrets (DB password, etc.) are
+# never written here directly — they come from .env via ${VAR} substitution.
+# ============================================================================
+
+database:
+  host: ${DB_HOST}
+  port: ${DB_PORT}
+  name: ${DB_NAME}
+  user: ${DB_USER}
+  password: ${DB_PASSWORD}
+  schema: asset_allocation
+  # If DB_HOST is unset/empty, backend/db.py falls back to a local SQLite file
+  # at data/asset_allocation.db so the app runs with zero external services
+  # for dev/demo. Point DB_HOST at a real Postgres instance for production use.
+  sqlite_fallback_path: data/asset_allocation.db
+
+download:
+  workers: 10
+  batch_size: 10
+  inter_batch_delay_seconds: 12
+  lookback_days: 1825
+  universe_file: universe/stock_universe.yaml
+  mf_universe_file: universe/mf_universe.yaml
+  bank_universe_file: universe/bank_universe.yaml
+  max_retries: 1
+
+selection:
+  risk_bands:                    # risk_thermometer (0-100) -> volatility band
+                                  # target_vol_pct is the band's typical annualized
+                                  # trailing volatility for Indian equities/MFs —
+                                  # used as the step-1 filter's reference point
+    conservative: { min: 0, max: 33, target_vol_pct: 18 }
+    moderate: { min: 34, max: 66, target_vol_pct: 27 }
+    aggressive: { min: 67, max: 100, target_vol_pct: 40 }
+  volatility_tolerance_pct: 40   # relative tolerance around target_vol_pct before
+                                  # an instrument is dropped in
+                                  # (e.g. 40 => instrument vol must be within
+                                  # +/-40% of the band's target to stay eligible)
+  correlation_threshold: 0.85    # dedup threshold
+  candidate_pool_size: 20        # cap per bucket
+  min_price_history_days: 60     # instruments with less cached history than this
+                                  # skip the volatility filter rather than being
+                                  # dropped outright (can't estimate vol reliably)
+
+optimizer:
+  strategy: black_litterman      # swap key -> OPTIMIZER_REGISTRY entry,
+  # Clips Black-Litterman's historical-mean equilibrium prior (pi) before it
+  # blends with the forecaster's guarded view -- pi is computed straight
+  # from trailing prices with none of forecaster.py's guardrails, so a
+  # single past run-up can otherwise make pi 80%+ for one name and let it
+  # dominate that instrument's posterior/weight despite a much more modest
+  # guarded forecast. A numerical-plausibility bound on the optimizer's own
+  # input, not a duplicate of the forecaster guardrail layer.
+  prior_cagr_cap_pct: 40
+
+forecaster:
+  lookback_days: 1825
+  horizon_years_default: 5
+  # A small, CPU/GPU-portable Transformer encoder.
+  d_model: 32
+  nhead: 4
+  num_layers: 2
+  epochs: 30
+  learning_rate: 0.001
+
+  # Guardrail layer (backend/forecasting/forecast_guardrails.py) — these are
+  # ENGINEERING ALERT THRESHOLDS for flagging/shrinking implausible 5-year
+  # forecasts before they reach the optimizer, not claims about what returns
+  # are "really" achievable. Bumping `version` forces every cached forecast
+  # (data/forecasts/<ticker>.json) to recompute under the new thresholds.
+  guardrails:
+    enabled: true
+    version: 4
+
+    cagr:
+      high_positive_pct: 20
+      extreme_positive_pct: 35
+      high_negative_pct: -15
+      extreme_negative_pct: -25
+
+    historical:
+      comparison_enabled: true
+      deviation_multiplier: 2.5
+      minimum_difference_pct: 15
+      min_years_for_comparison: 1.0
+
+    regime:
+      enabled: true
+      recent_window_days: 252
+      volatility_ratio_high: 2.0
+      volatility_ratio_low: 0.5
+
+    volatility:
+      high_annual_pct: 45
+
+    drawdown:
+      high_drawdown_pct: -40
+
+    confidence:
+      base_score: 100
+      penalty_extreme_cagr: 25
+      penalty_high_cagr: 10
+      penalty_history_deviation: 15
+      penalty_regime_shift: 15
+      penalty_high_volatility: 10
+      penalty_insufficient_history: 30
+      penalty_data_quality: 40
+      penalty_drawdown_risk: 10
+      penalty_terminal_cap: 10
+
+    scenario:
+      enabled: true
+      bear_sigma_multiplier: 0.75
+      bull_sigma_multiplier: 0.75
+      # Outer bound on the bear/bull tails' own implied CAGR — independent of,
+      # and deliberately wider than, the base-case soft cap below. Without
+      # this, sigma*sqrt(horizon) compounded over 5 years could still blow
+      # the bull tail up to an absurd multiple even with a guarded base mu.
+      max_cagr_pct: 45
+      min_cagr_pct: -35
+
+    soft_cap:
+      enabled: true
+      positive_cagr_pct: 22
+      negative_cagr_pct: -18
+      shrinkage_factor: 0.3
+      # Raises the positive ceiling for instruments more volatile than
+      # baseline_volatility_pct, so a genuinely volatile ("aggressive")
+      # pick isn't flattened to the same cap as a low-vol one — that
+      # flattening was breaking the risk thermometer: the aggressive risk
+      # band selects higher-volatility instruments by design, expecting a
+      # higher *potential* return, but a volatility-blind cap squashed them
+      # to the same ceiling as conservative picks, which could make a
+      # higher-risk allocation's blended return end up *lower* than a
+      # lower-risk one's.
+      volatility_scaling_enabled: true
+      baseline_volatility_pct: 20
+      volatility_scaling_per_10pct: 2.5   # extra CAGR pp allowed per +10pp of annual vol above baseline
+      absolute_max_positive_cagr_pct: 40  # outer ceiling regardless of volatility
+
+    data_quality:
+      min_observations: 30
+      extreme_daily_log_return: 0.5
+
+    # Hard rule: the guarded forecast (and the bull scenario tail) must never
+    # project more than `max_multiple_of_investment`x the current price/
+    # invested amount over the forecast horizon — a 2.5x cap over 5 years is
+    # ~20.1%/yr, which in practice is the binding constraint whenever
+    # soft_cap alone would still allow more. Unlike soft_cap, this clamps
+    # (no shrinkage) and only bounds the upside, never a loss.
+    terminal_cap:
+      enabled: true
+      max_multiple_of_investment: 2.5
+      # Same volatility scaling as soft_cap above, in multiple-space.
+      volatility_scaling_enabled: true
+      baseline_volatility_pct: 20
+      volatility_scaling_per_10pct: 0.3   # extra multiple allowed per +10pp of annual vol above baseline
+      absolute_max_multiple: 4.0          # outer ceiling regardless of volatility
+
+tax:
+  # Indian capital-gains regime (FY2024-25 rules), used by tax_engine.py.
+  equity_ltcg_threshold_days: 365
+  equity_ltcg_rate: 0.125        # >1L exemption applied separately
+  equity_ltcg_exemption: 125000
+  equity_stcg_rate: 0.20
+  debt_stcg_ltcg_threshold_days: 0   # debt MFs taxed at slab rate regardless of holding (post-Apr-2023 rule)
+  fd_interest_taxed_as: slab
+  default_slab_rate: 0.30        # used when user's actual slab isn't collected by the intake form
+
+app:
+  name: Asset Allocation Recommender
+  api_host: 127.0.0.1
+  api_port: 8000

@@ -1,0 +1,404 @@
+@import "tailwindcss";
+@import "@fontsource-variable/manrope";
+@import "@fontsource-variable/space-grotesk";
+
+/*
+ * Prudentia design tokens, in two tiers. Palette: "Paper & Periwinkle".
+ *
+ * Tier 1, primitives: raw colours as 50 to 900 scales (lightest to darkest), named for what
+ * they are (indigo-600, graphite-900). Nothing in the UI reads these directly.
+ *   P  Personality: indigo, the one brand colour.
+ *   N  Neutrals: a slate scale for light (warm paper to tinted ink), a violet-tinted graphite for dark.
+ *   S  Semantics: green (gain), red (loss), amber (warn), plus teal for the funds bucket.
+ * Tier 2, semantic tokens: each gives a colour a UI job (surface, ink, accent, loss) by pointing
+ * at a primitive. Light and dark only remap these, so every screen follows. The UI uses only these.
+ * A third tier (component tokens such as button-bg) is deliberately not here yet.
+ *
+ * Light: warm paper page under white panels, lavender fills, ink tinted blue-slate instead of black.
+ * Dark (Material): violet-tinted near-black, lighter surfaces for elevation (white overlays
+ * 5/7/9/12/15/16%), text at 87/70/60%, desaturated light accents that keep 4.5:1 at every
+ * elevation, and the saturated indigo only on the primary buttons.
+ * Elevation in both themes is surface colour plus a 12% outline, never a glow.
+ */
+:root {
+  /* Neutrals for light: slate, from warm paper to tinted ink */
+  --neutral-0: #ffffff;
+  --neutral-50: #f8f7f4;
+  --neutral-100: #eeeffa;
+  --neutral-200: #e4e4ec;
+  --neutral-500: #868899;
+  --neutral-600: #63656f;
+  --neutral-700: #4a4d5c;
+  --neutral-800: #333641;
+
+  /* Neutrals for dark: violet-tinted graphite (950 is the page, 900 the 1dp surface, rising to 700) */
+  --graphite-50: #e2e2e3;
+  --graphite-100: #bcbcbe;
+  --graphite-200: #a6a6a8;
+  --graphite-400: #77777b;
+  --graphite-600: #36353b;
+  --graphite-700: #313036;
+  --graphite-800: #2a2930;
+  --graphite-900: #212026;
+  --graphite-950: #15141b;
+
+  /* Personality */
+  --indigo-50: #eeeffa;
+  --indigo-100: #d9def4;
+  --indigo-300: #9aa7dd;
+  --indigo-400: #7482c0;
+  --indigo-500: #5b62d4;
+  --indigo-600: #4e65b5;
+
+  /* Semantics and the funds bucket */
+  --green-300: #7fd1b0;
+  --green-700: #2f6b5f;
+
+  --red-50: #fdeaea;
+  --red-300: #f0a39a;
+  --red-600: #b5473e;
+
+  --amber-50: #fbf3dc;
+  --amber-200: #f2cf74;
+  --amber-300: #f0c36b;
+  --amber-500: #b57d12;
+  --amber-700: #7a5b00;
+
+  --teal-300: #6fc4ba;
+  --teal-500: #3f8f86;
+
+
+  /* Soft ambient washes behind the page: indigo top-left, teal top-right */
+  --page-glow:
+    radial-gradient(60rem 40rem at 12% -12%, rgba(129, 140, 255, 0.14), transparent 62%),
+    radial-gradient(52rem 36rem at 92% -6%, rgba(95, 173, 165, 0.12), transparent 62%);
+}
+
+@theme {
+  /* Headings: Space Grotesk. Body, labels, tables: Manrope (tabular figures for numbers). */
+  --font-sans: "Manrope Variable", ui-sans-serif, system-ui, "Noto Sans Devanagari", sans-serif;
+  --font-display: "Space Grotesk Variable", "Manrope Variable", ui-sans-serif, system-ui, sans-serif;
+
+  /* Tier 2, light */
+  --color-page: var(--neutral-50);       /* 0dp background: warm paper */
+  --color-surface: var(--neutral-0);     /* 1dp panels */
+  --color-rail: var(--neutral-100);      /* 4dp: secondary layer, bar tracks, chat bubbles */
+  --color-raised: var(--neutral-0);      /* 8dp: dropdowns, tooltips */
+  --color-line: var(--neutral-200);      /* outlines and dividers */
+  --color-ctl: var(--neutral-500);       /* control borders: 3:1 against the surface */
+
+  --color-ink: var(--neutral-800);       /* high emphasis */
+  --color-ink-2: var(--neutral-700);
+  --color-ink-3: var(--neutral-600);     /* medium emphasis, hints */
+
+  --color-accent: var(--indigo-600);     /* links, selection, focus, active tab */
+  --color-accent-soft: var(--indigo-50);       /* selected */
+  --color-accent-container: var(--indigo-100); /* chat bubble, stronger selection */
+  --color-on-accent: var(--neutral-0);
+  --color-brand: var(--indigo-600);      /* filled primary buttons */
+  --color-on-brand: var(--neutral-0);
+
+  --color-gain: var(--green-700);
+  --color-loss: var(--red-600);
+  --color-loss-soft: var(--red-50);
+  --color-warn: var(--amber-700);
+  --color-warn-soft: var(--amber-50);
+
+  --color-stocks: var(--indigo-600);
+  --color-funds: var(--teal-500);
+  --color-fd: var(--amber-500);
+  --color-present: var(--indigo-400);
+
+  --radius-control: 8px;
+  --radius-panel: 12px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* The theme is the data-theme attribute on <html>: light by default, set by the toggle. */
+:root[data-theme="dark"] {
+  --color-page: var(--graphite-950);
+  --color-surface: var(--graphite-900);
+  --color-rail: var(--graphite-800);
+  --color-raised: var(--graphite-700);
+  --color-line: var(--graphite-600);
+  --color-ctl: var(--graphite-400);
+
+  --color-ink: var(--graphite-50);
+  --color-ink-2: var(--graphite-100);
+  --color-ink-3: var(--graphite-200);
+
+  --color-accent: var(--indigo-300);
+  /* Material: the accent over the surface at 10% and 26% */
+  --color-accent-soft: color-mix(in srgb, var(--indigo-300) 10%, var(--graphite-900));
+  --color-accent-container: color-mix(in srgb, var(--indigo-300) 26%, var(--graphite-900));
+  --color-on-accent: var(--graphite-950);
+  --color-brand: var(--indigo-500);
+  --color-on-brand: var(--neutral-0);
+
+  --color-gain: var(--green-300);
+  --color-loss: var(--red-300);
+  --color-loss-soft: color-mix(in srgb, var(--red-300) 14%, var(--graphite-900));
+  --color-warn: var(--amber-200);
+  --color-warn-soft: color-mix(in srgb, var(--amber-200) 14%, var(--graphite-900));
+
+  --color-stocks: var(--indigo-300);
+  --color-funds: var(--teal-300);
+  --color-fd: var(--amber-300);
+  --color-present: color-mix(in srgb, var(--indigo-300) 55%, var(--graphite-900));
+
+  --page-glow:
+    radial-gradient(60rem 40rem at 12% -12%, rgba(129, 140, 255, 0.1), transparent 62%),
+    radial-gradient(52rem 36rem at 92% -6%, rgba(95, 173, 165, 0.07), transparent 62%);
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+  }
+  html[data-theme="dark"] { color-scheme: dark; }
+  body {
+    margin: 0;
+    background-color: var(--color-page);
+    background-image: var(--page-glow, none);
+    background-attachment: fixed;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.5rem;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  /* Line heights sit on the 4px baseline grid. */
+  h1, h2, h3 {
+    text-wrap: balance;
+    letter-spacing: -0.02em; /* large type is tracked tighter */
+    font-weight: 700;
+  }
+  /* Display font for page and section titles only. h3 is a small label or control title (chart
+     titles, the accordion button), so it stays in the body font like the rest of the interface. */
+  h1, h2 { font-family: var(--font-display); }
+  h3 { letter-spacing: -0.005em; font-weight: 600; }
+  p { text-wrap: pretty; }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  button, a, input, select, textarea { touch-action: manipulation; }
+  button { cursor: pointer; }
+  button:disabled { cursor: not-allowed; }
+
+  ::selection { background: var(--color-accent); color: var(--color-on-accent); }
+  input, textarea { caret-color: var(--color-accent); }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  * { scrollbar-width: thin; scrollbar-color: var(--color-ctl) transparent; }
+}
+
+@layer components {
+  /* A short fade-and-settle when a tab opens. Not used for keyboard-heavy flows. */
+  .route-panel:not([hidden]) { animation: panel-in 180ms var(--ease-out); }
+  @keyframes panel-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+
+  .panel {
+    background: color-mix(in srgb, var(--color-rail) 42%, var(--color-surface));
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-panel);
+  }
+
+  /* Theme switch (as in the DASCA navbar): tinted square, grows a little on hover. */
+  .theme-toggle {
+    background-color: color-mix(in srgb, var(--color-ink) 5%, transparent);
+    transition: transform 300ms ease, background-color 300ms ease;
+  }
+  :root[data-theme="dark"] .theme-toggle {
+    background-color: color-mix(in srgb, var(--color-ink) 10%, transparent);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .theme-toggle:hover { transform: scale(1.1); }
+  }
+  .theme-toggle:active { transform: scale(0.97); }
+
+  /*
+   * State layer: one translucent overlay in the colour of the content.
+   * hover 4%, focus 12%, pressed 16%. On filled containers (.sl-fill) the
+   * overlay is white at 8 / 24 / 32%. Only one layer shows at a time (later
+   * rules win) and it fades. Disabled elements show no layer.
+   */
+  .sl { position: relative; }
+  .sl::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: currentColor;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 150ms var(--ease-out);
+  }
+  @media (hover: hover) {
+    .sl:hover::after { opacity: var(--sl-hover, 0.04); }
+  }
+  .sl:focus-visible::after { opacity: var(--sl-focus, 0.12); }
+  .sl:active::after { opacity: var(--sl-press, 0.16); }
+  .sl:disabled::after { opacity: 0; }
+  .sl-fill { --sl-hover: 0.08; --sl-focus: 0.24; --sl-press: 0.32; }
+
+  /* Range input: native element, so keyboard, screen reader and touch come for free.
+     pan-y: a horizontal drag moves the thumb, a vertical one still scrolls the page. */
+  .range {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 48px;
+    background: transparent;
+    cursor: pointer;
+    touch-action: pan-y;
+  }
+  .range::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(
+      to right,
+      var(--color-accent) var(--fill, 50%),
+      var(--color-line) var(--fill, 50%)
+    );
+  }
+  .range::-moz-range-track { height: 6px; border-radius: 3px; background: var(--color-line); }
+  .range::-moz-range-progress { height: 6px; border-radius: 3px; background: var(--color-accent); }
+  .range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    margin-top: -9px;
+    border-radius: 50%;
+    background: var(--color-surface);
+    border: 2px solid var(--color-accent);
+    transition: transform 150ms var(--ease-out);
+  }
+  .range::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--color-surface);
+    border: 2px solid var(--color-accent);
+  }
+  .range:active::-webkit-slider-thumb { transform: scale(1.12); }
+  .range:focus-visible { outline: none; }
+  .range:focus-visible::-webkit-slider-thumb { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+  .range:focus-visible::-moz-range-thumb { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+}
+
+/*
+ * Reduced motion: stop movement, keep feedback. Colour and opacity changes
+ * (hover, state layers) stay; the spinner stops spinning (its label still says
+ * what is happening) and GSAP skips its reveal.
+ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .animate-spin { animation: none; }
+  .route-panel:not([hidden]) { animation-name: panel-in-fade; }
+  @keyframes panel-in-fade { from { opacity: 0; } to { opacity: 1; } }
+  .range::-webkit-slider-thumb { transition: none; }
+  button:active { scale: none !important; }
+}
+
+@layer components {
+  /* Dot-matrix loader (3x3 "glyph pulse"): centre, then edges, then corners, on a loop. */
+  @keyframes dm-pulse {
+    0%, 100% { opacity: 0.08; }
+    28% { opacity: 0.95; }
+    55% { opacity: 0.3; }
+  }
+  .dm-dot { display: block; border-radius: 9999px; background: currentColor; opacity: 0.08; animation: dm-pulse 1.1s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) {
+    .dm-dot { animation: none; }
+    .dm-dot[data-centre] { opacity: 0.95; }
+  }
+}
+
+@layer components {
+  /* Motion vocabulary. Each answers a user action or marks one arrival; nothing loops except the loader. */
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); filter: blur(6px); } to { opacity: 1; transform: none; filter: blur(0); } }
+  .rise { animation: rise 560ms var(--ease-out) both; animation-delay: calc(var(--d, 0) * 1ms); }
+
+  @keyframes msg-in { from { opacity: 0; transform: translateY(8px) scale(0.98); } to { opacity: 1; transform: none; } }
+  .msg-in { animation: msg-in 280ms var(--ease-out) both; }
+
+  @keyframes swap { from { opacity: 0; transform: translateY(6px); filter: blur(4px); } to { opacity: 1; transform: none; filter: blur(0); } }
+  .swap { animation: swap 320ms var(--ease-out) both; }
+
+  @keyframes shimmer { to { background-position: -200% 0; } }
+  .shimmer-text {
+    background: linear-gradient(90deg, var(--color-ink-2) 0%, var(--color-ink) 45%, var(--color-ink-2) 90%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: shimmer 2.2s linear infinite;
+  }
+
+  @keyframes shake { 10%, 90% { transform: translateX(-1px); } 20%, 80% { transform: translateX(2px); } 30%, 50%, 70% { transform: translateX(-4px); } 40%, 60% { transform: translateX(4px); } }
+  .shake { animation: shake 420ms cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
+
+  @keyframes unlock { 0% { transform: scale(1); } 35% { transform: scale(1.05); background-color: var(--color-accent-soft); } 100% { transform: scale(1); } }
+  .unlock { animation: unlock 760ms var(--ease-out) both; animation-delay: calc(var(--d, 0) * 1ms); }
+
+  @keyframes icon-swap { from { opacity: 0; transform: scale(0.6) rotate(-30deg); filter: blur(3px); } to { opacity: 1; transform: none; filter: blur(0); } }
+  .icon-swap { animation: icon-swap 300ms var(--ease-out) both; }
+
+  /* Dashboard cards wait invisibly until GSAP staggers them in (PlanView); a timeout reveals them if GSAP is slow. */
+  [data-enter="pending"] [data-enter-item] { opacity: 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rise, .msg-in, .swap, .shake, .unlock, .icon-swap { animation: none !important; }
+    .shimmer-text { animation: none; background: none; color: var(--color-ink-2); }
+    [data-enter="pending"] [data-enter-item] { opacity: 1; }
+  }
+}
+
+/* ===== Dark theme surfaces: a higher surface is lighter, not shadowed ===== */
+@layer components {
+  :root[data-theme="dark"] .panel {
+    background: color-mix(in srgb, var(--color-rail) 78%, var(--color-surface));
+    border-color: color-mix(in srgb, var(--color-line) 80%, var(--color-ink) 20%);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--color-ink) 5%, transparent);
+  }
+  /* chips, rows and tracks that sit inside a card go one step lighter again, so the layers stay distinct */
+  :root[data-theme="dark"] .panel .bg-rail { background-color: var(--color-raised); }
+}
+/* ===== end dark theme surfaces ===== */
+
+/* One colour per sector, from the Prudentia palette family. The same sector has the same colour in the donut,
+   the bars and the chips. Light values clear 3:1 on the white panel; dark values are the lifted versions. */
+:root {
+  --sector-financial: #4e65b5;
+  --sector-industrials: #3f8f86;
+  --sector-consumer-discretionary: #b57d12;
+  --sector-healthcare: #b5473e;
+  --sector-technology: #7a82c9;
+  --sector-materials: #7a5b00;
+  --sector-consumer-staples: #5f9a6b;
+  --sector-energy-utilities: #63656f;
+  --sector-real-estate: #b86f9a;
+  --sector-diversified: #868899;
+}
+:root[data-theme="dark"] {
+  --sector-financial: #9aa7dd;
+  --sector-industrials: #6fc4ba;
+  --sector-consumer-discretionary: #e0a93f;
+  --sector-healthcare: #e08278;
+  --sector-technology: #b3b9ec;
+  --sector-materials: #c9a24a;
+  --sector-consumer-staples: #8fcf9c;
+  --sector-energy-utilities: #a3a6b4;
+  --sector-real-estate: #e29bc4;
+  --sector-diversified: #6d6f80;
+}

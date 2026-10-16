@@ -1,0 +1,79 @@
+{
+  "mu": -0.021975636355909337,
+  "sigma": 0.1782485657421844,
+  "n_obs": 4526,
+  "method": "transformer",
+  "final_train_loss": 0.9735851287841797,
+  "raw_mu": -0.021975636355909337,
+  "current_price": 135.759,
+  "raw_terminal_price": 121.48341691613092,
+  "guarded_terminal_price": 121.48341691613092,
+  "raw_cagr_pct": -2.197563635590934,
+  "guarded_cagr_pct": -2.197563635590934,
+  "historical_cagr_pct": 14.781871141950354,
+  "historical_cagr_years": 5.0,
+  "historical_max_drawdown_pct": -45.71689168407768,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 135.759,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 132.7756,
+      "annual_return_pct": -2.1976,
+      "cumulative_return_pct": -2.1976
+    },
+    {
+      "year": 2,
+      "projected_price": 129.8578,
+      "annual_return_pct": -2.1976,
+      "cumulative_return_pct": -4.3468
+    },
+    {
+      "year": 3,
+      "projected_price": 127.0041,
+      "annual_return_pct": -2.1976,
+      "cumulative_return_pct": -6.4489
+    },
+    {
+      "year": 4,
+      "projected_price": 124.2131,
+      "annual_return_pct": -2.1976,
+      "cumulative_return_pct": -8.5047
+    },
+    {
+      "year": 5,
+      "projected_price": 121.4834,
+      "annual_return_pct": -2.1976,
+      "cumulative_return_pct": -10.5154
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 90.0933,
+      "cagr_pct": -7.8735
+    },
+    "base": {
+      "terminal_price": 121.4834,
+      "cagr_pct": -2.1976
+    },
+    "bull": {
+      "terminal_price": 163.8104,
+      "cagr_pct": 3.828
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-16T10:56:13.144184"
+}

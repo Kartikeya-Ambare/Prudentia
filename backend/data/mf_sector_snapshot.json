@@ -1,0 +1,1230 @@
+{
+ "generated_at": "2026-10-16T21:12:02",
+ "funds": {
+  "102000": {
+   "fund_name": "HDFC Large Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 39.92,
+    "Technology": 13.1,
+    "Consumer Discretionary": 12.46,
+    "Healthcare": 10.26,
+    "Industrials": 8.49,
+    "Energy & Utilities": 6.8,
+    "Consumer Staples": 5.13,
+    "Materials": 3.45,
+    "Real Estate": 0.39
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read. Replaces the earlier MoneyControl table (2026-09-19) as the latest.",
+   "source_url": ""
+  },
+  "147748": {
+   "fund_name": "Union Midcap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 24.78,
+    "Industrials": 18.44,
+    "Consumer Discretionary": 16.11,
+    "Healthcare": 11.45,
+    "Materials": 9.71,
+    "Technology": 8.67,
+    "Real Estate": 3.86,
+    "Consumer Staples": 2.85,
+    "Energy & Utilities": 2.21,
+    "Diversified": 1.91
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "129646": {
+   "fund_name": "Union Small Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Industrials": 27.57,
+    "Financial": 19.04,
+    "Consumer Discretionary": 16.16,
+    "Healthcare": 13.66,
+    "Materials": 11.98,
+    "Consumer Staples": 4.74,
+    "Technology": 3.26,
+    "Real Estate": 1.32,
+    "Diversified": 1.15,
+    "Energy & Utilities": 1.11
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "108466": {
+   "fund_name": "ICICI Prudential Large Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 35.71,
+    "Consumer Discretionary": 11.22,
+    "Energy & Utilities": 10.85,
+    "Industrials": 10.05,
+    "Materials": 9.49,
+    "Technology": 9.28,
+    "Consumer Staples": 5.91,
+    "Healthcare": 5.68,
+    "Real Estate": 1.09,
+    "Diversified": 0.73
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": "https://groww.in/mutual-funds/icici-prudential-bluechip-fund-direct-growth"
+  },
+  "112113": {
+   "fund_name": "Aditya Birla Sun Life Frontline Equity Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 37.26,
+    "Consumer Discretionary": 16.06,
+    "Technology": 13.81,
+    "Energy & Utilities": 8.47,
+    "Materials": 8.05,
+    "Consumer Staples": 5.43,
+    "Industrials": 5.14,
+    "Healthcare": 4.92,
+    "Real Estate": 0.86
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read. The app still uses the fund's former name, Frontline Equity Fund.",
+   "source_url": ""
+  },
+  "107578": {
+   "fund_name": "Mirae Asset Large Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 35.25,
+    "Technology": 14.69,
+    "Consumer Discretionary": 11.14,
+    "Energy & Utilities": 10.26,
+    "Industrials": 8.64,
+    "Materials": 7.46,
+    "Consumer Staples": 5.99,
+    "Healthcare": 4.77,
+    "Real Estate": 1.07,
+    "Diversified": 0.74
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "105871": {
+   "fund_name": "DSP Top 100 Equity Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 37.14,
+    "Energy & Utilities": 14.39,
+    "Consumer Discretionary": 12.67,
+    "Technology": 11.67,
+    "Industrials": 8.05,
+    "Materials": 5.9,
+    "Consumer Staples": 5.13,
+    "Healthcare": 2.82,
+    "Real Estate": 2.23
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read. The app still uses the fund's former name, DSP Top 100 Equity Fund.",
+   "source_url": ""
+  },
+  "100475": {
+   "fund_name": "Tata Large Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 35.47,
+    "Technology": 17.27,
+    "Energy & Utilities": 10.2,
+    "Materials": 10.07,
+    "Healthcare": 8.92,
+    "Consumer Discretionary": 8.38,
+    "Industrials": 6.01,
+    "Consumer Staples": 2.81,
+    "Diversified": 0.86
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "148504": {
+   "fund_name": "Sundaram Large Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 38.46,
+    "Consumer Discretionary": 18.09,
+    "Technology": 14.24,
+    "Industrials": 10.53,
+    "Consumer Staples": 5.65,
+    "Energy & Utilities": 5.22,
+    "Materials": 4.03,
+    "Healthcare": 3.78
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "150441": {
+   "fund_name": "Quant Large Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Energy & Utilities": 25.73,
+    "Technology": 18.15,
+    "Financial": 15.84,
+    "Materials": 14.79,
+    "Healthcare": 12.9,
+    "Consumer Discretionary": 12.59
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "150185": {
+   "fund_name": "Baroda BNP Paribas Large Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 29.89,
+    "Industrials": 14.88,
+    "Technology": 14.85,
+    "Energy & Utilities": 11.59,
+    "Consumer Discretionary": 8.97,
+    "Consumer Staples": 6.72,
+    "Materials": 6.62,
+    "Healthcare": 6.47
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "111938": {
+   "fund_name": "Edelweiss Large Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 29.06,
+    "Technology": 13.01,
+    "Consumer Discretionary": 12.11,
+    "Healthcare": 10.18,
+    "Industrials": 10.06,
+    "Energy & Utilities": 9.28,
+    "Consumer Staples": 8.22,
+    "Materials": 8.07
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "108799": {
+   "fund_name": "Bandhan Large Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 32.85,
+    "Consumer Discretionary": 13.51,
+    "Technology": 12.2,
+    "Industrials": 9.88,
+    "Energy & Utilities": 9.86,
+    "Healthcare": 7.35,
+    "Materials": 7.19,
+    "Consumer Staples": 5.59,
+    "Real Estate": 1.57
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "146548": {
+   "fund_name": "Mahindra Manulife Large Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 35.78,
+    "Technology": 14.58,
+    "Consumer Discretionary": 12.87,
+    "Energy & Utilities": 9.36,
+    "Healthcare": 6.98,
+    "Industrials": 6.88,
+    "Materials": 6.86,
+    "Consumer Staples": 5.5,
+    "Real Estate": 1.21
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "101593": {
+   "fund_name": "HSBC Large Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 34.52,
+    "Technology": 21.58,
+    "Industrials": 13.94,
+    "Consumer Discretionary": 10.66,
+    "Energy & Utilities": 7.71,
+    "Healthcare": 5.18,
+    "Consumer Staples": 4.48,
+    "Materials": 1.93
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "100332": {
+   "fund_name": "LIC MF Large Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 38.33,
+    "Consumer Discretionary": 15.59,
+    "Industrials": 15.17,
+    "Technology": 10.04,
+    "Healthcare": 7.59,
+    "Materials": 6.54,
+    "Consumer Staples": 5.31,
+    "Energy & Utilities": 1.44
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "150797": {
+   "fund_name": "WhiteOak Capital Large Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 39.02,
+    "Technology": 17.02,
+    "Consumer Discretionary": 10.55,
+    "Healthcare": 7.84,
+    "Materials": 7.54,
+    "Industrials": 6.83,
+    "Consumer Staples": 5.98,
+    "Energy & Utilities": 5.23
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "116547": {
+   "fund_name": "Groww Large Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 39.85,
+    "Industrials": 16.79,
+    "Consumer Discretionary": 16.42,
+    "Technology": 12.9,
+    "Healthcare": 5.38,
+    "Materials": 4.63,
+    "Energy & Utilities": 2.96,
+    "Consumer Staples": 1.06
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "152351": {
+   "fund_name": "Motilal Oswal Large Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 38.01,
+    "Technology": 15.4,
+    "Industrials": 12.13,
+    "Consumer Discretionary": 11.68,
+    "Energy & Utilities": 11.03,
+    "Materials": 4.0,
+    "Consumer Staples": 3.14,
+    "Healthcare": 3.1,
+    "Real Estate": 1.51
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "114564": {
+   "fund_name": "Axis Midcap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Consumer Discretionary": 24.69,
+    "Financial": 19.3,
+    "Industrials": 14.58,
+    "Healthcare": 11.72,
+    "Materials": 8.02,
+    "Technology": 7.39,
+    "Consumer Staples": 4.89,
+    "Diversified": 3.74,
+    "Energy & Utilities": 3.11,
+    "Real Estate": 2.54
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "148459": {
+   "fund_name": "Nippon India Growth Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 29.0,
+    "Industrials": 16.75,
+    "Consumer Discretionary": 15.89,
+    "Healthcare": 11.78,
+    "Technology": 9.62,
+    "Materials": 5.36,
+    "Energy & Utilities": 5.13,
+    "Consumer Staples": 4.67,
+    "Real Estate": 1.11,
+    "Diversified": 0.69
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read. The app still uses the fund's former name, Nippon India Growth Fund.",
+   "source_url": ""
+  },
+  "102530": {
+   "fund_name": "ICICI Prudential Midcap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Materials": 25.45,
+    "Financial": 20.66,
+    "Industrials": 20.66,
+    "Consumer Discretionary": 13.72,
+    "Diversified": 6.1,
+    "Energy & Utilities": 5.72,
+    "Real Estate": 5.31,
+    "Healthcare": 1.26,
+    "Technology": 1.13
+   },
+   "source": "Groww app (Direct plan page, listed as 'ICICI Prudential Mid Cap'), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "140172": {
+   "fund_name": "Edelweiss Mid Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 26.08,
+    "Consumer Discretionary": 19.64,
+    "Industrials": 13.44,
+    "Materials": 9.31,
+    "Healthcare": 9.13,
+    "Technology": 8.91,
+    "Consumer Staples": 5.19,
+    "Energy & Utilities": 3.99,
+    "Real Estate": 3.98,
+    "Diversified": 0.33
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "150738": {
+   "fund_name": "Tata Midcap Growth Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 26.87,
+    "Industrials": 14.4,
+    "Consumer Discretionary": 14.38,
+    "Healthcare": 12.95,
+    "Materials": 11.78,
+    "Technology": 9.74,
+    "Energy & Utilities": 3.77,
+    "Real Estate": 2.91,
+    "Consumer Staples": 2.62,
+    "Diversified": 0.6
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read. The app calls this fund 'Tata Midcap Growth Fund'.",
+   "source_url": ""
+  },
+  "112931": {
+   "fund_name": "Mirae Asset Midcap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 23.72,
+    "Healthcare": 14.92,
+    "Consumer Discretionary": 14.82,
+    "Industrials": 14.5,
+    "Materials": 13.0,
+    "Technology": 8.25,
+    "Energy & Utilities": 4.08,
+    "Real Estate": 3.19,
+    "Consumer Staples": 1.88,
+    "Diversified": 1.65
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "105000": {
+   "fund_name": "Sundaram Midcap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 23.3,
+    "Industrials": 19.54,
+    "Consumer Discretionary": 19.36,
+    "Healthcare": 10.73,
+    "Materials": 8.54,
+    "Technology": 8.18,
+    "Consumer Staples": 3.84,
+    "Energy & Utilities": 3.44,
+    "Real Estate": 3.07
+   },
+   "source": "Groww app (Direct plan page, listed as 'Sundaram Mid Cap'), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "127039": {
+   "fund_name": "Motilal Oswal Midcap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 27.28,
+    "Technology": 24.48,
+    "Consumer Discretionary": 20.08,
+    "Industrials": 19.47,
+    "Energy & Utilities": 3.43,
+    "Real Estate": 2.32,
+    "Healthcare": 1.4,
+    "Materials": 0.92,
+    "Consumer Staples": 0.62
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "101065": {
+   "fund_name": "Quant Mid Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Healthcare": 23.3,
+    "Technology": 17.01,
+    "Industrials": 15.83,
+    "Materials": 14.35,
+    "Consumer Discretionary": 10.16,
+    "Energy & Utilities": 7.93,
+    "Financial": 5.39,
+    "Real Estate": 3.65,
+    "Consumer Staples": 2.39
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "153000": {
+   "fund_name": "Baroda BNP Paribas Midcap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 28.1,
+    "Industrials": 17.5,
+    "Healthcare": 13.73,
+    "Consumer Discretionary": 12.62,
+    "Technology": 9.25,
+    "Materials": 6.22,
+    "Energy & Utilities": 5.58,
+    "Real Estate": 2.97,
+    "Consumer Staples": 2.82,
+    "Diversified": 1.2
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "151033": {
+   "fund_name": "HSBC Midcap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 25.08,
+    "Consumer Discretionary": 22.38,
+    "Industrials": 20.72,
+    "Healthcare": 11.11,
+    "Technology": 7.91,
+    "Consumer Staples": 4.17,
+    "Diversified": 3.19,
+    "Energy & Utilities": 2.3,
+    "Materials": 2.05,
+    "Real Estate": 1.1
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "142107": {
+   "fund_name": "Mahindra Manulife Mid Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 29.31,
+    "Industrials": 25.48,
+    "Healthcare": 10.94,
+    "Consumer Discretionary": 10.5,
+    "Materials": 7.51,
+    "Consumer Staples": 5.47,
+    "Technology": 5.46,
+    "Energy & Utilities": 2.89,
+    "Real Estate": 1.25,
+    "Diversified": 1.21
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "152855": {
+   "fund_name": "Bandhan Midcap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 17.44,
+    "Industrials": 16.83,
+    "Consumer Discretionary": 15.84,
+    "Healthcare": 15.76,
+    "Technology": 12.49,
+    "Materials": 8.44,
+    "Diversified": 4.6,
+    "Consumer Staples": 4.21,
+    "Real Estate": 3.38,
+    "Energy & Utilities": 1.03
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "150582": {
+   "fund_name": "WhiteOak Capital Mid Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 25.73,
+    "Healthcare": 15.76,
+    "Industrials": 14.81,
+    "Technology": 12.07,
+    "Consumer Discretionary": 11.89,
+    "Materials": 7.12,
+    "Consumer Staples": 5.12,
+    "Energy & Utilities": 4.04,
+    "Real Estate": 2.86,
+    "Diversified": 0.61
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "100477": {
+   "fund_name": "Taurus Mid Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Technology": 24.86,
+    "Industrials": 24.13,
+    "Consumer Discretionary": 12.91,
+    "Financial": 12.24,
+    "Materials": 11.59,
+    "Healthcare": 10.52,
+    "Energy & Utilities": 2.02,
+    "Consumer Staples": 1.73
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "125494": {
+   "fund_name": "SBI Small Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Consumer Discretionary": 27.11,
+    "Industrials": 19.27,
+    "Materials": 18.61,
+    "Financial": 14.02,
+    "Technology": 8.01,
+    "Consumer Staples": 6.61,
+    "Healthcare": 2.78,
+    "Energy & Utilities": 2.67,
+    "Real Estate": 0.93
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "113177": {
+   "fund_name": "Nippon India Small Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Industrials": 24.77,
+    "Financial": 16.42,
+    "Consumer Discretionary": 15.13,
+    "Materials": 13.83,
+    "Consumer Staples": 9.31,
+    "Healthcare": 9.29,
+    "Technology": 4.73,
+    "Energy & Utilities": 4.1,
+    "Diversified": 1.86,
+    "Real Estate": 0.55
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "130501": {
+   "fund_name": "HDFC Small Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Industrials": 24.5,
+    "Consumer Discretionary": 22.75,
+    "Financial": 13.64,
+    "Healthcare": 11.98,
+    "Materials": 9.59,
+    "Technology": 7.84,
+    "Consumer Staples": 5.13,
+    "Diversified": 2.64,
+    "Energy & Utilities": 1.92
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "125350": {
+   "fund_name": "Axis Small Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 19.61,
+    "Industrials": 17.49,
+    "Healthcare": 15.48,
+    "Materials": 15.33,
+    "Consumer Discretionary": 14.31,
+    "Technology": 6.79,
+    "Consumer Staples": 5.18,
+    "Real Estate": 4.01,
+    "Energy & Utilities": 1.15,
+    "Diversified": 0.64
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "102874": {
+   "fund_name": "Kotak Small Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Healthcare": 20.57,
+    "Industrials": 19.81,
+    "Consumer Discretionary": 18.05,
+    "Financial": 16.01,
+    "Materials": 10.76,
+    "Technology": 6.45,
+    "Consumer Staples": 3.88,
+    "Real Estate": 3.58,
+    "Energy & Utilities": 0.89
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "105989": {
+   "fund_name": "DSP Small Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Consumer Discretionary": 27.38,
+    "Materials": 21.53,
+    "Industrials": 17.79,
+    "Healthcare": 11.37,
+    "Financial": 9.61,
+    "Technology": 5.67,
+    "Consumer Staples": 5.4,
+    "Diversified": 1.25
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "106821": {
+   "fund_name": "ICICI Prudential Smallcap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Industrials": 26.16,
+    "Materials": 20.87,
+    "Consumer Discretionary": 20.45,
+    "Financial": 15.48,
+    "Healthcare": 10.84,
+    "Energy & Utilities": 2.16,
+    "Consumer Staples": 1.59,
+    "Technology": 1.56,
+    "Real Estate": 0.57,
+    "Diversified": 0.32
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "145205": {
+   "fund_name": "Tata Small Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Materials": 28.52,
+    "Industrials": 23.83,
+    "Consumer Discretionary": 17.72,
+    "Technology": 7.28,
+    "Healthcare": 6.03,
+    "Financial": 5.92,
+    "Consumer Staples": 3.43,
+    "Diversified": 3.39,
+    "Real Estate": 2.84,
+    "Energy & Utilities": 1.05
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "100176": {
+   "fund_name": "Quant Small Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 19.85,
+    "Consumer Discretionary": 18.76,
+    "Healthcare": 14.58,
+    "Materials": 13.79,
+    "Technology": 11.42,
+    "Energy & Utilities": 11.26,
+    "Industrials": 5.21,
+    "Consumer Staples": 3.25,
+    "Real Estate": 1.87
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "146127": {
+   "fund_name": "Canara Robeco Small Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 23.46,
+    "Industrials": 21.85,
+    "Consumer Discretionary": 15.72,
+    "Healthcare": 12.75,
+    "Materials": 11.13,
+    "Technology": 6.03,
+    "Consumer Staples": 3.49,
+    "Energy & Utilities": 2.98,
+    "Diversified": 1.6,
+    "Real Estate": 1.01
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "146193": {
+   "fund_name": "Edelweiss Small Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 21.24,
+    "Industrials": 21.18,
+    "Consumer Discretionary": 17.57,
+    "Materials": 15.97,
+    "Healthcare": 15.65,
+    "Consumer Staples": 4.53,
+    "Real Estate": 2.09,
+    "Technology": 1.76
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "150912": {
+   "fund_name": "Mahindra Manulife Small Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Materials": 23.17,
+    "Consumer Discretionary": 20.2,
+    "Industrials": 16.99,
+    "Healthcare": 15.78,
+    "Financial": 13.88,
+    "Energy & Utilities": 4.86,
+    "Technology": 3.37,
+    "Consumer Staples": 1.76
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "147943": {
+   "fund_name": "Bandhan Small Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 25.54,
+    "Materials": 15.35,
+    "Consumer Discretionary": 13.52,
+    "Healthcare": 10.36,
+    "Technology": 9.53,
+    "Industrials": 8.84,
+    "Real Estate": 5.8,
+    "Consumer Staples": 5.01,
+    "Energy & Utilities": 4.51,
+    "Diversified": 1.53
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "152128": {
+   "fund_name": "Baroda BNP Paribas Small Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 25.12,
+    "Industrials": 19.14,
+    "Healthcare": 16.23,
+    "Consumer Discretionary": 11.83,
+    "Technology": 10.1,
+    "Materials": 8.47,
+    "Consumer Staples": 6.18,
+    "Energy & Utilities": 2.94
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "151130": {
+   "fund_name": "HSBC Small Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Industrials": 22.77,
+    "Financial": 20.17,
+    "Consumer Discretionary": 16.72,
+    "Healthcare": 14.52,
+    "Materials": 12.71,
+    "Consumer Staples": 4.47,
+    "Technology": 2.77,
+    "Diversified": 2.68,
+    "Real Estate": 1.82,
+    "Energy & Utilities": 1.36
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "149019": {
+   "fund_name": "PGIM India Small Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Industrials": 24.83,
+    "Consumer Discretionary": 18.68,
+    "Financial": 17.1,
+    "Healthcare": 12.36,
+    "Materials": 10.32,
+    "Consumer Staples": 7.87,
+    "Technology": 6.51,
+    "Energy & Utilities": 1.72,
+    "Real Estate": 0.62
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "152003": {
+   "fund_name": "LIC MF Small Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Industrials": 29.99,
+    "Consumer Discretionary": 22.06,
+    "Financial": 12.16,
+    "Materials": 12.09,
+    "Consumer Staples": 8.96,
+    "Healthcare": 7.85,
+    "Energy & Utilities": 2.65,
+    "Real Estate": 2.27,
+    "Technology": 1.99
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "145675": {
+   "fund_name": "Bank of India Small Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Industrials": 24.18,
+    "Consumer Discretionary": 23.34,
+    "Financial": 14.85,
+    "Technology": 13.0,
+    "Healthcare": 10.4,
+    "Materials": 8.22,
+    "Consumer Staples": 4.89,
+    "Diversified": 1.11
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "147917": {
+   "fund_name": "ITI Small Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Industrials": 26.59,
+    "Financial": 16.72,
+    "Materials": 14.83,
+    "Healthcare": 14.76,
+    "Consumer Discretionary": 14.37,
+    "Consumer Staples": 3.97,
+    "Energy & Utilities": 3.79,
+    "Technology": 2.24,
+    "Diversified": 1.73,
+    "Real Estate": 0.99
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "154063": {
+   "fund_name": "Groww Small Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Industrials": 35.26,
+    "Financial": 20.1,
+    "Consumer Discretionary": 18.95,
+    "Healthcare": 10.24,
+    "Materials": 9.21,
+    "Technology": 3.41,
+    "Diversified": 2.33,
+    "Consumer Staples": 0.48
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "106235": {
+   "fund_name": "Nippon India Large Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 34.62,
+    "Consumer Staples": 13.37,
+    "Consumer Discretionary": 13.27,
+    "Technology": 11.81,
+    "Energy & Utilities": 8.59,
+    "Healthcare": 7.5,
+    "Industrials": 6.84,
+    "Materials": 3.28,
+    "Diversified": 0.71
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "112277": {
+   "fund_name": "Axis Bluechip Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 36.34,
+    "Consumer Discretionary": 15.51,
+    "Technology": 14.88,
+    "Healthcare": 11.57,
+    "Industrials": 8.41,
+    "Materials": 5.98,
+    "Consumer Staples": 3.85,
+    "Energy & Utilities": 3.46
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read. In the app this fund is 'Axis Bluechip Fund' (no scheme code yet), so it is kept here and loaded once the code is fixed.",
+   "source_url": ""
+  },
+  "114458": {
+   "fund_name": "Kotak Bluechip Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 33.1,
+    "Technology": 11.79,
+    "Energy & Utilities": 10.84,
+    "Materials": 10.47,
+    "Consumer Discretionary": 10.38,
+    "Industrials": 10.35,
+    "Healthcare": 6.89,
+    "Consumer Staples": 5.86,
+    "Real Estate": 0.32
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read. In the app this fund is 'Kotak Bluechip Fund' (no scheme code yet), so it is kept here and loaded once the code is fixed.",
+   "source_url": ""
+  },
+  "100471": {
+   "fund_name": "Franklin India Bluechip Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 40.87,
+    "Technology": 13.93,
+    "Industrials": 12.99,
+    "Healthcare": 7.26,
+    "Consumer Discretionary": 7.09,
+    "Consumer Staples": 6.9,
+    "Energy & Utilities": 5.17,
+    "Materials": 4.68,
+    "Real Estate": 1.13
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read. In the app this fund is 'Franklin India Bluechip Fund' (no scheme code yet), so it is kept here and loaded once the code is fixed.",
+   "source_url": ""
+  },
+  "100651": {
+   "fund_name": "UTI Large Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 37.79,
+    "Technology": 16.49,
+    "Consumer Discretionary": 13.32,
+    "Industrials": 8.46,
+    "Energy & Utilities": 8.24,
+    "Materials": 7.25,
+    "Consumer Staples": 4.32,
+    "Healthcare": 4.11
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "113221": {
+   "fund_name": "Canara Robeco Bluechip Equity Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 35.4,
+    "Technology": 14.67,
+    "Consumer Discretionary": 12.48,
+    "Industrials": 10.18,
+    "Consumer Staples": 7.76,
+    "Healthcare": 7.65,
+    "Energy & Utilities": 6.48,
+    "Materials": 4.95,
+    "Real Estate": 0.43
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read. In the app this fund is 'Canara Robeco Bluechip Equity Fund' (no scheme code yet), so it is kept here and loaded once the code is fixed.",
+   "source_url": ""
+  },
+  "112098": {
+   "fund_name": "Invesco India Largecap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 34.02,
+    "Technology": 16.99,
+    "Industrials": 15.02,
+    "Consumer Discretionary": 13.23,
+    "Healthcare": 9.05,
+    "Materials": 6.92,
+    "Consumer Staples": 2.59,
+    "Real Estate": 1.67,
+    "Energy & Utilities": 0.49
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read. In the app this fund is 'Invesco India Largecap Fund' (no scheme code yet), so it is kept here and loaded once the code is fixed.",
+   "source_url": ""
+  },
+  "100219": {
+   "fund_name": "JM Large Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 28.41,
+    "Industrials": 17.2,
+    "Consumer Discretionary": 14.72,
+    "Technology": 10.59,
+    "Healthcare": 9.42,
+    "Materials": 8.34,
+    "Energy & Utilities": 6.58,
+    "Consumer Staples": 3.57,
+    "Real Estate": 1.17
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "138308": {
+   "fund_name": "PGIM India Large Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 35.89,
+    "Technology": 14.84,
+    "Consumer Discretionary": 11.73,
+    "Industrials": 8.29,
+    "Energy & Utilities": 7.77,
+    "Healthcare": 7.59,
+    "Materials": 6.95,
+    "Consumer Staples": 5.75,
+    "Real Estate": 1.2
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "148982": {
+   "fund_name": "Bank of India Bluechip Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 36.15,
+    "Industrials": 19.79,
+    "Materials": 11.98,
+    "Consumer Discretionary": 9.72,
+    "Technology": 7.0,
+    "Consumer Staples": 6.24,
+    "Energy & Utilities": 5.82,
+    "Healthcare": 3.3
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read. In the app this fund is 'Bank of India Bluechip Fund' (no scheme code yet), so it is kept here and loaded once the code is fixed.",
+   "source_url": ""
+  },
+  "105758": {
+   "fund_name": "HDFC Mid-Cap Opportunities Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 28.18,
+    "Healthcare": 16.84,
+    "Consumer Discretionary": 13.91,
+    "Technology": 12.65,
+    "Consumer Staples": 10.21,
+    "Industrials": 8.63,
+    "Materials": 5.8,
+    "Energy & Utilities": 3.47,
+    "Diversified": 0.33
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read. In the app this fund is 'HDFC Mid-Cap Opportunities Fund' (no scheme code yet), so it is kept here and loaded once the code is fixed.",
+   "source_url": ""
+  },
+  "104908": {
+   "fund_name": "Kotak Emerging Equity Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 25.73,
+    "Healthcare": 19.13,
+    "Industrials": 12.61,
+    "Technology": 12.22,
+    "Materials": 11.49,
+    "Consumer Discretionary": 9.83,
+    "Consumer Staples": 4.25,
+    "Real Estate": 2.14,
+    "Diversified": 1.36,
+    "Energy & Utilities": 1.23
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read. In the app this fund is 'Kotak Emerging Equity Fund' (no scheme code yet), so it is kept here and loaded once the code is fixed.",
+   "source_url": ""
+  },
+  "100473": {
+   "fund_name": "Franklin India Prima Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 24.95,
+    "Industrials": 20.13,
+    "Consumer Discretionary": 18.69,
+    "Materials": 10.11,
+    "Technology": 8.97,
+    "Healthcare": 8.13,
+    "Real Estate": 3.96,
+    "Energy & Utilities": 3.25,
+    "Consumer Staples": 1.82
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read. In the app this fund is 'Franklin India Prima Fund' (no scheme code yet), so it is kept here and loaded once the code is fixed.",
+   "source_url": ""
+  },
+  "105503": {
+   "fund_name": "Invesco India Midcap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 25.8,
+    "Healthcare": 24.53,
+    "Consumer Discretionary": 18.18,
+    "Real Estate": 9.14,
+    "Technology": 8.09,
+    "Industrials": 6.47,
+    "Materials": 5.77,
+    "Energy & Utilities": 1.85,
+    "Consumer Staples": 0.17
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read. In the app this fund is 'Invesco India Midcap Fund' (no scheme code yet), so it is kept here and loaded once the code is fixed.",
+   "source_url": ""
+  },
+  "152001": {
+   "fund_name": "LIC MF Midcap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 25.84,
+    "Industrials": 20.88,
+    "Consumer Discretionary": 15.06,
+    "Healthcare": 14.11,
+    "Technology": 10.96,
+    "Materials": 8.53,
+    "Energy & Utilities": 2.31,
+    "Real Estate": 2.31
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "103360": {
+   "fund_name": "Franklin India Smaller Companies Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Industrials": 23.93,
+    "Consumer Discretionary": 21.22,
+    "Financial": 18.28,
+    "Healthcare": 10.37,
+    "Materials": 9.55,
+    "Technology": 8.31,
+    "Real Estate": 3.41,
+    "Energy & Utilities": 2.79,
+    "Consumer Staples": 2.15
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "145139": {
+   "fund_name": "Invesco India Smallcap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Financial": 22.84,
+    "Healthcare": 20.37,
+    "Consumer Discretionary": 18.52,
+    "Industrials": 12.41,
+    "Materials": 9.75,
+    "Technology": 9.63,
+    "Real Estate": 4.79,
+    "Consumer Staples": 1.69
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  },
+  "100795": {
+   "fund_name": "Sundaram Small Cap Fund",
+   "as_of": "2026-10-16",
+   "sectors": {
+    "Industrials": 26.73,
+    "Financial": 19.56,
+    "Consumer Discretionary": 18.11,
+    "Technology": 11.12,
+    "Materials": 10.07,
+    "Healthcare": 9.39,
+    "Real Estate": 2.16,
+    "Consumer Staples": 1.97,
+    "Energy & Utilities": 0.88
+   },
+   "source": "Groww app (Direct plan page), pasted by the user. 'Equity sector allocation' as shown, a share of the equity holdings. Page shows no holdings date, so as_of is the day it was read.",
+   "source_url": ""
+  }
+ }
+}

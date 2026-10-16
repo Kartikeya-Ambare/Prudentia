@@ -1,0 +1,79 @@
+{
+  "mu": -0.01475193483877034,
+  "sigma": 0.3251961961981725,
+  "n_obs": 952,
+  "method": "transformer",
+  "final_train_loss": 0.9210874438285828,
+  "raw_mu": -0.01475193483877034,
+  "current_price": 580.25,
+  "raw_terminal_price": 538.6951958403241,
+  "guarded_terminal_price": 538.6951958403241,
+  "raw_cagr_pct": -1.475193483877034,
+  "guarded_cagr_pct": -1.475193483877034,
+  "historical_cagr_pct": 17.51531544997338,
+  "historical_cagr_years": 3.7777777777777777,
+  "historical_max_drawdown_pct": -44.549802587993916,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 580.25,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 571.6902,
+      "annual_return_pct": -1.4752,
+      "cumulative_return_pct": -1.4752
+    },
+    {
+      "year": 2,
+      "projected_price": 563.2567,
+      "annual_return_pct": -1.4752,
+      "cumulative_return_pct": -2.9286
+    },
+    {
+      "year": 3,
+      "projected_price": 554.9475,
+      "annual_return_pct": -1.4752,
+      "cumulative_return_pct": -4.3606
+    },
+    {
+      "year": 4,
+      "projected_price": 546.761,
+      "annual_return_pct": -1.4752,
+      "cumulative_return_pct": -5.7715
+    },
+    {
+      "year": 5,
+      "projected_price": 538.6952,
+      "annual_return_pct": -1.4752,
+      "cumulative_return_pct": -7.1615
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 312.2422,
+      "cagr_pct": -11.6564
+    },
+    "base": {
+      "terminal_price": 538.6952,
+      "cagr_pct": -1.4752
+    },
+    "bull": {
+      "terminal_price": 929.3826,
+      "cagr_pct": 9.8793
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-16T15:33:13.125312"
+}

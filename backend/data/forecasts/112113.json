@@ -1,0 +1,79 @@
+{
+  "mu": 0.08340480854636315,
+  "sigma": 0.15889352942219642,
+  "n_obs": 374,
+  "method": "transformer",
+  "final_train_loss": 0.9330565929412842,
+  "raw_mu": 0.08340480854636315,
+  "current_price": 12.5,
+  "raw_terminal_price": 18.657944937595367,
+  "guarded_terminal_price": 18.657944937595367,
+  "raw_cagr_pct": 8.340480854636315,
+  "guarded_cagr_pct": 8.340480854636315,
+  "historical_cagr_pct": 16.934648583939293,
+  "historical_cagr_years": 1.4841269841269842,
+  "historical_max_drawdown_pct": -16.824324324324323,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 12.5,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 13.5426,
+      "annual_return_pct": 8.3405,
+      "cumulative_return_pct": 8.3405
+    },
+    {
+      "year": 2,
+      "projected_price": 14.6721,
+      "annual_return_pct": 8.3405,
+      "cumulative_return_pct": 17.3766
+    },
+    {
+      "year": 3,
+      "projected_price": 15.8958,
+      "annual_return_pct": 8.3405,
+      "cumulative_return_pct": 27.1664
+    },
+    {
+      "year": 4,
+      "projected_price": 17.2216,
+      "annual_return_pct": 8.3405,
+      "cumulative_return_pct": 37.7727
+    },
+    {
+      "year": 5,
+      "projected_price": 18.6579,
+      "annual_return_pct": 8.3405,
+      "cumulative_return_pct": 49.2636
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 14.2934,
+      "cagr_pct": 2.7177
+    },
+    "base": {
+      "terminal_price": 18.6579,
+      "cagr_pct": 8.3405
+    },
+    "bull": {
+      "terminal_price": 24.3552,
+      "cagr_pct": 14.2711
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-16T10:56:06.838018"
+}
