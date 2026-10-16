@@ -35,6 +35,14 @@ def test_plan_invests_the_full_amount_for_any_split():
             assert abs(held - 500000 * d["split_pct"][bucket] / 100) < 26   # split_pct is rounded to 0.01%
 
 
+def test_scenarios_explain_a_narrow_optimistic_case():
+    sc = _plan(capital=500000)["scenarios"]
+    down = sc["base"]["projected_value"] - sc["bear"]["projected_value"]
+    up = sc["bull"]["projected_value"] - sc["base"]["projected_value"]
+    assert sc["bear"]["projected_value"] <= sc["base"]["projected_value"] <= sc["bull"]["projected_value"]
+    assert ("note" in sc) == (down > 0 and up < 0.25 * down)       # a narrow upside always comes with the explanation
+
+
 def test_only_chosen_classes_receive_money():
     d = _plan(classes=["fd"])
     assert d["split_pct"] == {"stock": 0.0, "mf": 0.0, "bank": 100.0}

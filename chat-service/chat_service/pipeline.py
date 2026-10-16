@@ -907,7 +907,7 @@ class ChatPipeline:
             elif sc:
                 r = (f"In the bull scenario, the return is about {n(round(sc['bull']['return_pct'], 1))}% a year, or about "
                      f"{replies.inr(sc['bull']['projected_value'])} after {replies.years_text(res['years'])}. "
-                     "This is the forecast's bull case, not a guarantee.")
+                     "This is the forecast's bull case, not a guarantee." + (" " + sc["note"] if sc.get("note") else ""))
             else:
                 r = na
         elif re.search(r"expected|return|munafa|kitna\s+milega", t):

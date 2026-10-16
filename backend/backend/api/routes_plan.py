@@ -262,6 +262,11 @@ def build_plan(req: PlanRequest, profile_id: Optional[str] = None) -> PlanResult
                 "return_pct": (((scen[k] + fd_projected) / total_present) ** (1 / h) - 1) * 100}
             for k in ("bear", "base", "bull")
         }
+        down = scenarios["base"]["projected_value"] - scenarios["bear"]["projected_value"]
+        up = scenarios["bull"]["projected_value"] - scenarios["base"]["projected_value"]
+        if down > 0 and up < 0.25 * down:
+            scenarios["note"] = ("The optimistic case is close to the expected case because the model caps the yearly return "
+                                 "it will forecast for any single stock or fund. Treat the cautious case as the number to plan around.")
 
     as_of = _data_as_of()
     newest = [d for d in as_of.values() if d]
