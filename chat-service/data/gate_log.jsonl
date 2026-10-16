@@ -214,3 +214,4 @@
 {"t": 1792183062.3571596, "message": "why stocks 42%", "action": "unsure", "label": "in", "conf": 0.664}
 {"t": 1792183083.2760272, "message": "tell me about the HDFC Bank FD rate", "action": "unsure", "label": "off_topic", "conf": 0.329}
 {"t": 1792183094.0970497, "message": "is this plan good for me", "action": "unsure", "label": "in", "conf": 0.472}
+{"t": 1792183856.7162688, "message": "remove stocks", "action": "unsure", "label": "in", "conf": 0.611}

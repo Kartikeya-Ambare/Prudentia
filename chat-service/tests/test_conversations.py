@@ -315,3 +315,62 @@ def test_questions_about_the_plan_are_not_mistaken_for_picks(make_pipe, msg):
     p = seeded(make_pipe)
     r = p.handle(S, msg)
     assert not r.get("blocked"), r["reply"]
+
+
+# ------------------------------------------------------------------------------------ found by reading the live transcript
+def test_removing_a_sector_does_not_remove_the_whole_asset_class(make_pipe):
+    p = seeded(make_pipe, judge="in")
+    p.handle(S, "I prefer pharma and IT stocks")
+    r = p.handle(S, "remove IT stocks")
+    assert "stocks" in r["result"]["classes"] and r["intent"] == "modify_inputs"
+    r = seeded(make_pipe, judge="in").handle(S, "remove banking stocks")
+    assert "no sectors choice to remove" in r["reply"].lower() and r["result"] is None
+
+
+@pytest.mark.parametrize("msg", ["is my money safe", "is my money safe?", "is this plan good for me", "is my plan safe", "is the plan ok",
+                                 "am I safe", "how safe is my plan"])
+def test_questions_about_safety_never_change_the_plan(make_pipe, msg):
+    p = seeded(make_pipe, judge="in")
+    before = dict(p.store.get(S).params)
+    r = p.handle(S, msg)
+    assert p.store.get(S).params == before and "Updated" not in r["reply"]
+    if msg != "how safe is my plan":
+        assert r["intent"] == "assess_plan" and "No investment is completely safe" in r["reply"] and "make it safer" in r["reply"]
+
+
+def test_make_it_safer_still_changes_the_risk(make_pipe):
+    r = seeded(make_pipe).handle(S, "make it safer")
+    assert r["params"]["risk_score"] == 20
+
+
+def test_assess_without_a_plan_asks_for_one(make_pipe):
+    r = make_pipe(ScriptedLLM(judge="in")).handle(S, "is my money safe")
+    assert "create a plan first" in r["reply"]
+
+
+@pytest.mark.parametrize("msg,anyof", [("tell me about the HDFC Bank FD rate", ["HDFC Bank"]), ("what is the SBI FD interest rate", ["State Bank"]),
+                                       ("what are the FD rates", ["Equitas", "IDFC"]), ("which bank gives the best FD interest", ["IDFC", "Equitas"])])
+def test_fd_rate_questions_are_answered(make_pipe, msg, anyof):
+    r = seeded(make_pipe, judge="in").handle(S, msg)
+    assert r["intent"] == "bank_rates" and any(a in r["reply"] for a in anyof) and "%" in r["reply"], r["reply"]
+
+
+@pytest.mark.parametrize("msg,years", [("make it 5 years to 10 years", 10), ("change from 5 years to 10 years", 10), ("5 se 10 saal", 10)])
+def test_from_a_to_b_takes_the_new_value(make_pipe, msg, years):
+    assert seeded(make_pipe).handle(S, msg)["params"]["years"] == years
+
+
+def test_two_different_years_in_one_message_are_a_conflict(make_pipe):
+    r = seeded(make_pipe).handle(S, "make it 3 years and 10 years")
+    assert "conflicting" in r["reply"] and r["params"]["years"] == 5
+
+
+@pytest.mark.parametrize("msg,risk", [("5 lakh 5 years moderate", 50), ("5 lakh 3 saal kam", 20), ("invest 2 lakh 4 years high", 80)])
+def test_a_bare_risk_word_with_the_amount_in_the_same_message(make_pipe, msg, risk):
+    r = make_pipe(ScriptedLLM(intent="provide_inputs")).handle(S, msg)
+    assert r["result"] and r["params"]["risk_score"] == risk, r["reply"]
+
+
+def test_high_growth_is_not_a_risk_level(make_pipe):
+    r = make_pipe(ScriptedLLM(intent="provide_inputs")).handle(S, "5 lakh 5 years in high growth funds")
+    assert r["result"] is None and "risk" in r["reply"].lower()

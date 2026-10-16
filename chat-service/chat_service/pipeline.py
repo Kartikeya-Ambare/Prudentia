@@ -201,6 +201,10 @@ class ChatPipeline:
     _R_ABOUT = re.compile(r"\b(allocation|portfolio|split|fds?|banks?|deposits?|stocks?|mutual|mf)\b", re.I)
     _R_BANKQ = re.compile(r"\b(banks?|deposits?|fds?)\b.{0,40}\b(kaunse|kaunsa|which|chune|chosen|select\w*|use\w*)\b|\b(kaunse|kaunsa|which|chune|chosen)\b.{0,40}\b(banks?|deposits?|fds?)\b", re.I)
 
+    _R_ASSESS = re.compile(r"^\W*(is|are|will|would|does|do)\b.{0,30}\b(plan|portfolio|allocation|money|investments?|this|it|these)\b.{0,25}"
+                           r"\b(safe|safest|good|ok|okay|fine|right|risky|secure|suitable|enough|worth\s+it|bad)\b|"
+                           r"\b(am\s+i|are\s+we)\s+(safe|ok|okay)\b|\bshould\s+i\s+(worry|be\s+worried)\b", re.I)
+    _R_RATE = re.compile(r"\b(rates?|interest|payout|yield)\b", re.I)
     _R_COMPARE = re.compile(r"\b(compare|comparison|vs\.?|versus|tulna|farak|difference|dono)\b", re.I)
     _R_HISTORY = re.compile(r"\b(increas\w*|decreas\w*|badh\w*|ghat\w*|chang\w*|history|trend|pehle|previous|last\s+month|"
                             r"pichle|earlier|compared\s+to)\b", re.I)
@@ -232,6 +236,11 @@ class ChatPipeline:
 
     def _rule_intent(self, s: Session, text: str) -> Optional[str]:
         """Cheap, unambiguous intents decided by code. Everything else goes to the intent LLM."""
+        if self._R_ASSESS.search(text):
+            return "assess_plan"
+        if self._R_RATE.search(text) and (re.search(r"\b(fds?|fixed\s+deposits?|banks?|deposits?)\b", text, re.I)
+                                          or any(re.search(rx, text, re.I) for _, rx in parse._BANK_ALIASES)):
+            return "bank_rates"
         funds = self._find_funds(text)
         if len(funds) >= 2 and not self._R_HISTORY.search(text):
             return "compare_funds"
@@ -278,6 +287,10 @@ class ChatPipeline:
             return self._mf_sector(s, text, it.get("fund_name"))
         if intent == "rebalance_check":
             return self._drift(s)
+        if intent == "assess_plan":
+            return self._assess(s)
+        if intent == "bank_rates":
+            return self._bank_rates(s, text)
         if intent == "ask_result":
             return self._ask_result(s, text)
         if intent == "compare_funds":
@@ -472,6 +485,8 @@ class ChatPipeline:
         if y is not None:
             patch["years"] = y
         r = parse.parse_risk(text)
+        if r is None and s.result is None and (a is not None or y is not None):
+            r = parse.parse_risk_bare(text)                      # '5 lakh 5 years moderate'
         rp = parse.parse_risk_pct(text, allow_bare="risk" in aw)
         shift = parse.parse_risk_shift(text) if s.params.get("risk") else None
         if rp is not None:
@@ -481,6 +496,8 @@ class ChatPipeline:
         elif shift:
             patch["risk_shift"] = shift
         ops = parse.parse_class_ops(text)
+        if prefs.parse_prefs(text):                              # 'remove banking stocks' edits the sector choice; it does not remove Stocks
+            ops = {"only": set(), "add": set(), "remove": set(), "explicit": False}
         has_prior = s.result is not None
         if ops["remove"]:
             patch["remove_classes"] = sorted(ops["remove"])
@@ -613,6 +630,8 @@ class ChatPipeline:
             if k in patch:
                 mode, vals = patch[k]
                 before = list(new.get(k) or [])
+                if mode == "remove" and not before:
+                    return self._resp(s, replies.t("pref_none", what=label), "clarify")
                 new[k] = prefs.apply_pref(before, mode, vals)
                 if had_result and new[k] != before:
                     show = lambda xs: ", ".join(prefs.SECTOR_LABEL.get(x, x) for x in xs) or "no restriction"
@@ -850,6 +869,48 @@ class ChatPipeline:
                           "\nTo rebalance, say for example 'move 5% from stocks to FD'.", "rebalance_check")
 
     # ------------------------------------------------------------------ explain / ask
+    def _assess(self, s: Session) -> dict:
+        """'Is my plan safe / good?': never a verdict, only how the plan is built and what the cautious case looks like."""
+        if not self._ensure_loaded(s):
+            return self._resp(s, replies.NEED_ALLOCATION, "assess_plan")
+        res, n = s.result, replies.num
+        b = res["buckets"]
+        fd = b.get("bank", {}).get("weight_pct", 0.0)
+        growth = b.get("stock", {}).get("weight_pct", 0.0) + b.get("mf", {}).get("weight_pct", 0.0)
+        parts = ["No investment is completely safe, and I can't say whether this plan is right for you."]
+        if fd and growth:
+            parts.append(f"Here is how it is built: {n(round(fd, 1))}% in FDs, which pay a fixed rate, and {n(round(growth, 1))}% in "
+                         "stocks and mutual funds, which can lose value, sometimes for years.")
+        elif growth:
+            parts.append("It is all in stocks and mutual funds, which can lose value, sometimes for years.")
+        else:
+            parts.append("It is all in FDs, which pay a fixed rate; the trade-off is lower growth.")
+        sc = res.get("scenarios")
+        if sc:
+            parts.append(f"In the cautious case your {replies.inr(res['amount'])} could be about {replies.inr(sc['bear']['projected_value'])} "
+                         f"after {replies.years_text(res['years'])}, against about {replies.inr(sc['base']['projected_value'])} in the expected case.")
+        parts.append("If you want less risk, say 'make it safer'.")
+        return self._resp(s, " ".join(parts) + "\n" + replies.DISCLAIMER, "assess_plan", result=res)
+
+    def _bank_rates(self, s: Session, text: str) -> dict:
+        try:
+            banks = self.engine.list_banks()
+        except EngineError as exc:
+            return self._engine_error(s, exc, "bank_rates")
+        by_id = {b["id"]: b for b in banks}
+        named = [bid for bid, rx in parse._BANK_ALIASES if re.search(rx, text, re.I)]
+        if named:
+            rows = [by_id[i] for i in named if i in by_id]
+            if not rows:
+                return self._resp(s, replies.t("bank_unknown", name=named[0], names=", ".join(b["display_name"] for b in banks)), "clarify")
+            head = "FD interest rate"
+        else:
+            rows = sorted(banks, key=lambda b: -b["rate_pct"])[:5]
+            head = "The highest FD rates I have"
+        listing = "; ".join(f"{b['display_name']} {replies.num(b['rate_pct'])}%" for b in rows)
+        return self._resp(s, f"{head}: {listing}. These are the yearly rates the plan assumes; check the bank for its current offer.\n"
+                          + replies.DISCLAIMER, "bank_rates")
+
     def _explain_allocation(self, s: Session, text: str = "") -> dict:
         if not self._ensure_loaded(s):
             return self._resp(s, replies.NEED_ALLOCATION, "explain_allocation")

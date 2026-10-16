@@ -18,6 +18,7 @@ _AMT = re.compile(
 _MULT = {"k": 1e3, "thousand": 1e3, "hazaar": 1e3, "hazar": 1e3, "hajar": 1e3, "lakh": 1e5, "lakhs": 1e5,
          "lac": 1e5, "lacs": 1e5, "l": 1e5, "crore": 1e7, "crores": 1e7, "cr": 1e7}
 _NOT_AMOUNT_TAIL = re.compile(r"^\s*(%|percent|pratishat|prati\s?shat|saal|saalon|sal|year|years|yr|yrs|varsh|y\b|mahine|months?)", re.I)
+_CHANGE_CUE = re.compile(r"\b(from|to|se|instead|badal\w*)\b", re.I)            # 'from 5 years to 10 years': the last value is the new one
 _CORRECTION = re.compile(r"\b(nahi|nahin|nhi|no|not|actually|sorry|i\s+mean|matlab|oops|galat|correction)\b", re.I)
 
 
@@ -53,7 +54,7 @@ def parse_amount(text: str, allow_bare: bool = False) -> Optional[float]:
         return None
     if len(set(c)) == 1:
         return c[0]
-    return c[-1] if _CORRECTION.search(text) else None
+    return c[-1] if (_CORRECTION.search(text) or _CHANGE_CUE.search(text)) else None
 
 
 # ------------------------------------------------------------------------------ years
@@ -72,7 +73,31 @@ def parse_years(text: str, allow_bare: bool = False) -> Optional[float]:
         return None
     if len(set(vals)) == 1:
         return vals[0]
-    return vals[-1] if _CORRECTION.search(text) else None
+    return vals[-1] if (_CORRECTION.search(text) or _CHANGE_CUE.search(text)) else None
+
+
+# ------------------------------------------------------------------------------ questions
+_Q_START = re.compile(r"^\s*(is|are|was|were|does|do|did|will|would|should|can|could|how|what|why|which|kya|kaun|kyun|kaise)\b", re.I)
+_REQUEST = re.compile(r"\b(please|plz|pls|make|keep|change|set|want|need|put|take|reduce|lower|raise|increase|decrease|switch|turn|"
+                      r"can\s+you|could\s+you|would\s+you|karo|kar\s+do|banao|chahiye)\b", re.I)
+
+
+def is_question(text: str) -> bool:
+    """A question about the plan ('is my money safe?'), as opposed to a request to change it ('make it safer')."""
+    t = normalise(text)
+    return bool(_Q_START.match(t) or t.endswith("?")) and not _REQUEST.search(t)
+
+
+_RISK_BARE = re.compile(r"\b(low|moderate|medium|high|conservative|aggressive|balanced|kam|madhyam)\b"
+                        r"(?!\s+(growth|returns?|yield|interest|rated|cost|fees?|price|priced))", re.I)
+_RISK_BARE_MAP = {"low": "low", "kam": "low", "conservative": "low", "moderate": "moderate", "medium": "moderate",
+                  "madhyam": "moderate", "balanced": "moderate", "high": "high", "aggressive": "high"}
+
+
+def parse_risk_bare(text: str) -> Optional[str]:
+    """'5 lakh 5 years moderate': a risk level without the word 'risk'. Only used while the amount or years are in the same message."""
+    m = _RISK_BARE.search(text)
+    return _RISK_BARE_MAP[m.group(1).lower()] if m else None
 
 
 # ------------------------------------------------------------------------------ risk
@@ -113,9 +138,9 @@ _RISKISH = re.compile(r"\b(risk\w*|safe\w*|aggressive|conservative|secure)\b", r
 def parse_risk_shift(text: str) -> Optional[str]:
     """'thoda safe karo' / 'make it safer' -> 'safer'; 'thoda aggressive banao' -> 'riskier'. Relative changes only."""
     t = normalise(text)
-    if not _RISKISH.search(t):
+    if not _RISKISH.search(t) or is_question(t):          # 'is my money safe?' asks; it does not change the plan
         return None
-    relative = bool(_RELATIVE.search(t)) or bool(re.search(r"\b(safer|riskier|safe|aggressive)\b", t, re.I))
+    relative =bool(_RELATIVE.search(t)) or bool(re.search(r"\b(safer|riskier|safe|aggressive)\b", t, re.I))
     if not relative:
         return None
     if re.search(r"\b(safer|safe|safest|secure|less\s+risk\w*|kam\s+risk\w*|lower\s+risk)\b|\brisk\W+(?:\w+\W+){0,2}?(kam|kum|ghat\w*|less|lower)\b", t, re.I) \

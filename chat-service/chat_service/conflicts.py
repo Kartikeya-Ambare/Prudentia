@@ -5,8 +5,8 @@ from __future__ import annotations
 import re
 from typing import Optional
 
-from chat_service.guardrails.chat_guardrails import classes_in, normalise
-from chat_service.parse import _ADD, _REMOVE
+from chat_service.guardrails.chat_guardrails import classes_in, normalise, years_in
+from chat_service.parse import _ADD, _REMOVE, parse_years
 
 _CLAUSES = re.compile(r"\s*(?:,|;|\band\b|\baur\b|\bthen\b|\bphir\b|&)\s*", re.I)
 _RISK_PCT = re.compile(r"(\d{1,3}(?:\.\d+)?)\s*(?:%|percent)\s*(?:risk|jokhim)|(?:risk|jokhim)\s*(?:to|=|:|ko)?\s*(\d{1,3}(?:\.\d+)?)\s*(?:%|percent)", re.I)
@@ -32,4 +32,6 @@ def find_conflict(text: str) -> Optional[str]:
     vals = {float(a or b) for a, b in _RISK_PCT.findall(t)}
     if len(vals) > 1:
         return "risk"
+    if len(years_in(t)) > 1 and parse_years(t) is None:        # '3 years and 10 years' (but 'from 5 years to 10 years' is a change)
+        return "years"
     return None

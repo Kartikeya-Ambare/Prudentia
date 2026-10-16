@@ -66,6 +66,8 @@ M: dict[str, str] = {
     "not_sure": "I wasn't sure about: {what}.",
     "risk_capped": "Your risk is already {moved}, so it can't go any further.",
     "risk_level": "Your risk level is {label}.",
+    "pref_none": ("There is no {what} choice to remove right now. You can say, for example, 'I prefer pharma and IT stocks' or "
+                  "'only large cap funds' to focus on some, and 'remove IT' afterwards to take one out."),
 }
 
 
@@ -193,7 +195,8 @@ GLOSSARY: list[tuple[str, str, str]] = [
 ]
 
 
-_NOT_GLOSSARY = re.compile(r"\b(sectors?|exposed|exposure|holdings?|(?<!asset )allocation|portfolio|split|drift\w*|rebalanc\w*)\b", re.I)
+_NOT_GLOSSARY = re.compile(r"\b(sectors?|exposed|exposure|holdings?|(?<!asset )allocation|portfolio|split|drift\w*|rebalanc\w*|"
+                           r"rates?|interest|yield|payout)\b", re.I)
 
 
 GLOSSARY.append(("scenarios", r"\b(bear|bull|base|optimistic|cautious|expected)\s+cases?\b|\bscenarios?\b|\bbear\b.{0,12}\bbull\b|\bbull\b.{0,12}\bbear\b",
