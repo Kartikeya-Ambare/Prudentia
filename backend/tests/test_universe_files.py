@@ -18,7 +18,16 @@ def test_mf_universe_shape():
     assert set(data["categories"]) == {"large_cap", "mid_cap", "small_cap"}
     assert data["max_schemes_per_category"] == 80
     for cat in data["categories"].values():
-        assert len(cat["seed_schemes"]) >= 25
+        assert len(cat["seed_schemes"]) >= 15
+
+
+def test_every_fund_in_the_universe_has_a_scheme_code():
+    import json
+    data = yaml.safe_load(repo_path("universe", "mf_universe.yaml").read_text(encoding="utf-8"))
+    codes = json.loads(repo_path("universe", "mf_scheme_codes.json").read_text(encoding="utf-8"))
+    seeds = [n for cat in data["categories"].values() for n in cat["seed_schemes"]]
+    assert seeds and all(codes.get(n) for n in seeds), [n for n in seeds if not codes.get(n)]
+    assert set(codes) == set(seeds)   # no stray entries either way
 
 
 def test_bank_universe_shape():

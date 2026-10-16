@@ -64,7 +64,7 @@ The guiding rule: **code decides the money, the language model only reads Englis
 
 ```mermaid
 flowchart LR
-    A[Universe<br/>196 stocks · 85 funds · 16 banks] --> B[Select<br/>by risk band,<br/>drop look-alikes]
+    A[Universe<br/>196 stocks · 72 funds · 16 banks] --> B[Select<br/>by risk band,<br/>drop look-alikes]
     B --> C[Forecast<br/>Transformer on<br/>5 years of prices]
     C --> D[Guardrails<br/>keep forecasts<br/>plausible]
     D --> E[After tax<br/>Indian capital-<br/>gains rules]
@@ -144,9 +144,9 @@ Three investors, each with **Rs. 5,00,000 for 5 years**, differing only in risk.
 
 | Risk | Stocks / Mutual funds / FDs | Expected return<br/>(per year, after tax) | Volatility | Cautious | Expected | Optimistic |
 |---|---|---|---|---|---|---|
-| **20** (conservative) | 29% / 33% / **38%** | 11.5% | 7.6% | Rs. 7.09 L | Rs. 8.64 L | Rs. 9.13 L |
+| **20** (conservative) | 29% / 33% / **38%** | 11.6% | 7.7% | Rs. 7.10 L | Rs. 8.64 L | Rs. 9.13 L |
 | **50** (moderate) | 42% / 38% / **20%** | 13.9% | 11.9% | Rs. 6.97 L | Rs. 9.55 L | Rs. 9.94 L |
-| **80** (aggressive) | 54% / 41% / **5%** | 16.1% | 16.6% | Rs. 7.18 L | Rs. 10.55 L | Rs. 10.99 L |
+| **80** (aggressive) | 54% / 41% / **5%** | 16.1% | 16.6% | Rs. 7.18 L | Rs. 10.54 L | Rs. 10.97 L |
 
 The pattern is the one you'd hope for: more risk means less FD, more equity, a higher expected return *and* higher volatility. A plan takes about **1 second** once the price cache is warm (about 3 seconds for the first one).
 
@@ -179,7 +179,7 @@ Small test sets mean small confidence: zero leaks in 52 messages is consistent w
 | Chat service tests | 258 pass |
 | End-to-end chat flow against the live engine (plan, edit, rebalance, refuse, Hinglish) | 20 / 20 checks pass |
 | Fresh-clone setup, tests, build and start on Windows, macOS and Linux (Python 3.11 and 3.14) | 6 / 6 combinations pass in CI |
-| Coverage of the universe | 196 stocks in 12 sectors, 85 mutual funds (72 with sector tables), 16 banks |
+| Coverage of the universe | 196 stocks in 12 sectors, 72 mutual funds (each with a sector table), 16 banks |
 
 ### Known limitations
 
