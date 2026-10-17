@@ -24,10 +24,12 @@ export const useDrift = (profileId: string | undefined) =>
 
 export const useChat = () =>
   useMutation({
+    mutationKey: ["chat"],
     mutationFn: (vars: { message: string; profileId?: string; sessionId: string }) =>
       api.chat(vars.message, vars.profileId, vars.sessionId),
   });
 
-export const usePlan = () => useMutation({ mutationFn: api.plan });
+/** The plan build is the only slow step that shows the big "reading prices, picking stocks" loader; chat actions have their own small one. */
+export const usePlan = () => useMutation({ mutationKey: ["plan"], mutationFn: api.plan });
 
 export const useBanks = () => useQuery({ queryKey: ["banks"], queryFn: api.banks, staleTime: 10 * 60_000 });

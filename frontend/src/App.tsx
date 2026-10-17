@@ -182,7 +182,7 @@ export function App() {
   const health = useHealth();
   const plan = useSession((s) => s.lastResult);
   const level = useLevel((s) => s.level);
-  const busy = useIsMutating() > 0;
+  const busy = useIsMutating({ mutationKey: ["plan"] }) > 0;      // chat messages show their own small "Working on it"
   const wide = useMedia("(min-width: 1280px)");
 
   const page = PAGES.find((p) => p.path === pathname);

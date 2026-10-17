@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useBanks, usePlan } from "@/api/hooks";
 import type { AssetClass, McCategory, PlanRequest } from "@/api/types";
-import { useSession } from "@/store/session";
+import { asPlan, useSession } from "@/store/session";
 import { useT } from "@/lib/i18n";
 import { Button } from "@/components/ui/Button";
 import { ClassCard, Segmented } from "@/components/ui/Choice";
@@ -27,6 +27,7 @@ export function PlanForm({ full }: { full: boolean }) {
   const banks = useBanks();
   const current = useSession((s) => s.lastResult);
   const setLastResult = useSession((s) => s.setLastResult);
+  const addMessage = useSession((s) => s.addMessage);
 
   const [capital, setCapital] = useState(100_000);
   const [horizon, setHorizon] = useState(5);
@@ -66,7 +67,13 @@ export function PlanForm({ full }: { full: boolean }) {
       if (useSplit) req.manual_split = Object.fromEntries(classes.map((c) => [c, splitValue(c)]));
     }
     const asked = useSession.getState().activeLevel;
-    plan.mutate(req, { onSuccess: (r) => setLastResult(r, asked) });
+    plan.mutate(req, {
+      onSuccess: (r) => {
+        setLastResult(r, asked);
+        // Keep every plan in the chat timeline, so a later change from the chat never makes the earlier result disappear.
+        addMessage({ role: "assistant", content: current ? "Your plan is updated." : "Here is your plan.", allocation: asPlan(r) }, asked);
+      },
+    });
   }
 
   return (
