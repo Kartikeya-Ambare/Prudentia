@@ -3,12 +3,12 @@
   "sigma": 0.3153818505704438,
   "n_obs": 1240,
   "method": "transformer",
-  "final_train_loss": 0.9819672107696533,
-  "raw_mu": 0.3782163734933949,
+  "final_train_loss": 0.9930772185325623,
+  "raw_mu": 0.4149625581538486,
   "current_price": 393.29998779296875,
-  "raw_terminal_price": 1955.7392804053443,
+  "raw_terminal_price": 2230.7385518255337,
   "guarded_terminal_price": 1119.3890107450793,
-  "raw_cagr_pct": 37.82163734933949,
+  "raw_cagr_pct": 41.496255815384856,
   "guarded_cagr_pct": 23.268304137908437,
   "historical_cagr_pct": 44.992042095704534,
   "historical_cagr_years": 4.920634920634921,
@@ -26,8 +26,8 @@
     "SCENARIO_CAPPED"
   ],
   "warnings": [
-    "Raw forecast CAGR (37.8%) falls in the EXTREME_GROWTH band.",
-    "Raw CAGR (37.8%) was shrunk toward the (volatility-scaled) soft cap, to 28.8%, before reaching the optimizer.",
+    "Raw forecast CAGR (41.5%) falls in the EXTREME_GROWTH band.",
+    "Raw CAGR (41.5%) was shrunk toward the (volatility-scaled) soft cap, to 29.9%, before reaching the optimizer.",
     "Guarded forecast would have projected more than 2.85x the current price/invested amount over 5 years; hard-capped to 2.85x (23.3% CAGR).",
     "The bear/bull scenario band was capped to avoid implausible multi-year compounding; see scenario.max_cagr_pct/min_cagr_pct in config.yaml."
   ],
@@ -85,5 +85,5 @@
   },
   "horizon_years_used": 5,
   "guardrail_version": 4,
-  "computed_at": "2026-10-16T10:55:45.934050"
+  "computed_at": "2026-10-17T11:07:03.743310"
 }

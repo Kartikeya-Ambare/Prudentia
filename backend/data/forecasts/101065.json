@@ -1,0 +1,79 @@
+{
+  "mu": 0.04805748874703122,
+  "sigma": 0.14738818421463337,
+  "n_obs": 5062,
+  "method": "transformer",
+  "final_train_loss": 0.9772119522094727,
+  "raw_mu": 0.04805748874703122,
+  "current_price": 212.8791,
+  "raw_terminal_price": 269.18977099838554,
+  "guarded_terminal_price": 269.18977099838554,
+  "raw_cagr_pct": 4.805748874703122,
+  "guarded_cagr_pct": 4.805748874703122,
+  "historical_cagr_pct": 13.675406829006098,
+  "historical_cagr_years": 5.0,
+  "historical_max_drawdown_pct": -39.35103977202195,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 212.8791,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 223.1095,
+      "annual_return_pct": 4.8057,
+      "cumulative_return_pct": 4.8057
+    },
+    {
+      "year": 2,
+      "projected_price": 233.8316,
+      "annual_return_pct": 4.8057,
+      "cumulative_return_pct": 9.8424
+    },
+    {
+      "year": 3,
+      "projected_price": 245.069,
+      "annual_return_pct": 4.8057,
+      "cumulative_return_pct": 15.1212
+    },
+    {
+      "year": 4,
+      "projected_price": 256.8464,
+      "annual_return_pct": 4.8057,
+      "cumulative_return_pct": 20.6536
+    },
+    {
+      "year": 5,
+      "projected_price": 269.1898,
+      "annual_return_pct": 4.8057,
+      "cumulative_return_pct": 26.4519
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 210.2378,
+      "cagr_pct": -0.2494
+    },
+    "base": {
+      "terminal_price": 269.1898,
+      "cagr_pct": 4.8057
+    },
+    "bull": {
+      "terminal_price": 344.6723,
+      "cagr_pct": 10.1171
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-17T13:57:37.499071"
+}

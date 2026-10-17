@@ -1,0 +1,83 @@
+{
+  "mu": -0.1504663903097023,
+  "sigma": 0.390675434078451,
+  "n_obs": 1257,
+  "method": "transformer",
+  "final_train_loss": 0.9883608222007751,
+  "raw_mu": -0.1504663903097023,
+  "current_price": 274.1000061035156,
+  "raw_terminal_price": 121.28633472216204,
+  "guarded_terminal_price": 121.28633472216204,
+  "raw_cagr_pct": -15.04663903097023,
+  "guarded_cagr_pct": -15.04663903097023,
+  "historical_cagr_pct": -8.406516543606458,
+  "historical_cagr_years": 4.988095238095238,
+  "historical_max_drawdown_pct": -56.75618917529556,
+  "confidence_score": 90.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "HIGH_DOWNSIDE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [
+    "HIGH_DOWNSIDE"
+  ],
+  "warnings": [
+    "Raw forecast CAGR (-15.0%) falls in the HIGH_DOWNSIDE band."
+  ],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 274.1,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 232.8572,
+      "annual_return_pct": -15.0466,
+      "cumulative_return_pct": -15.0466
+    },
+    {
+      "year": 2,
+      "projected_price": 197.82,
+      "annual_return_pct": -15.0466,
+      "cumulative_return_pct": -27.8293
+    },
+    {
+      "year": 3,
+      "projected_price": 168.0547,
+      "annual_return_pct": -15.0466,
+      "cumulative_return_pct": -38.6885
+    },
+    {
+      "year": 4,
+      "projected_price": 142.7681,
+      "annual_return_pct": -15.0466,
+      "cumulative_return_pct": -47.9138
+    },
+    {
+      "year": 5,
+      "projected_price": 121.2863,
+      "annual_return_pct": -15.0466,
+      "cumulative_return_pct": -55.7511
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 62.9897,
+      "cagr_pct": -25.4801
+    },
+    "base": {
+      "terminal_price": 121.2863,
+      "cagr_pct": -15.0466
+    },
+    "bull": {
+      "terminal_price": 233.5361,
+      "cagr_pct": -3.1524
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-17T13:57:16.774336"
+}

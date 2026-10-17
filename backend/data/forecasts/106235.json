@@ -1,0 +1,79 @@
+{
+  "mu": -0.016236707505718144,
+  "sigma": 0.19904347448521334,
+  "n_obs": 4720,
+  "method": "transformer",
+  "final_train_loss": 0.9943552613258362,
+  "raw_mu": -0.016236707505718144,
+  "current_price": 86.3252,
+  "raw_terminal_price": 79.54092934581305,
+  "guarded_terminal_price": 79.54092934581305,
+  "raw_cagr_pct": -1.6236707505718144,
+  "guarded_cagr_pct": -1.6236707505718144,
+  "historical_cagr_pct": 12.100940755102796,
+  "historical_cagr_years": 5.0,
+  "historical_max_drawdown_pct": -56.88626708635073,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 86.3252,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 84.9236,
+      "annual_return_pct": -1.6237,
+      "cumulative_return_pct": -1.6237
+    },
+    {
+      "year": 2,
+      "projected_price": 83.5447,
+      "annual_return_pct": -1.6237,
+      "cumulative_return_pct": -3.221
+    },
+    {
+      "year": 3,
+      "projected_price": 82.1882,
+      "annual_return_pct": -1.6237,
+      "cumulative_return_pct": -4.7924
+    },
+    {
+      "year": 4,
+      "projected_price": 80.8537,
+      "annual_return_pct": -1.6237,
+      "cumulative_return_pct": -6.3382
+    },
+    {
+      "year": 5,
+      "projected_price": 79.5409,
+      "annual_return_pct": -1.6237,
+      "cumulative_return_pct": -7.859
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 56.9666,
+      "cagr_pct": -7.977
+    },
+    "base": {
+      "terminal_price": 79.5409,
+      "cagr_pct": -1.6237
+    },
+    "bull": {
+      "terminal_price": 111.0608,
+      "cagr_pct": 5.1682
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-17T13:57:50.307828"
+}

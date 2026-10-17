@@ -1,0 +1,79 @@
+{
+  "mu": 0.09037413864725176,
+  "sigma": 0.15209535561860266,
+  "n_obs": 1027,
+  "method": "transformer",
+  "final_train_loss": 0.9688370227813721,
+  "raw_mu": 0.09037413864725176,
+  "current_price": 15.2924,
+  "raw_terminal_price": 23.569662363727044,
+  "guarded_terminal_price": 23.569662363727044,
+  "raw_cagr_pct": 9.037413864725176,
+  "guarded_cagr_pct": 9.037413864725176,
+  "historical_cagr_pct": 10.960590680416416,
+  "historical_cagr_years": 4.075396825396825,
+  "historical_max_drawdown_pct": -21.598407940761724,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 15.2924,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 16.6744,
+      "annual_return_pct": 9.0374,
+      "cumulative_return_pct": 9.0374
+    },
+    {
+      "year": 2,
+      "projected_price": 18.1814,
+      "annual_return_pct": 9.0374,
+      "cumulative_return_pct": 18.8916
+    },
+    {
+      "year": 3,
+      "projected_price": 19.8245,
+      "annual_return_pct": 9.0374,
+      "cumulative_return_pct": 29.6363
+    },
+    {
+      "year": 4,
+      "projected_price": 21.6161,
+      "annual_return_pct": 9.0374,
+      "cumulative_return_pct": 41.3521
+    },
+    {
+      "year": 5,
+      "projected_price": 23.5697,
+      "annual_return_pct": 9.0374,
+      "cumulative_return_pct": 54.1266
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 18.2632,
+      "cagr_pct": 3.6144
+    },
+    "base": {
+      "terminal_price": 23.5697,
+      "cagr_pct": 9.0374
+    },
+    "bull": {
+      "terminal_price": 30.4179,
+      "cagr_pct": 14.7442
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-17T13:58:09.313322"
+}

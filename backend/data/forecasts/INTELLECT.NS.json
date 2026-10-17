@@ -1,0 +1,79 @@
+{
+  "mu": -0.13369367341351548,
+  "sigma": 0.42740995011864513,
+  "n_obs": 1258,
+  "method": "transformer",
+  "final_train_loss": 1.008515477180481,
+  "raw_mu": -0.13369367341351548,
+  "current_price": 633.75,
+  "raw_terminal_price": 309.2255727058966,
+  "guarded_terminal_price": 309.2255727058966,
+  "raw_cagr_pct": -13.369367341351548,
+  "guarded_cagr_pct": -13.369367341351548,
+  "historical_cagr_pct": -0.32960889815633054,
+  "historical_cagr_years": 4.992063492063492,
+  "historical_max_drawdown_pct": -59.06571298489467,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 633.75,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 549.0216,
+      "annual_return_pct": -13.3694,
+      "cumulative_return_pct": -13.3694
+    },
+    {
+      "year": 2,
+      "projected_price": 475.6209,
+      "annual_return_pct": -13.3694,
+      "cumulative_return_pct": -24.9513
+    },
+    {
+      "year": 3,
+      "projected_price": 412.0334,
+      "annual_return_pct": -13.3694,
+      "cumulative_return_pct": -34.9849
+    },
+    {
+      "year": 4,
+      "projected_price": 356.9471,
+      "annual_return_pct": -13.3694,
+      "cumulative_return_pct": -43.677
+    },
+    {
+      "year": 5,
+      "projected_price": 309.2256,
+      "annual_return_pct": -13.3694,
+      "cumulative_return_pct": -51.207
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 151.0004,
+      "cagr_pct": -24.9394
+    },
+    "base": {
+      "terminal_price": 309.2256,
+      "cagr_pct": -13.3694
+    },
+    "bull": {
+      "terminal_price": 633.2462,
+      "cagr_pct": -0.0159
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-17T13:56:48.380431"
+}

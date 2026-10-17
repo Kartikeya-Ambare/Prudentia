@@ -1,0 +1,79 @@
+{
+  "mu": -0.052594295433718505,
+  "sigma": 0.17651770754792287,
+  "n_obs": 2141,
+  "method": "transformer",
+  "final_train_loss": 0.9829437732696533,
+  "raw_mu": -0.052594295433718505,
+  "current_price": 24.7878,
+  "raw_terminal_price": 18.919861825850898,
+  "guarded_terminal_price": 18.919861825850898,
+  "raw_cagr_pct": -5.2594295433718505,
+  "guarded_cagr_pct": -5.2594295433718505,
+  "historical_cagr_pct": 8.29179024585358,
+  "historical_cagr_years": 5.0,
+  "historical_max_drawdown_pct": -33.20733983194552,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 24.7878,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 23.4841,
+      "annual_return_pct": -5.2594,
+      "cumulative_return_pct": -5.2594
+    },
+    {
+      "year": 2,
+      "projected_price": 22.249,
+      "annual_return_pct": -5.2594,
+      "cumulative_return_pct": -10.2422
+    },
+    {
+      "year": 3,
+      "projected_price": 21.0788,
+      "annual_return_pct": -5.2594,
+      "cumulative_return_pct": -14.963
+    },
+    {
+      "year": 4,
+      "projected_price": 19.9702,
+      "annual_return_pct": -5.2594,
+      "cumulative_return_pct": -19.4355
+    },
+    {
+      "year": 5,
+      "projected_price": 18.9199,
+      "annual_return_pct": -5.2594,
+      "cumulative_return_pct": -23.6727
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 14.0719,
+      "cagr_pct": -10.7058
+    },
+    "base": {
+      "terminal_price": 18.9199,
+      "cagr_pct": -5.2594
+    },
+    "bull": {
+      "terminal_price": 25.4379,
+      "cagr_pct": 0.5191
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-17T13:58:00.946096"
+}

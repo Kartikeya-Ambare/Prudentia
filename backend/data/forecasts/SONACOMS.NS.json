@@ -1,0 +1,79 @@
+{
+  "mu": 0.0779645769995258,
+  "sigma": 0.35632130005496193,
+  "n_obs": 1259,
+  "method": "transformer",
+  "final_train_loss": 0.9120964407920837,
+  "raw_mu": 0.0779645769995258,
+  "current_price": 800.0,
+  "raw_terminal_price": 1164.4274521013865,
+  "guarded_terminal_price": 1164.4274521013865,
+  "raw_cagr_pct": 7.7964576999525805,
+  "guarded_cagr_pct": 7.7964576999525805,
+  "historical_cagr_pct": 7.723918762830451,
+  "historical_cagr_years": 4.996031746031746,
+  "historical_max_drawdown_pct": -51.18823424795742,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 800.0,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 862.3717,
+      "annual_return_pct": 7.7965,
+      "cumulative_return_pct": 7.7965
+    },
+    {
+      "year": 2,
+      "projected_price": 929.6061,
+      "annual_return_pct": 7.7965,
+      "cumulative_return_pct": 16.2008
+    },
+    {
+      "year": 3,
+      "projected_price": 1002.0825,
+      "annual_return_pct": 7.7965,
+      "cumulative_return_pct": 25.2603
+    },
+    {
+      "year": 4,
+      "projected_price": 1080.2094,
+      "annual_return_pct": 7.7965,
+      "cumulative_return_pct": 35.0262
+    },
+    {
+      "year": 5,
+      "projected_price": 1164.4275,
+      "annual_return_pct": 7.7965,
+      "cumulative_return_pct": 45.5534
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 640.6068,
+      "cagr_pct": -4.3466
+    },
+    "base": {
+      "terminal_price": 1164.4275,
+      "cagr_pct": 7.7965
+    },
+    "bull": {
+      "terminal_price": 2116.5735,
+      "cagr_pct": 21.4811
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-17T13:57:16.200672"
+}

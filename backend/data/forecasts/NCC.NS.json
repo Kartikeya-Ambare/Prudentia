@@ -1,0 +1,79 @@
+{
+  "mu": 0.0012462227552620748,
+  "sigma": 0.3982370894542907,
+  "n_obs": 1258,
+  "method": "transformer",
+  "final_train_loss": 1.0047879219055176,
+  "raw_mu": 0.0012462227552620748,
+  "current_price": 123.77999877929688,
+  "raw_terminal_price": 124.55321082360099,
+  "guarded_terminal_price": 124.55321082360099,
+  "raw_cagr_pct": 0.12462227552620748,
+  "guarded_cagr_pct": 0.12462227552620748,
+  "historical_cagr_pct": 11.3558314660944,
+  "historical_cagr_years": 4.992063492063492,
+  "historical_max_drawdown_pct": -65.40070690610426,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 123.78,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 123.9343,
+      "annual_return_pct": 0.1246,
+      "cumulative_return_pct": 0.1246
+    },
+    {
+      "year": 2,
+      "projected_price": 124.0887,
+      "annual_return_pct": 0.1246,
+      "cumulative_return_pct": 0.2494
+    },
+    {
+      "year": 3,
+      "projected_price": 124.2433,
+      "annual_return_pct": 0.1246,
+      "cumulative_return_pct": 0.3743
+    },
+    {
+      "year": 4,
+      "projected_price": 124.3982,
+      "annual_return_pct": 0.1246,
+      "cumulative_return_pct": 0.4994
+    },
+    {
+      "year": 5,
+      "projected_price": 124.5532,
+      "annual_return_pct": 0.1246,
+      "cumulative_return_pct": 0.6247
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 63.8712,
+      "cagr_pct": -12.3946
+    },
+    "base": {
+      "terminal_price": 124.5532,
+      "cagr_pct": 0.1246
+    },
+    "bull": {
+      "terminal_price": 242.8871,
+      "cagr_pct": 14.4329
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-17T13:57:00.342912"
+}

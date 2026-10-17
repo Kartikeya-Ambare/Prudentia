@@ -1,0 +1,79 @@
+{
+  "mu": 0.021635192422172034,
+  "sigma": 0.3176595029114065,
+  "n_obs": 1259,
+  "method": "transformer",
+  "final_train_loss": 0.9902008771896362,
+  "raw_mu": 0.021635192422172038,
+  "current_price": 2500.0,
+  "raw_terminal_price": 2782.397870521394,
+  "guarded_terminal_price": 2782.397870521394,
+  "raw_cagr_pct": 2.1635192422172036,
+  "guarded_cagr_pct": 2.1635192422172036,
+  "historical_cagr_pct": -2.0277490130268028,
+  "historical_cagr_years": 4.996031746031746,
+  "historical_max_drawdown_pct": -51.94419372156972,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 2500.0,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 2554.088,
+      "annual_return_pct": 2.1635,
+      "cumulative_return_pct": 2.1635
+    },
+    {
+      "year": 2,
+      "projected_price": 2609.3462,
+      "annual_return_pct": 2.1635,
+      "cumulative_return_pct": 4.3738
+    },
+    {
+      "year": 3,
+      "projected_price": 2665.7999,
+      "annual_return_pct": 2.1635,
+      "cumulative_return_pct": 6.632
+    },
+    {
+      "year": 4,
+      "projected_price": 2723.475,
+      "annual_return_pct": 2.1635,
+      "cumulative_return_pct": 8.939
+    },
+    {
+      "year": 5,
+      "projected_price": 2782.3979,
+      "annual_return_pct": 2.1635,
+      "cumulative_return_pct": 11.2959
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 1633.2664,
+      "cagr_pct": -8.1618
+    },
+    "base": {
+      "terminal_price": 2782.3979,
+      "cagr_pct": 2.1635
+    },
+    "bull": {
+      "terminal_price": 4740.0339,
+      "cagr_pct": 13.6497
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-17T12:08:53.569689"
+}

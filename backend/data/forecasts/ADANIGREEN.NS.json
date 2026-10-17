@@ -1,0 +1,83 @@
+{
+  "mu": -0.012351127469342997,
+  "sigma": 0.5179956661505175,
+  "n_obs": 1259,
+  "method": "transformer",
+  "final_train_loss": 0.9481279850006104,
+  "raw_mu": -0.012351127469342998,
+  "current_price": 1302.0,
+  "raw_terminal_price": 1223.5559849744684,
+  "guarded_terminal_price": 1223.5559849744684,
+  "raw_cagr_pct": -1.2351127469342997,
+  "guarded_cagr_pct": -1.2351127469342997,
+  "historical_cagr_pct": 2.8555805091836417,
+  "historical_cagr_years": 4.996031746031746,
+  "historical_max_drawdown_pct": -84.44032949984745,
+  "confidence_score": 90.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [
+    "HIGH_VOLATILITY"
+  ],
+  "warnings": [
+    "Historical annualized volatility (51.8%) is high."
+  ],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 1302.0,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 1285.9188,
+      "annual_return_pct": -1.2351,
+      "cumulative_return_pct": -1.2351
+    },
+    {
+      "year": 2,
+      "projected_price": 1270.0363,
+      "annual_return_pct": -1.2351,
+      "cumulative_return_pct": -2.455
+    },
+    {
+      "year": 3,
+      "projected_price": 1254.3499,
+      "annual_return_pct": -1.2351,
+      "cumulative_return_pct": -3.6598
+    },
+    {
+      "year": 4,
+      "projected_price": 1238.8573,
+      "annual_return_pct": -1.2351,
+      "cumulative_return_pct": -4.8497
+    },
+    {
+      "year": 5,
+      "projected_price": 1223.556,
+      "annual_return_pct": -1.2351,
+      "cumulative_return_pct": -6.0249
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 513.2749,
+      "cagr_pct": -16.9867
+    },
+    "base": {
+      "terminal_price": 1223.556,
+      "cagr_pct": -1.2351
+    },
+    "bull": {
+      "terminal_price": 2916.7398,
+      "cagr_pct": 17.5053
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-17T12:12:20.041446"
+}

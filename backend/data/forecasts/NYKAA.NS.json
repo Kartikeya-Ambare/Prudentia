@@ -1,0 +1,79 @@
+{
+  "mu": 0.08062499622632936,
+  "sigma": 0.3715243934290992,
+  "n_obs": 1224,
+  "method": "transformer",
+  "final_train_loss": 0.9551681876182556,
+  "raw_mu": 0.08062499622632936,
+  "current_price": 345.0,
+  "raw_terminal_price": 508.38665342074347,
+  "guarded_terminal_price": 508.38665342074347,
+  "raw_cagr_pct": 8.062499622632936,
+  "guarded_cagr_pct": 8.062499622632936,
+  "historical_cagr_pct": -1.299690400535214,
+  "historical_cagr_years": 4.857142857142857,
+  "historical_max_drawdown_pct": -72.09498261192084,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 345.0,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 372.8156,
+      "annual_return_pct": 8.0625,
+      "cumulative_return_pct": 8.0625
+    },
+    {
+      "year": 2,
+      "projected_price": 402.8739,
+      "annual_return_pct": 8.0625,
+      "cumulative_return_pct": 16.775
+    },
+    {
+      "year": 3,
+      "projected_price": 435.3556,
+      "annual_return_pct": 8.0625,
+      "cumulative_return_pct": 26.19
+    },
+    {
+      "year": 4,
+      "projected_price": 470.4561,
+      "annual_return_pct": 8.0625,
+      "cumulative_return_pct": 36.3641
+    },
+    {
+      "year": 5,
+      "projected_price": 508.3867,
+      "annual_return_pct": 8.0625,
+      "cumulative_return_pct": 47.3585
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 272.6467,
+      "cagr_pct": -4.5983
+    },
+    "base": {
+      "terminal_price": 508.3867,
+      "cagr_pct": 8.0625
+    },
+    "bull": {
+      "terminal_price": 947.9556,
+      "cagr_pct": 22.4035
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-17T13:57:02.618907"
+}

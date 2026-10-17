@@ -1,0 +1,89 @@
+{
+  "mu": 0.2326127593843348,
+  "sigma": 0.31511142423025235,
+  "n_obs": 1259,
+  "method": "transformer",
+  "final_train_loss": 0.996751070022583,
+  "raw_mu": 0.38361082591608725,
+  "current_price": 148.91000366210938,
+  "raw_terminal_price": 755.0811551382892,
+  "guarded_terminal_price": 423.6987369663058,
+  "raw_cagr_pct": 38.36108259160873,
+  "guarded_cagr_pct": 23.261275938433478,
+  "historical_cagr_pct": 21.40444895275646,
+  "historical_cagr_years": 4.996031746031746,
+  "historical_max_drawdown_pct": -34.8126385741597,
+  "confidence_score": 65.0,
+  "confidence_status": "MODERATE_CONFIDENCE",
+  "guardrail_status": "EXTREME_GROWTH",
+  "data_quality_status": "OK",
+  "soft_cap_applied": true,
+  "terminal_cap_applied": true,
+  "flags": [
+    "EXTREME_GROWTH",
+    "SOFT_CAP_APPLIED",
+    "TERMINAL_PRICE_CAP_APPLIED",
+    "SCENARIO_CAPPED"
+  ],
+  "warnings": [
+    "Raw forecast CAGR (38.4%) falls in the EXTREME_GROWTH band.",
+    "Raw CAGR (38.4%) was shrunk toward the (volatility-scaled) soft cap, to 28.9%, before reaching the optimizer.",
+    "Guarded forecast would have projected more than 2.85x the current price/invested amount over 5 years; hard-capped to 2.85x (23.3% CAGR).",
+    "The bear/bull scenario band was capped to avoid implausible multi-year compounding; see scenario.max_cagr_pct/min_cagr_pct in config.yaml."
+  ],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 148.91,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 183.5484,
+      "annual_return_pct": 23.2613,
+      "cumulative_return_pct": 23.2613
+    },
+    {
+      "year": 2,
+      "projected_price": 226.2441,
+      "annual_return_pct": 23.2613,
+      "cumulative_return_pct": 51.9334
+    },
+    {
+      "year": 3,
+      "projected_price": 278.8713,
+      "annual_return_pct": 23.2613,
+      "cumulative_return_pct": 87.2751
+    },
+    {
+      "year": 4,
+      "projected_price": 343.7403,
+      "annual_return_pct": 23.2613,
+      "cumulative_return_pct": 130.8376
+    },
+    {
+      "year": 5,
+      "projected_price": 423.6987,
+      "annual_return_pct": 23.2613,
+      "cumulative_return_pct": 184.5334
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 249.7761,
+      "cagr_pct": 10.8984
+    },
+    "base": {
+      "terminal_price": 423.6987,
+      "cagr_pct": 23.2613
+    },
+    "bull": {
+      "terminal_price": 423.6987,
+      "cagr_pct": 23.2613
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-17T12:12:52.868801"
+}

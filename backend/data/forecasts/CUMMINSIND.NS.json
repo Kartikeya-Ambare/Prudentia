@@ -3,31 +3,31 @@
   "sigma": 0.2920074796829856,
   "n_obs": 1240,
   "method": "transformer",
-  "final_train_loss": 0.9899998903274536,
-  "raw_mu": 0.4110283675621704,
+  "final_train_loss": 0.9870235323905945,
+  "raw_mu": 0.32798872267806023,
   "current_price": 5099.5,
-  "raw_terminal_price": 28523.730272185778,
+  "raw_terminal_price": 21061.996251901517,
   "guarded_terminal_price": 14156.326427930153,
-  "raw_cagr_pct": 41.102836756217044,
+  "raw_cagr_pct": 32.798872267806026,
   "guarded_cagr_pct": 22.654812935886383,
   "historical_cagr_pct": 41.75514838508705,
   "historical_cagr_years": 4.920634920634921,
   "historical_max_drawdown_pct": -34.32507728229986,
-  "confidence_score": 65.0,
-  "confidence_status": "MODERATE_CONFIDENCE",
-  "guardrail_status": "EXTREME_GROWTH",
+  "confidence_score": 80.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "HIGH_GROWTH",
   "data_quality_status": "OK",
   "soft_cap_applied": true,
   "terminal_cap_applied": true,
   "flags": [
-    "EXTREME_GROWTH",
+    "HIGH_GROWTH",
     "SOFT_CAP_APPLIED",
     "TERMINAL_PRICE_CAP_APPLIED",
     "SCENARIO_CAPPED"
   ],
   "warnings": [
-    "Raw forecast CAGR (41.1%) falls in the EXTREME_GROWTH band.",
-    "Raw CAGR (41.1%) was shrunk toward the (volatility-scaled) soft cap, to 29.3%, before reaching the optimizer.",
+    "Raw forecast CAGR (32.8%) falls in the HIGH_GROWTH band.",
+    "Raw CAGR (32.8%) was shrunk toward the (volatility-scaled) soft cap, to 26.8%, before reaching the optimizer.",
     "Guarded forecast would have projected more than 2.78x the current price/invested amount over 5 years; hard-capped to 2.78x (22.7% CAGR).",
     "The bear/bull scenario band was capped to avoid implausible multi-year compounding; see scenario.max_cagr_pct/min_cagr_pct in config.yaml."
   ],
@@ -85,5 +85,5 @@
   },
   "horizon_years_used": 5,
   "guardrail_version": 4,
-  "computed_at": "2026-10-16T10:55:45.083353"
+  "computed_at": "2026-10-17T11:03:52.411805"
 }

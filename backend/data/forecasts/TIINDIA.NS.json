@@ -1,0 +1,79 @@
+{
+  "mu": 0.04493630578419777,
+  "sigma": 0.3790556895932248,
+  "n_obs": 1259,
+  "method": "transformer",
+  "final_train_loss": 0.9770716428756714,
+  "raw_mu": 0.04493630578419777,
+  "current_price": 2197.300048828125,
+  "raw_terminal_price": 2737.401237661852,
+  "guarded_terminal_price": 2737.401237661852,
+  "raw_cagr_pct": 4.493630578419777,
+  "guarded_cagr_pct": 4.493630578419777,
+  "historical_cagr_pct": 7.888424877409017,
+  "historical_cagr_years": 4.996031746031746,
+  "historical_max_drawdown_pct": -53.56321202017617,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 2197.3,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 2296.0386,
+      "annual_return_pct": 4.4936,
+      "cumulative_return_pct": 4.4936
+    },
+    {
+      "year": 2,
+      "projected_price": 2399.2141,
+      "annual_return_pct": 4.4936,
+      "cumulative_return_pct": 9.1892
+    },
+    {
+      "year": 3,
+      "projected_price": 2507.0259,
+      "annual_return_pct": 4.4936,
+      "cumulative_return_pct": 14.0957
+    },
+    {
+      "year": 4,
+      "projected_price": 2619.6824,
+      "annual_return_pct": 4.4936,
+      "cumulative_return_pct": 19.2228
+    },
+    {
+      "year": 5,
+      "projected_price": 2737.4012,
+      "annual_return_pct": 4.4936,
+      "cumulative_return_pct": 24.5802
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 1449.6372,
+      "cagr_pct": -7.9817
+    },
+    "base": {
+      "terminal_price": 2737.4012,
+      "cagr_pct": 4.4936
+    },
+    "bull": {
+      "terminal_price": 5169.1317,
+      "cagr_pct": 18.6604
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-17T13:57:20.767923"
+}

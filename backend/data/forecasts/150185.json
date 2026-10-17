@@ -1,0 +1,79 @@
+{
+  "mu": 0.06660875127997165,
+  "sigma": 0.1283098322276687,
+  "n_obs": 1131,
+  "method": "transformer",
+  "final_train_loss": 0.9654653072357178,
+  "raw_mu": 0.06660875127997165,
+  "current_price": 213.1672,
+  "raw_terminal_price": 294.2700709191907,
+  "guarded_terminal_price": 294.2700709191907,
+  "raw_cagr_pct": 6.660875127997165,
+  "guarded_cagr_pct": 6.660875127997165,
+  "historical_cagr_pct": 10.864218107597367,
+  "historical_cagr_years": 4.488095238095238,
+  "historical_max_drawdown_pct": -18.572154151078422,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 213.1672,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 227.366,
+      "annual_return_pct": 6.6609,
+      "cumulative_return_pct": 6.6609
+    },
+    {
+      "year": 2,
+      "projected_price": 242.5106,
+      "annual_return_pct": 6.6609,
+      "cumulative_return_pct": 13.7654
+    },
+    {
+      "year": 3,
+      "projected_price": 258.6639,
+      "annual_return_pct": 6.6609,
+      "cumulative_return_pct": 21.3432
+    },
+    {
+      "year": 4,
+      "projected_price": 275.8932,
+      "annual_return_pct": 6.6609,
+      "cumulative_return_pct": 29.4257
+    },
+    {
+      "year": 5,
+      "projected_price": 294.2701,
+      "annual_return_pct": 6.6609,
+      "cumulative_return_pct": 38.0466
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 237.2978,
+      "cagr_pct": 2.1679
+    },
+    "base": {
+      "terminal_price": 294.2701,
+      "cagr_pct": 6.6609
+    },
+    "bull": {
+      "terminal_price": 364.9207,
+      "cagr_pct": 11.3514
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-17T13:58:08.868908"
+}

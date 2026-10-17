@@ -1,0 +1,79 @@
+{
+  "mu": 0.0912954951015736,
+  "sigma": 0.24985844125816398,
+  "n_obs": 1259,
+  "method": "transformer",
+  "final_train_loss": 1.0054126977920532,
+  "raw_mu": 0.09129549510157361,
+  "current_price": 553.0,
+  "raw_terminal_price": 855.9274279446357,
+  "guarded_terminal_price": 855.9274279446357,
+  "raw_cagr_pct": 9.12954951015736,
+  "guarded_cagr_pct": 9.12954951015736,
+  "historical_cagr_pct": -5.110760908879019,
+  "historical_cagr_years": 4.996031746031746,
+  "historical_max_drawdown_pct": -37.11717518116969,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 553.0,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 603.4864,
+      "annual_return_pct": 9.1295,
+      "cumulative_return_pct": 9.1295
+    },
+    {
+      "year": 2,
+      "projected_price": 658.582,
+      "annual_return_pct": 9.1295,
+      "cumulative_return_pct": 19.0926
+    },
+    {
+      "year": 3,
+      "projected_price": 718.7076,
+      "annual_return_pct": 9.1295,
+      "cumulative_return_pct": 29.9652
+    },
+    {
+      "year": 4,
+      "projected_price": 784.3223,
+      "annual_return_pct": 9.1295,
+      "cumulative_return_pct": 41.8304
+    },
+    {
+      "year": 5,
+      "projected_price": 855.9274,
+      "annual_return_pct": 9.1295,
+      "cumulative_return_pct": 54.7789
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 562.9328,
+      "cagr_pct": 0.3567
+    },
+    "base": {
+      "terminal_price": 855.9274,
+      "cagr_pct": 9.1295
+    },
+    "bull": {
+      "terminal_price": 1301.4196,
+      "cagr_pct": 18.6693
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-17T12:22:31.903021"
+}

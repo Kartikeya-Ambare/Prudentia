@@ -1,0 +1,79 @@
+{
+  "mu": 0.06470727058839452,
+  "sigma": 0.19209785621782355,
+  "n_obs": 5057,
+  "method": "transformer",
+  "final_train_loss": 0.9826824069023132,
+  "raw_mu": 0.06470727058839452,
+  "current_price": 486.7545,
+  "raw_terminal_price": 665.9798265480324,
+  "guarded_terminal_price": 665.9798265480324,
+  "raw_cagr_pct": 6.4707270588394525,
+  "guarded_cagr_pct": 6.4707270588394525,
+  "historical_cagr_pct": 8.208389733682942,
+  "historical_cagr_years": 5.0,
+  "historical_max_drawdown_pct": -58.086774181323854,
+  "confidence_score": 100.0,
+  "confidence_status": "HIGHER_CONFIDENCE",
+  "guardrail_status": "NORMAL_RANGE",
+  "data_quality_status": "OK",
+  "soft_cap_applied": false,
+  "terminal_cap_applied": false,
+  "flags": [],
+  "warnings": [],
+  "trajectory": [
+    {
+      "year": 0,
+      "projected_price": 486.7545,
+      "annual_return_pct": 0.0,
+      "cumulative_return_pct": 0.0
+    },
+    {
+      "year": 1,
+      "projected_price": 518.2511,
+      "annual_return_pct": 6.4707,
+      "cumulative_return_pct": 6.4707
+    },
+    {
+      "year": 2,
+      "projected_price": 551.7857,
+      "annual_return_pct": 6.4707,
+      "cumulative_return_pct": 13.3602
+    },
+    {
+      "year": 3,
+      "projected_price": 587.4902,
+      "annual_return_pct": 6.4707,
+      "cumulative_return_pct": 20.6954
+    },
+    {
+      "year": 4,
+      "projected_price": 625.5051,
+      "annual_return_pct": 6.4707,
+      "cumulative_return_pct": 28.5053
+    },
+    {
+      "year": 5,
+      "projected_price": 665.9798,
+      "annual_return_pct": 6.4707,
+      "cumulative_return_pct": 36.8205
+    }
+  ],
+  "scenarios": {
+    "bear": {
+      "terminal_price": 482.5582,
+      "cagr_pct": -0.173
+    },
+    "base": {
+      "terminal_price": 665.9798,
+      "cagr_pct": 6.4707
+    },
+    "bull": {
+      "terminal_price": 919.1205,
+      "cagr_pct": 13.5566
+    }
+  },
+  "horizon_years_used": 5,
+  "guardrail_version": 4,
+  "computed_at": "2026-10-17T13:57:32.335013"
+}
