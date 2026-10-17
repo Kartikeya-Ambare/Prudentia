@@ -24,7 +24,7 @@ export function Toggle({
       >
         <span
           className={clsx(
-            "absolute left-0.5 top-0.5 size-[24px] rounded-full bg-surface transition-transform duration-[300ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] motion-reduce:transition-none",
+            "absolute left-0.5 top-0.5 size-[24px] rounded-full bg-surface transition-transform duration-[200ms] ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none",
             checked && "translate-x-[20px]",
           )}
         />
