@@ -12,6 +12,7 @@ import { useLevel } from "@/store/ui";
 import { useT, type Key } from "@/lib/i18n";
 import { RoutePanel } from "@/components/ui/RoutePanel";
 import { Alert } from "@/components/ui/Feedback";
+import { Button } from "@/components/ui/Button";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { ModeToggle } from "@/components/ui/ModeToggle";
 import { EngineLoader } from "@/components/viz/DotMatrixLoader";
@@ -142,6 +143,21 @@ function TopBar({ title, tagline }: { title: string; tagline: boolean }) {
   );
 }
 
+/** Beginner and Expert keep separate plans. When this mode has none and the other does, say so and offer to bring it across. */
+function OtherModePlan() {
+  const level = useLevel((s) => s.level);
+  const here = useSession((s) => s.lastResult);
+  const other = useSession((s) => s.slots[level === "beginner" ? "expert" : "beginner"].lastResult);
+  const adopt = useSession((s) => s.adoptPlanFromOtherMode);
+  if (here || !other) return null;
+  return (
+    <div className="panel mb-4 flex flex-wrap items-center justify-between gap-3 px-5 py-4">
+      <p className="text-[14.5px] leading-6">{`You already have a plan in ${level === "beginner" ? "Expert" : "Beginner"} mode.`}</p>
+      <Button variant="secondary" onClick={adopt}>Show it here</Button>
+    </div>
+  );
+}
+
 /** Shown above the results when prices have moved since the plan was made. */
 function DriftNotice() {
   const t = useT();
@@ -189,13 +205,17 @@ export function App() {
           <main id="main" tabIndex={-1} className="min-w-0 flex-1 outline-none px-4 pb-44 pt-5 sm:px-8 md:flex md:flex-col md:overflow-y-auto md:pb-0 md:pt-6">
             <TopBar title={t(page.title)} tagline={page.path === "/"} />
             {chatOnly ? (
-              <div className="h-[calc(100dvh-17rem)] min-h-[440px] md:h-auto md:min-h-0 md:flex-1"><StartScreen /></div>
+              <>
+                <OtherModePlan />
+                <div className="h-[calc(100dvh-17rem)] min-h-[440px] md:h-auto md:min-h-0 md:flex-1"><StartScreen /></div>
+              </>
             ) : (
               <div className="mx-auto flex w-full max-w-[1180px] flex-1 flex-col">
                 <div key={`${pathname}-${level}`} className="route-panel flex min-w-0 flex-col gap-4">
                   {/* At the top and pinned there, so it is seen even when the "Get plan" button is far down a long form. */}
                   {busy && <div className="sticky top-0 z-20"><EngineLoader /></div>}
                   {plan && !onSectors && <DriftNotice />}
+                  {home && !plan && <OtherModePlan />}
                   {home && level === "expert" && <PlanForm full />}
                   <div className={clsx("transition-opacity duration-300", busy && plan && "pointer-events-none opacity-40")}>
                     {onSectors && <RoutePanel active><SectorTab /></RoutePanel>}

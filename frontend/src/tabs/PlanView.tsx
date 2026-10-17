@@ -1,6 +1,6 @@
 import { lazy, Suspense, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import clsx from "clsx";
-import { ArrowRightIcon, CurrencyInrIcon, HourglassMediumIcon, ShieldCheckIcon, TrendUpIcon, type Icon } from "@phosphor-icons/react";
+import { ArrowRightIcon, CaretDownIcon, CurrencyInrIcon, HourglassMediumIcon, ShieldCheckIcon, TrendUpIcon, type Icon } from "@phosphor-icons/react";
 import type { Bucket, InstrumentWeight, PlanResult, ValueProjection } from "@/api/types";
 import { gsapReady, NO_REDUCED_MOTION, REDUCED_MOTION } from "@/lib/gsap";
 import { number, pct, whole } from "@/lib/format";
@@ -18,9 +18,6 @@ const BUCKET_COLOR: Record<Bucket, string> = {
 };
 const BUCKET_ORDER: Bucket[] = ["stock", "mf", "bank"];
 const BUCKET_KEY: Record<Bucket, Key> = { stock: "stocks", mf: "mf", bank: "fd" };
-
-/** 1057410 -> 10.6 L, 12500000 -> 1.25 Cr: the short form used where the full figure sits in a table nearby. */
-const compact = (n: number) => (n >= 1e7 ? `${(n / 1e7).toFixed(2)} Cr` : n >= 1e5 ? `${(n / 1e5).toFixed(1)} L` : whole(n));
 
 /** 2026-10-14 -> 14 Oct */
 const shortDate = (iso: string) => new Date(`${iso}T00:00:00`).toLocaleDateString("en-IN", { day: "numeric", month: "short" });
@@ -71,6 +68,22 @@ export function Kpi({ label, icon: Icon, note, children }: { label: string; icon
       <p className="num mt-1.5 whitespace-nowrap text-[20px] font-semibold leading-8 tracking-[-0.01em] @2xl:text-[26px]">{children}</p>
       <p className="min-h-4 truncate text-[12.5px] leading-4 text-ink-3">{note}</p>
     </li>
+  );
+}
+
+/** A section that stays folded until asked for: the detail is there, but the page ends where the story does. */
+function Fold({ title, hint, className, children }: { title: string; hint?: string; className?: string; children: ReactNode }) {
+  return (
+    <details className={clsx("panel group", className)}>
+      <summary className="sl flex min-h-[56px] cursor-pointer list-none items-center justify-between gap-3 rounded-[var(--radius-panel)] px-5 py-3 [&::-webkit-details-marker]:hidden">
+        <span className="text-[16px] font-semibold leading-6">{title}</span>
+        <span className="flex items-center gap-2 text-[13px] leading-5 text-ink-3">
+          {hint}
+          <CaretDownIcon size={16} aria-hidden className="transition-transform duration-200 group-open:rotate-180" />
+        </span>
+      </summary>
+      <div className="px-5 pb-5">{children}</div>
+    </details>
   );
 }
 
@@ -163,8 +176,7 @@ export function PlanView({ result }: { result: PlanResult }) {
     : [];
 
   const expectedCase = result.scenarios?.base;
-  const cautiousCase = result.scenarios?.bear;
-  const optimisticCase = result.scenarios?.bull;
+  const expectedValue = expectedCase?.projected_value ?? result.bucket_projections.reduce((a, b) => a + b.projected_value, 0);
   const [classView, setClassView] = useState<"chart" | "table">("chart");
 
   // One orchestrated moment when a new plan arrives: summary cards first, then the panels, each rising a little.
@@ -203,9 +215,9 @@ export function PlanView({ result }: { result: PlanResult }) {
         <Kpi label={t("invested")} icon={CurrencyInrIcon} note={unallocated > 1 ? `of Rs. ${whole(requested)}` : "today"}>
           <span className="mr-1 text-[15px] font-medium text-ink-3">Rs.</span><span className="num">{whole(total)}</span>
         </Kpi>
-        <Kpi label={`After ${result.horizon_years} ${t("yearsUnit")}`} icon={HourglassMediumIcon}
-          note={expectedCase && cautiousCase && optimisticCase ? `${compact(cautiousCase.projected_value)} to ${compact(optimisticCase.projected_value)}` : "expected"}>
-          <span className="mr-1 text-[15px] font-medium text-ink-3">Rs.</span><span className="num">{whole(expectedCase?.projected_value ?? result.bucket_projections.reduce((a, b) => a + b.projected_value, 0))}</span>
+        <Kpi label="Expected gain" icon={HourglassMediumIcon}
+          note={`${(expectedValue / Math.max(total, 1)).toFixed(1)}x in ${result.horizon_years} ${t("yearsUnit")}`}>
+          <span className="mr-1 text-[15px] font-medium text-ink-3">Rs.</span><span className="num text-gain">{whole(Math.max(expectedValue - total, 0))}</span>
         </Kpi>
         <Kpi label={t("kpiReturn")} icon={TrendUpIcon} note={`${t("perYear")}, ${t("afterTax")}`}>
           <Metric value={result.expected_return_pct} tone="gain" />
@@ -295,14 +307,14 @@ export function PlanView({ result }: { result: PlanResult }) {
         </div>
       </div>
 
-      <Card title={t("projections")} className="mt-4">
+      <Fold title="Detailed figures for every holding" hint={`${result.instrument_projections.length} rows`} className="mt-4">
         <DataTable caption={t("projections")} columns={projColumns} rows={result.instrument_projections} />
-      </Card>
+      </Fold>
 
       {result.banks_selected.length > 0 && (
-        <Card title={t("banksSel")} className="mt-4">
+        <Fold title={t("banksSel")} hint={`${result.banks_selected.length} banks`} className="mt-3">
           <DataTable caption={t("banksSel")} columns={weightColumns} rows={result.banks_selected} />
-        </Card>
+        </Fold>
       )}
     </section>
   );

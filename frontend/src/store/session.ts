@@ -55,6 +55,8 @@ interface SessionState extends Slot {
   /** `level` names the mode that asked; a reply that lands after a mode switch is filed under the mode that asked. */
   setLastResult: (result: PlanResult | AllocationExplanation, level?: Level) => void;
   addMessage: (message: ChatMessage, level?: Level) => void;
+  /** The plan the other mode holds, shown here too. Chat history and chat session stay separate. */
+  adoptPlanFromOtherMode: () => void;
 }
 
 export const useSession = create<SessionState>()((set) => {
@@ -75,6 +77,12 @@ export const useSession = create<SessionState>()((set) => {
         const plan = asPlan(r);
         if (!level || level === s.activeLevel) return { lastResult: plan };
         return { slots: { ...s.slots, [level]: { ...s.slots[level], lastResult: plan } } };
+      }),
+    adoptPlanFromOtherMode: () =>
+      set((s) => {
+        const other = s.activeLevel === "beginner" ? "expert" : "beginner";
+        const plan = s.slots[other].lastResult;
+        return plan ? { lastResult: plan } : {};
       }),
     addMessage: (message, level) =>
       set((s) => {
