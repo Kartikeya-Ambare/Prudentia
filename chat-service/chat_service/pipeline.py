@@ -40,6 +40,7 @@ _YES = re.compile(r"^(yes|y|haan|haa|han|ha|ok|okay|theek|thik|chalega|kar\s+do|
 _NO = re.compile(r"^(no|n|nahi|nahin|nhi|cancel|mat\s+karo|rehne\s+do|stop)\b[\w\s.!]{0,15}$", re.I)
 _SECTOR_CUE = re.compile(r"\b(sectors?|funds?|mf|mutual|exposure|exposed|holdings?|allocation|weights?|invested\s+in)\b", re.I)
 _FUND_GUESS = re.compile(r"\b(?:of|for|in|about|from)\s+((?:[a-z0-9&.']+\s+){1,5}?)(?:mutual\s+)?funds?\b", re.I)
+_MOVE_WORDS = re.compile(r"\b(take|pull|withdraw|put|move|shift|swap|transfer|convert|switch|park|daal\w*|badal\w*)\b", re.I)
 _ALSO = re.compile(r"\b(also|too|as\s+well|bhi|same|again|similarly)\b", re.I)
 _RESTORE = parse.RESTORE
 _FUND_STOP = {"fund", "funds", "mutual", "mf", "scheme", "plan", "direct", "growth", "the"}
@@ -161,6 +162,11 @@ class ChatPipeline:
                     and _ALSO.search(text) and s.last_move:        # 'and from MF to stocks also': same amount as last time
                 move = {**move, **{k: v for k, v in s.last_move.items() if k in ("all", "pct", "amount")}}
             return self._rebalance(s, move)
+        ops_now = parse.parse_class_ops(text)
+        if _MOVE_WORDS.search(text) and len(classes_in(text)) >= 2 \
+                and not (ops_now["remove"] or ops_now["add"] or (ops_now["only"] and ops_now["explicit"])):
+            self.trace.path = "move_unclear"                     # looks like a move between two classes that the rules could not read:
+            return self._resp(s, replies.MOVE_UNCLEAR, "rebalance", missing=["move"])   # ask, never guess an amount edit
         bank_choice = parse.parse_banks(text)
         if bank_choice:
             self.trace.path = "rule_banks"
@@ -196,14 +202,20 @@ class ChatPipeline:
         r"\bhow\s+many\s+(stocks?|shares?|funds?|mutual\s+funds?|mfs?|banks?|instruments?|holdings?)\b|\bkitne\s+(stocks?|funds?|banks?|mf)\b|"
         r"\bdata\b.{0,25}\b(from|date|latest|fresh|updated|old)\b|\bwhen\b.{0,20}\b(data|prices?|updated)\b|\bhow\s+(old|fresh|recent)\b|"
         r"\b(worth|become|grow\s+to|turn\s+into|end\s+up|final\s+(value|amount))\b.{0,40}\b(after|in|over|years?)\b|"
-        r"\bafter\s+\d+\s+years?\b.{0,25}\b(worth|value|amount)\b|\bkitna\s+(ho\s+jayega|ban\s+jayega)\b", re.I)
+        r"\bafter\s+\d+\s+years?\b.{0,25}\b(worth|value|amount)\b|\bkitna\s+(ho\s+jayega|ban\s+jayega|badhega|badh\s+jayega)\b", re.I)
     _R_WHY = re.compile(r"\b(why|kyu|kyun|explain|samjhao|reason)\b", re.I)
     _R_ABOUT = re.compile(r"\b(allocation|portfolio|split|fds?|banks?|deposits?|stocks?|mutual|mf)\b", re.I)
     _R_BANKQ = re.compile(r"\b(banks?|deposits?|fds?)\b.{0,40}\b(kaunse|kaunsa|which|chune|chosen|select\w*|use\w*)\b|\b(kaunse|kaunsa|which|chune|chosen)\b.{0,40}\b(banks?|deposits?|fds?)\b", re.I)
 
     _R_ASSESS = re.compile(r"^\W*(is|are|will|would|does|do)\b.{0,30}\b(plan|portfolio|allocation|money|investments?|this|it|these)\b.{0,25}"
                            r"\b(safe|safest|good|ok|okay|fine|right|risky|secure|suitable|enough|worth\s+it|bad)\b|"
-                           r"\b(am\s+i|are\s+we)\s+(safe|ok|okay)\b|\bshould\s+i\s+(worry|be\s+worried)\b", re.I)
+                           r"\b(am\s+i|are\s+we)\s+(safe|ok|okay)\b|\bshould\s+i\s+(worry|be\s+worried)\b|\b(biggest|main|major|top)\s+risks?\b", re.I)
+    _R_SHOULD = re.compile(r"^\W*(should|shall)\s+i\b", re.I)
+    _R_LIST = re.compile(r"\b(list|show|which|what|see|name|display|tell\s+me)\b.{0,30}\b(stocks?|shares?|mutual\s+funds?|funds?|mfs?|banks?|holdings?|"
+                         r"investments?|instruments?|picks?|companies)\b|\b(stocks?|funds?|mutual\s+funds?|banks?|mf|fd)\s+(me|mein)\s+(kya|kaun|konse|kaunse)\b|"
+                         r"\b(kaun|konse|kaunse)\s*(kaun\s*)?(se\s+)?(stocks?|funds?|banks?|mf)\b", re.I)
+    _R_SHOW = re.compile(r"\b(show|display|see|dikhao|dikha\s+do|repeat|recap|summari[sz]e)\b.{0,30}\b(plan|portfolio|allocation|result|summary)\b|"
+                         r"\b(plan|portfolio)\b.{0,20}\b(dikhao|dikha\s+do|again|dobara)\b", re.I)
     _R_RATE = re.compile(r"\b(rates?|interest|payout|yield)\b", re.I)
     _R_COMPARE = re.compile(r"\b(compare|comparison|vs\.?|versus|tulna|farak|difference|dono)\b", re.I)
     _R_HISTORY = re.compile(r"\b(increas\w*|decreas\w*|badh\w*|ghat\w*|chang\w*|history|trend|pehle|previous|last\s+month|"
@@ -238,6 +250,10 @@ class ChatPipeline:
         """Cheap, unambiguous intents decided by code. Everything else goes to the intent LLM."""
         if self._R_ASSESS.search(text):
             return "assess_plan"
+        if self._R_SHOULD.search(text):
+            return "advice_choice"
+        if s.result is not None and self._R_SHOW.search(text):
+            return "show_plan"
         if self._R_RATE.search(text) and (re.search(r"\b(fds?|fixed\s+deposits?|banks?|deposits?)\b", text, re.I)
                                           or any(re.search(rx, text, re.I) for _, rx in parse._BANK_ALIASES)):
             return "bank_rates"
@@ -259,6 +275,8 @@ class ChatPipeline:
             return "rebalance_check"
         if self._R_RESULT.search(text):
             return "ask_result"
+        if self._R_LIST.search(text) and not self._R_WHY.search(text):
+            return "list_holdings"
         if (self._R_WHY.search(text) and self._R_ABOUT.search(text)) or self._R_BANKQ.search(text):
             return "explain_allocation"
         if self._is_edit(text):
@@ -288,7 +306,13 @@ class ChatPipeline:
         if intent == "rebalance_check":
             return self._drift(s)
         if intent == "assess_plan":
-            return self._assess(s)
+            return self._assess(s, text)
+        if intent == "advice_choice":
+            return self._resp(s, replies.ADVICE_CHOICE, "advice_choice")
+        if intent == "show_plan":
+            return self._show_plan(s)
+        if intent == "list_holdings":
+            return self._holdings(s, text)
         if intent == "bank_rates":
             return self._bank_rates(s, text)
         if intent == "ask_result":
@@ -869,8 +893,38 @@ class ChatPipeline:
                           "\nTo rebalance, say for example 'move 5% from stocks to FD'.", "rebalance_check")
 
     # ------------------------------------------------------------------ explain / ask
-    def _assess(self, s: Session) -> dict:
+    def _show_plan(self, s: Session) -> dict:
+        if not self._ensure_loaded(s):
+            return self._resp(s, replies.NEED_ALLOCATION, "show_plan")
+        return self._resp(s, replies.allocation_reply(s.result, self._risk_text(s.params)), "show_plan", result=s.result)
+
+    def _holdings(self, s: Session, text: str) -> dict:
+        """'Which stocks / funds / banks are in my plan?': the instruments and their amounts, from the engine's result."""
+        wanted = classes_in(text)
+        if not self._ensure_loaded(s):
+            if re.search(r"\bbanks?\b", text, re.I):                    # no plan yet: the banks the app can use
+                try:
+                    banks = self.engine.list_banks()
+                except EngineError as exc:
+                    return self._engine_error(s, exc, "list_holdings")
+                return self._resp(s, "Banks I can use for the FD: " + ", ".join(b["display_name"] for b in banks) + ".", "list_holdings")
+            return self._resp(s, replies.NEED_ALLOCATION, "list_holdings")
+        res, lab = s.result, replies.BUCKET_LABEL
+        bucket_of = {"stocks": "stock", "mf": "mf", "fd": "bank"}
+        want = {bucket_of[c] for c in wanted} or {"stock", "mf", "bank"}
+        lines = []
+        for b in ("stock", "mf", "bank"):
+            items = [i for i in res.get("instruments", []) if i["bucket"] == b]
+            if b in want and items:
+                lines.append(f"{lab[b]}: " + "; ".join(f"{i['display_name']} {replies.inr(i['amount'])}" for i in items))
+        if not lines:
+            return self._resp(s, "Your plan has none of that right now.", "list_holdings", result=res)
+        return self._resp(s, "Here is what your plan holds.\n" + "\n".join(lines) + "\n" + replies.DISCLAIMER, "list_holdings", result=res)
+
+    def _assess(self, s: Session, text: str = "") -> dict:
         """'Is my plan safe / good?': never a verdict, only how the plan is built and what the cautious case looks like."""
+        if re.search(r"\b(put|invest|keep|all\s+in|100\s*%|everything|only)\b", text, re.I):      # 'is it safe to put 100% in stocks?'
+            return self._resp(s, replies.ASSESS_HYPOTHETICAL, "assess_plan")
         if not self._ensure_loaded(s):
             return self._resp(s, replies.NEED_ALLOCATION, "assess_plan")
         res, n = s.result, replies.num
@@ -996,7 +1050,7 @@ class ChatPipeline:
             return self._resp(s, r + "\n" + replies.DISCLAIMER, "ask_result", result=res)
         sc = res.get("scenarios")
         na = "That number isn't available right now."
-        if re.search(r"\b(worth|become|grow\s+to|turn\s+into|end\s+up|final\s+(value|amount))\b|kitna\s+(ho\s+jayega|ban\s+jayega)", t) \
+        if re.search(r"\b(worth|become|grow\s+to|turn\s+into|end\s+up|final\s+(value|amount))\b|kitna\s+(ho\s+jayega|ban\s+jayega|badhega|badh\s+jayega)", t) \
                 and not re.search(r"worst|best|bear|bull|p\s?5|p\s?95", t):
             yrs = replies.years_text(res["years"])
             if sc:
@@ -1011,7 +1065,12 @@ class ChatPipeline:
             else:
                 r = na
             return self._resp(s, r + "\n" + replies.DISCLAIMER, "ask_result", result=res)
-        if re.search(r"worst|p\s?5|kharab|lowest|minimum|sabse\s+kam|bear", t):
+        if sc and re.search(r"worst|bear|lowest|kharab|sabse\s+kam", t) and re.search(r"best|bull|highest|achha|accha|sabse\s+zyada", t):
+            r = (f"After {replies.years_text(res['years'])}, your {replies.inr(res['amount'])} could be about "
+                 f"{replies.inr(sc['bear']['projected_value'])} in the worst (bear) case, about {replies.inr(sc['base']['projected_value'])} "
+                 f"in the expected case and about {replies.inr(sc['bull']['projected_value'])} in the best (bull) case. "
+                 "These are estimates, not guarantees." + (" " + sc["note"] if sc.get("note") else ""))
+        elif re.search(r"worst|p\s?5|kharab|lowest|minimum|sabse\s+kam|bear", t):
             v, pr = res.get("p5_return_pct"), (res.get("projected") or {}).get("p5")
             if v is not None:
                 r = f"In the worst case (P5), the return is about {n(v)}% a year" + (f", or about {replies.inr(pr)} after {replies.years_text(res['years'])}" if pr else "") + "."
@@ -1033,7 +1092,15 @@ class ChatPipeline:
                 r = na
         elif re.search(r"expected|return|munafa|kitna\s+milega", t):
             v = res.get("expected_return_pct")
-            r = na if v is None else f"The expected return is about {n(round(v, 1))}% a year. It is an estimate, not a guarantee."
+            bps = {b["label"]: b for b in (res.get("backend") or {}).get("bucket_projections", [])}
+            labelmap = {"stocks": "Stocks", "mf": "Mutual Funds", "fd": "Bank/FD"}
+            per_class = [f"{replies.CLASS_LABEL[c]} is estimated at about {n(round(bps[labelmap[c]]['projected_return_pct'], 1))}% a year after tax"
+                         for c in ("stocks", "mf", "fd")
+                         if c in classes_in(t) and labelmap[c] in bps and bps[labelmap[c]].get("present_value", 0) > 0]
+            if per_class:                                         # 'what is the return on mutual funds in my plan'
+                r = "; ".join(per_class) + ". These are estimates, not guarantees."
+            else:
+                r = na if v is None else f"The expected return is about {n(round(v, 1))}% a year. It is an estimate, not a guarantee."
         elif re.search(r"data\s+kab|as\s+of|date|kab\s+ka|data.{0,25}(from|latest|fresh|updated|old)|when.{0,20}(data|prices?|updated)|how\s+(old|fresh|recent)", t):
             r = f"The data is as of {replies.asof_text(res.get('data_as_of') or 'unknown')}."
         elif re.search(r"how\s+many\s+(stocks?|shares?)|kitne\s+stocks", t):

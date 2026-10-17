@@ -37,6 +37,9 @@ _BEST_PICK = re.compile(
     r"\b(best|top|hottest|greatest)\s+(performing\s+|performer\s+)?(\d+\s+|three\s+|five\s+|ten\s+)?(stocks?|shares?|mutual\s+funds?|funds?|mf)\b"
     r"|\bwhich\s+(mutual\s+fund|fund|stock|share|mf)s?\b.{0,30}\b(best|highest|top|better|good|most)\b", re.I)
 _ABOUT_PLAN = re.compile(r"\b(my|this|the|your)\s+(plan|portfolio|allocation|result)\b|\byou\s+(picked|chose|selected|recommended)\b|\bin\s+my\b", re.I)
+# hacking, passwords and other security asks: never answered
+_SECURITY = re.compile(r"\b(hack\w*|crack\w*|steal\w*|phish\w*|password\w*|passcode|otp|cvv|credentials?|login\s+details|"
+                       r"bypass\s+(security|login|auth\w*)|exploit\w*|malware|ransom\w*|ddos|brute\s?force)\b", re.I)
 # asking about other users / the previous conversation / internal configuration
 _ACTIONS_OUTSIDE_APP = re.compile(
     r"\b(send|email|mail|whatsapp|text)\s+(me|my|this|the)\b.{0,25}\b(email|mail|plan|pdf|report|message|whatsapp)\b|\bemail\s+me\b"
@@ -105,7 +108,7 @@ def screen(message: str, awaiting: Iterable[str] | None = None, gate: ScopeGate 
         return Screen("block", "no_tips", REFUSALS["no_tips"], cleaned)
     if _ACTIONS_OUTSIDE_APP.search(scan):
         return Screen("block", "unsupported_topic", REFUSALS["unsupported_topic"], cleaned)
-    if _OTHERS.search(scan):
+    if _OTHERS.search(scan) or _SECURITY.search(scan):
         return Screen("block", "injection", REFUSALS["injection"], cleaned)
     if _ABUSE.search(scan):
         return Screen("block", "abusive", REFUSALS["off_topic"], cleaned)

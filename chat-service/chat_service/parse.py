@@ -129,7 +129,8 @@ def risk_unknown(text: str) -> bool:
     return bool(_DONT_KNOW_RISK.search(text))
 
 
-_RELATIVE = re.compile(r"\b(thoda|thodi|thode|bit|slightly|somewhat|aur|more|less|safer|riskier|lower|higher)\b", re.I)
+_RELATIVE = re.compile(r"\b(thoda|thodi|thode|bit|little|slightly|somewhat|aur|more|less|safer|riskier|lower|higher|"
+                       r"increase|decrease|reduce|raise|boost|bump|cut)\b", re.I)
 _SAFER_W = re.compile(r"\b(safe|safer|safest|kam|kum|low|lower|less|conservative|ghat\w*|reduce|decrease|secure)\b", re.I)
 _RISKIER_W = re.compile(r"\b(zyada|jyada|jyaada|high|higher|more|aggressive|riskier|risky|badh\w*|increase)\b", re.I)
 _RISKISH = re.compile(r"\b(risk\w*|safe\w*|aggressive|conservative|secure)\b", re.I)
@@ -143,10 +144,12 @@ def parse_risk_shift(text: str) -> Optional[str]:
     relative =bool(_RELATIVE.search(t)) or bool(re.search(r"\b(safer|riskier|safe|aggressive)\b", t, re.I))
     if not relative:
         return None
-    if re.search(r"\b(safer|safe|safest|secure|less\s+risk\w*|kam\s+risk\w*|lower\s+risk)\b|\brisk\W+(?:\w+\W+){0,2}?(kam|kum|ghat\w*|less|lower)\b", t, re.I) \
+    if re.search(r"\b(safer|safe|safest|secure|less\s+risk\w*|kam\s+risk\w*|lower\s+risk|(reduce|decrease|cut|lower)\s+(the\s+|my\s+)?risk)\b|"
+                 r"\brisk\W+(?:\w+\W+){0,2}?(kam|kum|ghat\w*|less|lower)\b", t, re.I) \
             and not re.search(r"\b(riskier|aggressive)\b", t, re.I):
         return "safer"
-    if re.search(r"\b(riskier|risky|aggressive|more\s+risk\w*|zyada\s+risk\w*|jyada\s+risk\w*|higher\s+risk)\b|\brisk\W+(?:\w+\W+){0,2}?(zyada|jyada|badh\w*|more|higher)\b", t, re.I):
+    if re.search(r"\b(riskier|risky|aggressive|more\s+risk\w*|zyada\s+risk\w*|jyada\s+risk\w*|higher\s+risk|(increase|raise|boost|bump(\s+up)?)\s+(the\s+|my\s+)?risk)\b|"
+                 r"\brisk\W+(?:\w+\W+){0,2}?(zyada|jyada|badh\w*|more|higher)\b", t, re.I):
         return "riskier"
     return None
 
@@ -162,7 +165,7 @@ def shift_risk(current: Optional[str], shift: str) -> Optional[str]:
 _REMOVE = re.compile(r"\b(hata\w*|hatao|nikal\w*|remove|exclude|drop|without|mat\s+rakho|nahi\s+chahiye|nhi\s+chahiye|"
                      r"band\s+karo|skip|avoid|na\s+rakho|chhod\w*)\b", re.I)
 _ADD = re.compile(r"\b(add|also|bhi|include|jodo|jod\s+do|shamil|aur\s+add)\b", re.I)
-_ONLY = re.compile(r"\b(only|sirf|bas|just|keval|solely)\b", re.I)
+_ONLY = re.compile(r"\b(only|sirf|bas|just|keval|solely)\b|\b(put|keep)\s+(everything|all)\s+(in|into)\b|\ball\s+(in|into)\b", re.I)
 _ALL = re.compile(r"\b(sab|all|teeno|everything|anything|koi\s+bhi|thoda\s+thoda)\b", re.I)
 
 
@@ -200,9 +203,12 @@ _MOVE_D = re.compile(rf"\b{_CL}\s+se\s+(?:rs\.?\s*|₹)?[\d,.]+\s*(?:k|lakhs?|la
 _MOVE_E = re.compile(rf"\b(reduce|decrease|cut|lower)\s+{_CL}\b.{{0,18}}\b(increase|add|raise|boost)\s+{_CL}\b", re.I)
 _MOVE_F = re.compile(rf"\b{_CL}\s+(?:me|mein)\s+se\b.{{0,25}}?\b{_CL}\s+(?:me|mein|ko)\b", re.I)
 _MOVE_G = re.compile(rf"\bto\s+{_CL}\b.{{0,25}}?\bfrom\s+{_CL}\b", re.I)          # 'all money to stocks from mutual funds'
+_MOVE_H = re.compile(rf"\b(?:take|pull|withdraw|draw|get)\b.{{0,40}}?\b(?:out\s+of|from)\s+{_CL}\b.{{0,40}}?"
+                     rf"\b(?:put|move|add|invest|shift|transfer|keep|place|deposit|park)\b.{{0,25}}?\b(?:in|into|to|towards?)\s+{_CL}\b", re.I)
+_MOVE_I = re.compile(rf"\b(?:put|invest|place|park|add)\b.{{0,30}}?\b(?:in|into|to)\s+{_CL}\b.{{0,25}}?\b(?:from|out\s+of)\s+{_CL}\b", re.I)
 _ALL_MONEY = re.compile(r"\b(all|everything|entire|whole|sab|saara|sara|poora|pura|sabhi)\b", re.I)
 _MOVE_VERB = re.compile(r"\b(move|shift|transfer|switch|convert|swap)\b", re.I)
-_MOVE_CUE = re.compile(r"\b(move|shift|transfer|rebalance|daal\w*|dal\s?do|badal\w*|convert|switch|swap|bhej\w*)\b", re.I)
+_MOVE_CUE = re.compile(r"\b(move|shift|transfer|rebalance|daal\w*|dal\s?do|badal\w*|convert|switch|swap|bhej\w*|take|pull|withdraw|park)\b", re.I)
 _PCT = re.compile(r"(\d+(?:\.\d+)?)\s*(?:%|percent|pratishat|prati\s?shat)", re.I)
 
 
@@ -248,7 +254,12 @@ def parse_move(text: str) -> dict:
     m = _MOVE_A.search(t)
     src = dst = None
     mg = _MOVE_G.search(t)
-    if m:
+    mh, mi = _MOVE_H.search(t), _MOVE_I.search(t)
+    if mh:                                               # 'take 25000 out of FD and put it in mutual funds'
+        src, dst = _bucket(mh.group(1)), _bucket(mh.group(2))
+    elif mi:                                             # 'put 5000 into stocks from FD'
+        dst, src = _bucket(mi.group(1)), _bucket(mi.group(2))
+    elif m:
         src, dst = _bucket(m.group(1)), _bucket(m.group(2))
     elif mg:
         dst, src = _bucket(mg.group(1)), _bucket(mg.group(2))
@@ -288,6 +299,11 @@ def parse_move(text: str) -> dict:
     out = {"from": src, "to": dst, "pct": pct, "amount": amount}
     if pct is None and amount is None and (src or dst) and _ALL_MONEY.search(t):
         out["all"] = True                                    # 'move all money from mutual funds to stocks'
+    elif pct is None and amount is None and (src or dst):
+        if _HALF.search(t):
+            out["fraction"] = 0.5                            # 'shift half of my FD to stocks'
+        elif _QUARTER.search(t):
+            out["fraction"] = 0.25
     return out
 
 

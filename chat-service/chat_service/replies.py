@@ -196,7 +196,7 @@ GLOSSARY: list[tuple[str, str, str]] = [
 
 
 _NOT_GLOSSARY = re.compile(r"\b(sectors?|exposed|exposure|holdings?|(?<!asset )allocation|portfolio|split|drift\w*|rebalanc\w*|"
-                           r"rates?|interest|yield|payout)\b", re.I)
+                           r"rates?|interest|yield|payout|kya\s+kya|kaun\s*(se|kaun)|konse|kaunse)\b", re.I)
 
 
 GLOSSARY.append(("scenarios", r"\b(bear|bull|base|optimistic|cautious|expected)\s+cases?\b|\bscenarios?\b|\bbear\b.{0,12}\bbull\b|\bbull\b.{0,12}\bbear\b",
@@ -264,10 +264,18 @@ MOVE_ONE_DEST = ("I can move money to one place at a time. For example, 'move 10
 MOVE_MULTI_PARTIAL = ("To move money out of two places at once, say 'move all money from mutual funds and FD to stocks'. "
                       "For a percentage or an amount, please send one move at a time.")
 
+# ------------------------------------------------------------------------------ questions that ask for a verdict
+ASSESS_HYPOTHETICAL = ("No investment is completely safe, and I can't say what is right for you. Stocks and mutual funds can lose value, "
+                       "sometimes for years; FDs pay a fixed rate but grow less. To see how a choice would look, say for example "
+                       "'only stocks' or 'make it safer', and I'll show that plan with its cautious case. " + DISCLAIMER)
+ADVICE_CHOICE = ("I can't tell you what is right for you, but I can show you what a change would look like. Try 'make it high risk', "
+                 "'remove FD' or 'move 10% from stocks to FD', and compare the plans, including the cautious case. " + DISCLAIMER)
+
 # ------------------------------------------------------------------------------ start over
-RESET = "Okay, let's start fresh. Tell me how much you'd like to invest, for how many years and how much risk you're comfortable with."
+RESET ="Okay, let's start fresh. Tell me how much you'd like to invest, for how many years and how much risk you're comfortable with."
 START_OVER = re.compile(r"^(start\s+(over|again|afresh|fresh)|restart|reset(\s+(everything|it|the\s+chat|chat))?|new\s+(plan|chat)|"
-                        r"naya\s+plan|dobara\s+shuru(\s+karo)?|(remove|delete|clear|scrap|cancel)\s+(everything|all|it\s+all|my\s+plan|the\s+plan|plan))$", re.I)
+                        r"naya\s+plan|dobara\s+shuru(\s+karo)?|(remove|delete|clear|scrap|cancel)\s+(everything|all|it\s+all|my\s+plan|the\s+plan|plan)|"
+                        r"sab\s+(kuch\s+)?(hata|delete|clear|mita)\w*(\s+(do|karo))?|poora\s+plan\s+(hata|delete|clear)\w*(\s+(do|karo))?)$", re.I)
 
 
 def is_start_over(text: str) -> bool:
@@ -287,6 +295,9 @@ SMALLTALK = {
     "bye": "Goodbye! Come back any time you want to adjust your plan.",
     "who": ("I'm Prudie, the Prudentia assistant. I'm an AI program, not a person. I build an illustrative split of your money "
             "across stocks, mutual funds and FDs and help you adjust it. I don't give stock tips or promise returns."),
+    "trust": ("That is your call, so here is what I am: an AI assistant that builds illustrative allocations from past data and a "
+              "forecasting model. I am not a SEBI-registered adviser and I can't promise returns, so treat my plans as a starting point "
+              "and do your own checks before investing real money."),
     "beginner": ("No problem, I'll guide you. Just tell me three things: how much you'd like to invest, for how many years, and how "
                  "much risk you're comfortable with (low, moderate or high). For example, '5 lakh for 5 years, moderate risk'. "
                  "If you're not sure about the risk, say so and I'll ask three quick questions."),
@@ -315,6 +326,8 @@ _SMALL = [
                        r"aap\s+kaun\s+ho|tumhara\s+naam\s+kya\s+hai|aapka\s+naam\s+kya\s+hai|introduce\s+yourself|"
                        r"who\s+(made|created|built|developed|designed)\s+you|are\s+you\s+(a\s+|an\s+)?(bot|human|real|ai|robot|person|chat\s?gpt|gpt|alive)|"
                        r"how\s+old\s+are\s+you|what'?s\s+your\s+age|what\s+is\s+your\s+age|are\s+you\s+(a\s+)?real\s+(person|human))$", re.I)),
+    ("trust", re.compile(r"^(can|should|do)\s+(i|we)\s+trust\s+(you|this|prudentia|this\s+app)(\s+with\s+my\s+money)?$|"
+                         r"^(are\s+you|is\s+this|is\s+prudentia|is\s+this\s+app)\s+(safe|reliable|legit|legitimate|trustworthy|genuine|a\s+scam|real)$", re.I)),
     ("beginner", re.compile(r"^(i\s+am|i'?m)\s+(a\s+)?(complete\s+)?(beginner|newbie|new(\s+to\s+(this|investing|it))?|confused|clueless)(\W+.*)?$|"
                             r"^(i\s+(do\s*n'?t|dont)\s+know\s+(much|anything)(\s+about\s+(investing|this|money|stocks))?)|"
                             r"^(where|how)\s+(do\s+i|should\s+i|to)\s+(start|begin)|^(getting\s+started|first\s+time\s+investor|i\s+am\s+new\s+here)$|"
@@ -343,7 +356,7 @@ def smalltalk(text: str, has_plan: bool, awaiting: bool = False) -> Optional[str
         if rx.match(t):
             if kind == "dangling" and awaiting:       # a bare 'yes' / 'all' can be the answer to a question that is open
                 return None
-            if kind in ("bye", "who", "help", "beginner"):
+            if kind in ("bye", "who", "help", "beginner", "trust"):
                 return SMALLTALK[kind]
             return SMALLTALK[f"{kind}_{'plan' if has_plan else 'new'}"]
     return None
