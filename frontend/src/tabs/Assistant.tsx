@@ -53,11 +53,11 @@ export function AssistantBar() {
   const reply = last?.role === "assistant" && history.length > dismissed ? last : null;
   const phase: AgentPhase = pending ? "thinking" : done ? "done" : focused && draft ? "typing" : "idle";
 
-  // A reply is a notice, not a fixture: it clears itself (a plan update is already visible on the page, so sooner),
-  // and the whole text stays in the conversation panel.
+  // A plan update clears itself after a few seconds: the plan on the page already shows it. An answer, a refusal or an error
+  // stays until it is dismissed or the next message is sent, so it can always be read. The full text stays in the panel.
   useEffect(() => {
-    if (!reply || pending) return;
-    const id = setTimeout(() => setDismissed(history.length), reply.allocation ? 7000 : 14000);
+    if (!reply || pending || !reply.allocation) return;
+    const id = setTimeout(() => setDismissed(history.length), 7000);
     return () => clearTimeout(id);
   }, [reply, pending, history.length]);
 
