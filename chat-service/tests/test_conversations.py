@@ -492,3 +492,96 @@ def test_risk_wording_with_increase_and_reduce(make_pipe, msg, score):
 def test_hinglish_how_much_will_it_grow(make_pipe):
     r = seeded(make_pipe, judge="in").handle(S, "mera paisa kitna badhega")
     assert r["intent"] == "ask_result" and "projected to grow" in r["reply"]
+
+
+# ------------------------------------------------------------------------------------ probe round 3
+def test_a_sum_of_money_with_no_other_words_starts_a_plan(make_pipe):
+    r = make_pipe(ScriptedLLM(intent="provide_inputs", judge="off_topic")).handle(S, "hello i have 2 lakh rupees what should i do with it")
+    assert not r.get("blocked") and r["params"]["amount"] == 200000 and "For how many years" in r["reply"]
+
+
+@pytest.mark.parametrize("msg", ["less stocks more fd", "more fd less stocks", "stocks kam fd zyada"])
+def test_less_x_more_y_asks_how_much_and_never_removes_a_class(make_pipe, msg):
+    p = seeded(make_pipe, judge="in")
+    r = p.handle(S, msg)
+    assert r["intent"] == "rebalance" and "How much" in r["reply"] and r["params"]["classes"] == ["stocks", "mf", "fd"]
+
+
+def test_more_x_alone_asks_where_the_money_comes_from(make_pipe):
+    r = seeded(make_pipe, judge="in").handle(S, "give me more mutual funds")
+    assert r["intent"] == "rebalance" and r["missing"] == ["move"] and "from" in r["reply"].lower()
+
+
+@pytest.mark.parametrize("msg,amount", [("amount badhao 2 lakh", 700000), ("increase the amount by 2 lakh", 700000),
+                                        ("add 1 lakh more", 600000), ("reduce the amount by 1 lakh", 400000), ("make it 6 lakh", 600000),
+                                        ("increase it to 8 lakh", 800000)])
+def test_amount_changes_can_be_relative_or_absolute(make_pipe, msg, amount):
+    assert seeded(make_pipe, judge="in").handle(S, msg)["params"]["amount"] == amount
+
+
+@pytest.mark.parametrize("msg,years", [("add 2 more years", 7), ("extend by 3 years", 8), ("3 saal badha do", 8), ("make it 7 years", 7)])
+def test_years_changes_can_be_relative_or_absolute(make_pipe, msg, years):
+    assert seeded(make_pipe, judge="in").handle(S, msg)["params"]["years"] == years
+
+
+def test_years_badha_do_without_a_number_asks_for_it(make_pipe):
+    p = seeded(make_pipe, judge="in")
+    r = p.handle(S, "years badha do")
+    assert "For how many years" in r["reply"] and r["params"]["years"] == 5
+    assert p.handle(S, "8")["params"]["years"] == 8
+
+
+def test_start_again_with_an_amount_resets_then_plans(make_pipe):
+    p = seeded(make_pipe, judge="in")
+    r = p.handle(S, "start again with 10 lakh")
+    assert r["params"]["amount"] == 1000000 and r["params"].get("years") is None and r["result"] is None
+    assert "For how many years" in r["reply"]
+
+
+@pytest.mark.parametrize("msg", ["plan reset karo", "reset plan", "start from scratch"])
+def test_more_ways_to_say_reset(make_pipe, msg):
+    r = seeded(make_pipe).handle(S, msg)
+    assert "start fresh" in r["reply"] and r["result"] is None
+
+
+@pytest.mark.parametrize("msg,word", [("ok thanks bye", "Goodbye"), ("you're amazing", "kind"), ("good job", "kind"),
+                                      ("I don't understand", "Sorry"), ("explain in simple words", "Sorry"),
+                                      ("give me an example", "Sorry"), ("this is wrong", "Sorry")])
+def test_more_small_talk(make_pipe, msg, word):
+    r = seeded(make_pipe).handle(S, msg)
+    assert r["intent"] == "smalltalk" and word in r["reply"] and not r.get("blocked")
+
+
+@pytest.mark.parametrize("msg", ["repeat that", "show everything", "once more"])
+def test_repeat_shows_the_plan_again(make_pipe, msg):
+    r = seeded(make_pipe).handle(S, msg)
+    assert r["intent"] == "show_plan" and r["result"]["amount"] == 500000
+
+
+@pytest.mark.parametrize("msg", ["how is my money split", "what is the risk of this plan", "can i lose all my money", "kya ye safe hai"])
+def test_plan_questions_get_the_plan_not_a_glossary(make_pipe, msg):
+    r = seeded(make_pipe, judge="in").handle(S, msg)
+    assert r["intent"] in ("show_plan", "assess_plan") and r["result"] is not None
+
+
+@pytest.mark.parametrize("msg", ["is 50% risk too much", "what would you do in my place"])
+def test_opinion_questions_never_change_the_plan(make_pipe, msg):
+    r = seeded(make_pipe, judge="in").handle(S, msg)
+    assert r["intent"] == "advice_choice" and r["params"]["risk_score"] == 50
+
+
+def test_what_if_a_split_is_hypothetical(make_pipe):
+    r = seeded(make_pipe, judge="in").handle(S, "what if i put 80% in fd")
+    assert r["intent"] == "assess_plan" and r["params"]["classes"] == ["stocks", "mf", "fd"]
+
+
+def test_return_of_a_class_is_answered(make_pipe):
+    r = seeded(make_pipe, judge="off_topic").handle(S, "mutual fund ka return kitna hai")
+    assert r["intent"] == "ask_result" and not r.get("blocked")
+
+
+def test_naming_a_stock_in_the_plan_describes_it(make_pipe):
+    p = seeded(make_pipe, judge="in")
+    inst = next(i for i in p.handle(S, "show the plan")["result"]["instruments"] if i["bucket"] == "stock")
+    r = p.handle(S, f"what is {inst['label'].split('.')[0]}")
+    assert r["intent"] == "ask_result" and inst["display_name"] in r["reply"]

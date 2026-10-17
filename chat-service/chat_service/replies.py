@@ -273,13 +273,27 @@ ADVICE_CHOICE = ("I can't tell you what is right for you, but I can show you wha
 
 # ------------------------------------------------------------------------------ start over
 RESET ="Okay, let's start fresh. Tell me how much you'd like to invest, for how many years and how much risk you're comfortable with."
-START_OVER = re.compile(r"^(start\s+(over|again|afresh|fresh)|restart|reset(\s+(everything|it|the\s+chat|chat))?|new\s+(plan|chat)|"
-                        r"naya\s+plan|dobara\s+shuru(\s+karo)?|(remove|delete|clear|scrap|cancel)\s+(everything|all|it\s+all|my\s+plan|the\s+plan|plan)|"
+START_OVER = re.compile(r"^(start\s+(over|again|afresh|fresh)|restart|reset(\s+(everything|it|the\s+chat|chat|plan|the\s+plan))?(\s+(karo|kar\s+do|kardo))?|"
+                        r"(plan|chat)\s+(reset|restart)(\s+(karo|kar\s+do|kardo))?|new\s+(plan|chat)|start\s+from\s+scratch|fresh\s+start|from\s+scratch|"
+                        r"naya\s+plan(\s+banao)?|dobara\s+shuru(\s+karo)?|(remove|delete|clear|scrap|cancel)\s+(everything|all|it\s+all|my\s+plan|the\s+plan|plan)|"
                         r"sab\s+(kuch\s+)?(hata|delete|clear|mita)\w*(\s+(do|karo))?|poora\s+plan\s+(hata|delete|clear)\w*(\s+(do|karo))?)$", re.I)
+# 'start again with 10 lakh' / 'new plan: 5 lakh for 3 years': reset, then treat the rest as the first message of a new plan
+START_OVER_WITH = re.compile(r"^\W*(start\s+(over|again|afresh|fresh)|restart|reset|new\s+plan|naya\s+plan|start\s+from\s+scratch)\s*"
+                             r"(?:with|for|using|:|,|-|and)\s+(?P<rest>\S.*)$", re.I)
+REPEAT = re.compile(r"^(repeat(\s+(that|it|again|the\s+plan|please))?|(show|display|tell)(\s+me)?\s+(everything|all|it|that|again|the\s+plan\s+again)|"
+                    r"once\s+more|again|say\s+(that\s+)?again|dobara\s+(dikhao|batao)|phir\s+se\s+(dikhao|batao)|show\s+me\s+the\s+whole\s+thing)$", re.I)
+
+
+def _flat(text: str) -> str:
+    return re.sub(r"\s+", " ", re.sub(r"[^\w\s']", " ", text or "")).strip()
 
 
 def is_start_over(text: str) -> bool:
-    return bool(START_OVER.match(re.sub(r"\s+", " ", re.sub(r"[^\w\s']", " ", text or "")).strip()))
+    return bool(START_OVER.match(_flat(text)))
+
+
+def is_repeat(text: str) -> bool:
+    return bool(REPEAT.match(_flat(text)))
 
 
 # ------------------------------------------------------------------------------ small talk (greetings, thanks, who/what/help)
@@ -308,6 +322,14 @@ SMALLTALK = {
     "howru_new": ("I'm doing well, thank you! Tell me how much you'd like to invest, for how many years and your risk level, "
                   "and I'll build a plan."),
     "howru_plan": "I'm doing well, thank you! Your plan is ready; ask me to change it or explain any part of it.",
+    "compliment_new": "Thank you, that's kind of you! Tell me how much you'd like to invest, for how many years and your risk level, and I'll build a plan.",
+    "compliment_plan": "Thank you, that's kind of you! Let me know if you'd like to change or understand anything in your plan.",
+    "confused_new": ("No problem, let's keep it simple. Just tell me how much you'd like to invest, for how many years and how much risk "
+                     "you're comfortable with, for example '5 lakh for 5 years, moderate risk'. If you're not sure about the risk, say so "
+                     "and I'll ask three quick questions."),
+    "confused_plan": ("Sorry about that, let me help. Tell me which part is unclear or looks wrong, for example 'why did you pick these "
+                      "stocks', 'what is the risk of this plan' or 'how much will I have after 5 years', or tell me what to change, like "
+                      "'make it 10 years' or 'move 10% from stocks to FD'."),
     "dangling_new": ("I'm not sure what you're answering. Tell me how much you'd like to invest, for how many years and your "
                      "risk level, for example '5 lakh for 5 years, moderate risk'."),
     "dangling_plan": ("I'm not sure what you're answering, and nothing is waiting for a reply. Tell me what to do with your plan, "
@@ -320,8 +342,17 @@ _SMALL = [
                           r"(\s+(a\s+lot|so\s+much|very\s+much|prudie|bro|sir|mam|again))*$", re.I)),
     ("ack", re.compile(r"^(ok(ay)?|okk+|k|cool|nice|great|awesome|perfect|good|fine|got\s+it|understood|alright|sounds\s+good|"
                        r"theek\s+hai|thik\s+hai|accha|achha|badhiya|wow)(\s+(thanks?|thank\s+you|thx))?$", re.I)),
-    ("bye", re.compile(r"^(bye+|goodbye|good\s+bye|see\s+(you|ya)(\s+later)?|take\s+care|cya|alvida|tata|ttyl|that'?s\s+all|"
-                       r"that\s+is\s+all|i'?m\s+done)$", re.I)),
+    ("bye", re.compile(r"^((ok(ay)?|alright|cool)\s+)?((thanks?|thank\s+you|thx)\s+)?(bye+|goodbye|good\s+bye|see\s+(you|ya)(\s+later)?|take\s+care|cya|alvida|tata|ttyl|"
+                       r"that'?s\s+all|that\s+is\s+all|i'?m\s+done)(\s+(thanks?|thank\s+you|thx|bye+))?$", re.I)),
+    ("compliment", re.compile(r"^((you'?re|you\s+are|u\s+r|ur|this\s+is|that'?s|that\s+is)\s+)?(so\s+|very\s+|really\s+|super\s+)?"
+                              r"(amazing|awesome|great|helpful|smart|brilliant|excellent|wonderful|the\s+best|fantastic|impressive|good|nice|cool)"
+                              r"(\s+(bot|prudie|job|work|app|stuff))?$|^(good|great|nice|well|excellent|superb)\s+(job|work|done)(\s+prudie)?$|"
+                              r"^(love|loved|like|liked)\s+(it|this|that|you)$|^(bahut|bohot|ekdum|kya\s+baat)\s+(accha|achha|badhiya|mast|hai)$|^mast$", re.I)),
+    ("confused", re.compile(r"^((i\s+)?(do\s*n'?t|dont|didn'?t|did\s+not|do\s+not)\s+(understand|get\s+it|get\s+this|follow)(\s+(this|that|it|any\s+of\s+(this|it)))?|"
+                            r"(this|that|it)\s+(is|looks|seems|feels)\s+(confusing|wrong|incorrect|odd|weird|strange|off)|(this|that)'?s\s+(wrong|incorrect|confusing)|"
+                            r"(that|this)\s+(is\s+)?not\s+(right|correct|what\s+i\s+(wanted|asked))|(explain|say|tell)(\s+(it|me|that))?\s+(in\s+)?(simple|simpler|easy|easier|plain)"
+                            r"(\s+(words|terms|english|language|way))?|(make\s+it\s+)?simpler|give\s+me\s+an?\s+example|example|"
+                            r"(samajh|samjha)\s+(nahi|nhi)(\s+aaya|\s+aya)?|(i\s+am|i'?m)\s+(lost|stuck|confused))$", re.I)),
     ("who", re.compile(r"^(who\s+are\s+you|what\s+are\s+you|what'?s\s+your\s+name|what\s+is\s+your\s+name|your\s+name|tum\s+kaun\s+ho|"
                        r"aap\s+kaun\s+ho|tumhara\s+naam\s+kya\s+hai|aapka\s+naam\s+kya\s+hai|introduce\s+yourself|"
                        r"who\s+(made|created|built|developed|designed)\s+you|are\s+you\s+(a\s+|an\s+)?(bot|human|real|ai|robot|person|chat\s?gpt|gpt|alive)|"

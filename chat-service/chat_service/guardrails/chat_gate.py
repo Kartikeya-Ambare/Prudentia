@@ -68,7 +68,17 @@ def is_plan_edit(text: str) -> bool:
     ops = parse.parse_class_ops(text)
     return bool(ops["remove"] or (ops["add"] and ops["explicit"]) or parse.parse_risk_pct(text) is not None
                 or parse.parse_years(text) is not None or parse.parse_move(text) or parse.parse_banks(text)
-                or parse.RESTORE.search(text))
+                or parse.RESTORE.search(text) or parse.parse_amount_delta(text) is not None
+                or parse.parse_years_delta(text) is not None or parse.vague_change(text))
+
+
+# 'i have 2 lakh rupees what should i do with it': a sum of money plus a saving/investing word starts a plan
+_INVEST_WORDS = re.compile(r"\b(invest\w*|save|saving|savings|grow|park|paisa|paise|money|rupees?|lakhs?|lacs?|crores?|rs\.?)\b|₹", re.I)
+# 'mutual fund ka return kitna hai' / 'what is the return on stocks': a question about the plan's per-class return
+_CLASS_RETURN = re.compile(
+    r"\b(stocks?|funds?|mutual\s+funds?|mf|fds?|fixed\s+deposits?|banks?)\s+(ka|ki|ke|of)\s+(expected\s+)?returns?\b"
+    r"|\b(what|how\s+much|kitna|kya)\b.{0,25}\breturns?\b.{0,20}\b(stocks?|funds?|mutual\s+funds?|mf|fds?|banks?)\b"
+    r"|\breturns?\b.{0,12}\b(kitna|kitne|kya)\b", re.I)
 
 
 def get_gate() -> ScopeGate:
@@ -116,6 +126,8 @@ def screen(message: str, awaiting: Iterable[str] | None = None, gate: ScopeGate 
         return Screen("block", "unsupported_topic", REFUSALS["unsupported_topic"], cleaned)
     if replies.glossary_answer(cleaned):                              # 'what is diversification?': a term this app explains
         return Screen("allow", "in", None, cleaned)
+    if _CLASS_RETURN.search(scan):
+        return Screen("allow", "in", None, cleaned)
     aw = set(awaiting or ())
     if "move_amount" in aw and parse.parse_move_amount(scan):          # 'all' / 'half' / '10%' / '5000' after 'how much?'
         return Screen("allow", "slot_answer", None, cleaned)
@@ -125,6 +137,8 @@ def screen(message: str, awaiting: Iterable[str] | None = None, gate: ScopeGate 
         return Screen("allow", "slot_answer", None, cleaned)
     d = (gate or get_gate()).decide(cleaned)
     if is_plan_edit(scan) and d.action != "block":           # a confident 'off-topic/creative' verdict still wins
+        return Screen("allow", "plan_edit", None, cleaned)
+    if d.action == "block" and d.label == "off_topic" and parse.parse_amount(scan) is not None and _INVEST_WORDS.search(scan):
         return Screen("allow", "plan_edit", None, cleaned)
     if d.action == "unsure" and judge is not None:          # tier 2: LLM reads the written policy
         j = judge.judge(cleaned)

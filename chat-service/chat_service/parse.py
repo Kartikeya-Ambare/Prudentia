@@ -76,6 +76,61 @@ def parse_years(text: str, allow_bare: bool = False) -> Optional[float]:
     return vals[-1] if (_CORRECTION.search(text) or _CHANGE_CUE.search(text)) else None
 
 
+# ------------------------------------------------------------------------------ relative changes ('add 2 lakh', '2 more years')
+_UP_V = re.compile(r"\b(increase|raise|add|top\s*up|extend|badha\w*|jod\w*|aur\s+(?:daal|dal|add|jod)\w*)\b", re.I)
+_DOWN_V = re.compile(r"\b(decrease|reduce|lower|cut|ghata\w*|kam\s+kar\w*|shorten)\b", re.I)
+_UNIT_MORE = re.compile(r"(?:\d|lakhs?|lacs?|crores?|\bk|rupees?|rs\.?)\s+(more|extra|aur|less|kam)\b", re.I)
+_ABS_TO = re.compile(r"\b(?:to|ko|=)\s*(?:rs\.?\s*|₹)?\d", re.I)
+
+
+def _sign(text: str) -> int:
+    up, down = bool(_UP_V.search(text)), bool(_DOWN_V.search(text))
+    return 1 if up and not down else -1 if down and not up else 0
+
+
+def parse_amount_delta(text: str) -> Optional[float]:
+    """'amount badhao 2 lakh' / 'add 1 lakh more' -> +200000 / +100000; 'reduce the amount by 50000' -> -50000.
+    None when the text sets an absolute amount ('make it 6 lakh', 'increase it to 8 lakh')."""
+    a = parse_amount(text)
+    sign = _sign(text)
+    um = _UNIT_MORE.search(text)
+    if not sign and um:
+        sign = -1 if um.group(1).lower() in ("less", "kam") else 1
+    if a is None or not sign or (_ABS_TO.search(text) and not re.search(r"\bby\b", text, re.I)):
+        return None
+    return sign * a
+
+
+def parse_years_delta(text: str) -> Optional[float]:
+    """'add 2 more years' / '3 saal aur' -> +2 / +3; 'reduce by 2 years' -> -2. None for an absolute number of years."""
+    t = words_to_digits(normalise(text))
+    m = re.search(r"(\d+(?:\.\d+)?)\s*(more\s+|extra\s+|additional\s+|aur\s+)?(?:saalon|saal|sal|varsh|years?|yrs?|yr)(?![a-z])", t, re.I)
+    if not m:
+        m = re.search(r"\b(?:years?|yrs?|saal|sal)\s+(?:by|ko)\s+()(\d+(?:\.\d+)?)", t, re.I)
+        if m:
+            sign = _sign(t)
+            return sign * float(m.group(2)) if sign else None
+    sign = _sign(t) or (1 if m and m.group(2) else 0)
+    if not m or not sign or (_ABS_TO.search(t) and not re.search(r"\bby\b", t, re.I)):
+        return None
+    return sign * float(m.group(1))
+
+
+_VAGUE_VERB = re.compile(r"\b(increase|raise|extend|badha\w*|decrease|reduce|lower|shorten|ghata\w*|kam\s+kar\w*)\b", re.I)
+
+
+def vague_change(text: str) -> Optional[str]:
+    """'years badha do' / 'increase the amount' with no number: which input the user wants changed ('years' or 'amount')."""
+    t = normalise(text)
+    if not _VAGUE_VERB.search(t) or re.search(r"\d", words_to_digits(t)) or re.search(r"\b(risk|stocks?|funds?|fds?|mf)\b", t, re.I):
+        return None
+    if re.search(r"\b(years?|saal|sal|horizon|duration|period)\b", t, re.I):
+        return "years"
+    if re.search(r"\b(amount|capital|principal|investment|rupees?|paisa|paise)\b", t, re.I):
+        return "amount"
+    return None
+
+
 # ------------------------------------------------------------------------------ questions
 _Q_START = re.compile(r"^\s*(is|are|was|were|does|do|did|will|would|should|can|could|how|what|why|which|kya|kaun|kyun|kaise)\b", re.I)
 _REQUEST = re.compile(r"\b(please|plz|pls|make|keep|change|set|want|need|put|take|reduce|lower|raise|increase|decrease|switch|turn|"
@@ -206,6 +261,14 @@ _MOVE_G = re.compile(rf"\bto\s+{_CL}\b.{{0,25}}?\bfrom\s+{_CL}\b", re.I)        
 _MOVE_H = re.compile(rf"\b(?:take|pull|withdraw|draw|get)\b.{{0,40}}?\b(?:out\s+of|from)\s+{_CL}\b.{{0,40}}?"
                      rf"\b(?:put|move|add|invest|shift|transfer|keep|place|deposit|park)\b.{{0,25}}?\b(?:in|into|to|towards?)\s+{_CL}\b", re.I)
 _MOVE_I = re.compile(rf"\b(?:put|invest|place|park|add)\b.{{0,30}}?\b(?:in|into|to)\s+{_CL}\b.{{0,25}}?\b(?:from|out\s+of)\s+{_CL}\b", re.I)
+_LESS_W = r"(?:less|lower|reduce|decrease|cut|fewer|kam)"
+_MORE_W = r"(?:more|higher|increase|raise|boost|zyada)"
+_NOT_RISK = r"(?:(?!risk).){0,12}?"
+_LESS_MORE = re.compile(rf"\b{_LESS_W}\s+{_CL}\b.{{0,25}}?\b{_MORE_W}\s+{_CL}\b", re.I)
+_MORE_LESS = re.compile(rf"\b{_MORE_W}\s+{_CL}\b.{{0,25}}?\b{_LESS_W}\s+{_CL}\b", re.I)
+_LESS_ONE = re.compile(rf"(?<!\bno\s)(?<!\bnot\s)\b{_LESS_W}\s+{_NOT_RISK}\b{_CL}\b|\b{_CL}\s+(?:kam|ghata\w*)\b", re.I)
+_MORE_ONE = re.compile(rf"(?<!\bno\s)(?<!\bnot\s)\b{_MORE_W}\s+{_NOT_RISK}\b{_CL}\b|\b{_CL}\s+(?:badha\w*|zyada)\b", re.I)
+_QUESTION_START = re.compile(r"^\s*(what|why|which|how|who|when|is|are|was|does|do|did|kya|kaun|kyun|kaise)\b", re.I)
 _ALL_MONEY = re.compile(r"\b(all|everything|entire|whole|sab|saara|sara|poora|pura|sabhi)\b", re.I)
 _MOVE_VERB = re.compile(r"\b(move|shift|transfer|switch|convert|swap)\b", re.I)
 _MOVE_CUE = re.compile(r"\b(move|shift|transfer|rebalance|daal\w*|dal\s?do|badal\w*|convert|switch|swap|bhej\w*|take|pull|withdraw|park)\b", re.I)
@@ -280,12 +343,25 @@ def parse_move(text: str) -> dict:
             m5 = _MOVE_E.search(t)
             if m5:
                 src, dst = _bucket(m5.group(2)), _bucket(m5.group(4))
+    soft = False                                          # 'less stocks more fd' / 'more mutual funds': a move without the verb
+    if not (src and dst):
+        mj, mk = _LESS_MORE.search(t), _MORE_LESS.search(t)
+        if mj:
+            src, dst, soft = _bucket(mj.group(1)), _bucket(mj.group(2)), True
+        elif mk:
+            dst, src, soft = _bucket(mk.group(1)), _bucket(mk.group(2)), True
+    if not (src or dst) and not _QUESTION_START.match(t):
+        ml, mm = _LESS_ONE.search(t), _MORE_ONE.search(t)
+        if ml and not mm:
+            src, soft = _bucket(ml.group(1) or ml.group(2)), True
+        elif mm and not ml:
+            dst, soft = _bucket(mm.group(1) or mm.group(2)), True
     if not (src or dst) and _MOVE_VERB.search(t):       # only one end named: 'move 10% to stocks' / 'move 5000 from fd'
         mt = re.search(rf"\bto\s+{_CL}\b", t, re.I) or re.search(rf"\b{_CL}\s+(?:me|mein|ko|mai)\b", t, re.I)
         mf = re.search(rf"\bfrom\s+{_CL}\b", t, re.I) or re.search(rf"\b{_CL}\s+se\b", t, re.I)
         dst = _bucket(mt.group(1)) if mt else None
         src = _bucket(mf.group(1)) if mf else None
-    if not (src and dst) and not _MOVE_CUE.search(t):
+    if not (src and dst) and not (soft or _MOVE_CUE.search(t)):
         return {}
     if not (src or dst) :
         return {}

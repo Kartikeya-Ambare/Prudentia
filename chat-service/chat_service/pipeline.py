@@ -115,6 +115,13 @@ class ChatPipeline:
         if replies.is_start_over(message):                       # 'start over' / 'reset' / 'new plan' / 'delete my plan'
             self.trace.path = "start_over"
             return self._start_over(s)
+        fresh = replies.START_OVER_WITH.match(message or "")
+        if fresh and not replies.is_start_over(fresh.group("rest")):        # 'start again with 10 lakh': reset, then plan from the rest
+            self._start_over(s)
+            return self.handle(session_id, fresh.group("rest"), profile_id)
+        if s.result is not None and not s.awaiting and replies.is_repeat(message):      # 'repeat that' / 'show everything'
+            self.trace.path = "repeat"
+            return self._show_plan(s)
 
         if not any(a in ("confirm", "risk_scenario") for a in s.awaiting):
             chit = replies.smalltalk(message, has_plan=bool(s.result or s.profile_id), awaiting=bool(s.awaiting))   # hi / thanks / bye / who are you / help
@@ -171,6 +178,11 @@ class ChatPipeline:
         if bank_choice:
             self.trace.path = "rule_banks"
             return self._banks(s, bank_choice)
+        vague = parse.vague_change(text) if s.result is not None else None
+        if vague:                                              # 'years badha do' with no number: ask for it
+            self.trace.path = "vague_change"
+            s.awaiting = [vague]
+            return self._resp(s, "What should it be instead? " + replies.ASK[vague], "modify_inputs", missing=[vague])
 
         slot_turn = scr.category == "slot_answer" and any(a in replies.SLOT_ORDER for a in aw)
         if slot_turn:
@@ -210,13 +222,20 @@ class ChatPipeline:
 
     _R_ASSESS = re.compile(r"^\W*(is|are|will|would|does|do)\b.{0,30}\b(plan|portfolio|allocation|money|investments?|this|it|these)\b.{0,25}"
                            r"\b(safe|safest|good|ok|okay|fine|right|risky|secure|suitable|enough|worth\s+it|bad)\b|"
-                           r"\b(am\s+i|are\s+we)\s+(safe|ok|okay)\b|\bshould\s+i\s+(worry|be\s+worried)\b|\b(biggest|main|major|top)\s+risks?\b", re.I)
-    _R_SHOULD = re.compile(r"^\W*(should|shall)\s+i\b", re.I)
+                           r"\b(am\s+i|are\s+we)\s+(safe|ok|okay)\b|\bshould\s+i\s+(worry|be\s+worried)\b|\b(biggest|main|major|top)\s+risks?\b|"
+                           r"\bwhat('?s|\s+is)\s+the\s+(risk|danger)s?\b.{0,25}\b(plan|this|it|portfolio|investment|allocation)\b|\b(can|could)\s+i\s+(lose|loose)\b|"
+                           r"\bwhat\s+if\b.{0,25}\b(put|invest|keep|move|shift|have|had|go)\b.{0,25}\b\d+(\.\d+)?\s*%|"
+                           r"\bkya\s+(ye|yeh|ise|isme)\b.{0,12}\b(safe|risky|surakshit)\b|\b(ye|yeh)\s+(safe|risky)\s+hai\b|\bis\s+(it|this)\s+(safe|risky)\b", re.I)
+    _R_SHOULD = re.compile(r"^\W*(should|shall)\s+i\b|\bwhat\s+would\s+you\s+do\b|\bwhat\s+do\s+you\s+(think|suggest|recommend|feel)\b|\byour\s+(opinion|advice|view|take)\b|"
+                           r"\bis\s+\d+(\.\d+)?\s*%\s*(risk\s+)?(too\s+(much|high|low|risky)|enough|ok|okay|fine|good|right)\b|\btoo\s+(much|high|low)\s+risk\b|"
+                           r"\baap\s+kya\s+karte\b", re.I)
     _R_LIST = re.compile(r"\b(list|show|which|what|see|name|display|tell\s+me)\b.{0,30}\b(stocks?|shares?|mutual\s+funds?|funds?|mfs?|banks?|holdings?|"
                          r"investments?|instruments?|picks?|companies)\b|\b(stocks?|funds?|mutual\s+funds?|banks?|mf|fd)\s+(me|mein)\s+(kya|kaun|konse|kaunse)\b|"
                          r"\b(kaun|konse|kaunse)\s*(kaun\s*)?(se\s+)?(stocks?|funds?|banks?|mf)\b", re.I)
     _R_SHOW = re.compile(r"\b(show|display|see|dikhao|dikha\s+do|repeat|recap|summari[sz]e)\b.{0,30}\b(plan|portfolio|allocation|result|summary)\b|"
-                         r"\b(plan|portfolio)\b.{0,20}\b(dikhao|dikha\s+do|again|dobara)\b", re.I)
+                         r"\b(plan|portfolio)\b.{0,20}\b(dikhao|dikha\s+do|again|dobara)\b|"
+                         r"\bhow\s+(is|are)\s+(my|the)\s+(money|plan|portfolio|investments?|funds)\s+(split|divided|allocated|distributed|spread|invested)\b|"
+                         r"\b(my|the)\s+(split|breakdown)\b|\bbreak\s*down\b|\bpaisa\s+(kaise|kahan)\s+(baanta|bant|divide|laga)\w*", re.I)
     _R_RATE = re.compile(r"\b(rates?|interest|payout|yield)\b", re.I)
     _R_COMPARE = re.compile(r"\b(compare|comparison|vs\.?|versus|tulna|farak|difference|dono)\b", re.I)
     _R_HISTORY = re.compile(r"\b(increas\w*|decreas\w*|badh\w*|ghat\w*|chang\w*|history|trend|pehle|previous|last\s+month|"
@@ -242,8 +261,8 @@ class ChatPipeline:
             return None
         words = set(re.findall(r"[a-z0-9]+", text.lower()))
         for i in s.result.get("instruments", []):
-            core = set(re.findall(r"[a-z0-9]+", i["display_name"].lower())) - {"fund", "fixed", "deposit", "bank", "limited"}
-            if i["label"].lower() in words or (core and core <= words):
+            core = set(re.findall(r"[a-z0-9]+", i["display_name"].lower())) - {"fund", "fixed", "deposit", "bank", "limited", "ns", "bo"}
+            if i["label"].lower() in words or i["label"].lower().split(".")[0] in words or (core and core <= words):
                 return i
         return None
 
@@ -270,7 +289,7 @@ class ChatPipeline:
             return "explain_mf_sector"
         if prefs.parse_prefs(text):
             return "modify_inputs" if s.result is not None else "provide_inputs"
-        if self._instrument_in(s, text) and self._R_VALUE.search(text):
+        if self._instrument_in(s, text) and (self._R_VALUE.search(text) or re.search(r"^\W*(what|who)\s+(is|are)\b|\babout\b|\bkya\s+hai\b", text, re.I)):
             return "ask_result"
         if self._R_DRIFT.search(text):
             return "rebalance_check"
@@ -288,7 +307,7 @@ class ChatPipeline:
     def _is_edit(text: str) -> bool:
         """An unambiguous plan edit: a rupee amount, years, a risk %, an add/remove of an asset class, a relative risk change."""
         ops = parse.parse_class_ops(text)
-        return (parse.parse_amount(text) is not None or parse.parse_years(text) is not None
+        return (parse.parse_amount(text) is not None or parse.parse_years(text) is not None or parse.parse_years_delta(text) is not None
                 or parse.parse_risk_pct(text) is not None or bool(ops["remove"] or (ops["add"] and ops["explicit"]))
                 or parse.parse_risk_shift(text) is not None or parse.parse_risk(text) is not None)
 
@@ -505,6 +524,10 @@ class ChatPipeline:
         only_years = "years" in aw and "amount" not in aw
         a = parse.parse_amount(text, allow_bare=only_amount)
         y = parse.parse_years(text, allow_bare=only_years)
+        if s.params.get("amount") and (da := parse.parse_amount_delta(text)) is not None:
+            a = float(s.params["amount"]) + da                   # 'amount badhao 2 lakh' / 'add 1 lakh more': relative to the plan's amount
+        if s.params.get("years") and (dy := parse.parse_years_delta(text)) is not None:
+            y = float(s.params["years"]) + dy
         if a is not None:
             patch["amount"] = a
         if y is not None:
@@ -924,7 +947,7 @@ class ChatPipeline:
 
     def _assess(self, s: Session, text: str = "") -> dict:
         """'Is my plan safe / good?': never a verdict, only how the plan is built and what the cautious case looks like."""
-        if re.search(r"\b(put|invest|keep|all\s+in|100\s*%|everything|only)\b", text, re.I):      # 'is it safe to put 100% in stocks?'
+        if re.search(r"\b(put|invest|keep|all\s+in|100\s*%|everything|only)\b|\bwhat\s+if\b.{0,25}\d\s*%", text, re.I):      # 'is it safe to put 100% in stocks?'
             return self._resp(s, replies.ASSESS_HYPOTHETICAL, "assess_plan")
         if not self._ensure_loaded(s):
             return self._resp(s, replies.NEED_ALLOCATION, "assess_plan")
