@@ -15,7 +15,7 @@ import { prudieStateFor, type AgentPhase } from "@/prudie/agent";
 const Prudie = lazy(() => import("@/prudie/Prudie"));
 import { Alert } from "@/components/ui/Feedback";
 import { PlanReplyCard } from "@/tabs/PlanReplyCard";
-import { DotMatrixLoader } from "@/components/viz/DotMatrixLoader";
+import { DotMatrixLoader, EngineLoader } from "@/components/viz/DotMatrixLoader";
 import { DataTable, type Column } from "@/components/ui/DataTable";
 
 const diffColumns: Column<DriftRow>[] = [
@@ -142,9 +142,12 @@ export function ChatPanel({ variant }: { variant: "full" | "dock" }) {
           </div>
         </li>
       ))}
-      {chat.isPending && (
+      {chat.isPending && (plan ? (
         <li className="flex items-center gap-3 text-[14px] text-ink-2"><DotMatrixLoader dot={5} gap={2} label={t("thinking")} />{t("thinking")}</li>
-      )}
+      ) : (
+        // The very first plan is the slow one (prices, picks, banks, scenarios): show those steps. Later chat actions just say "Working on it".
+        <li className="max-w-[420px]"><EngineLoader /></li>
+      ))}
       <li ref={endRef} aria-hidden />
     </ul>
   );
