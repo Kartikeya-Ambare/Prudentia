@@ -1,6 +1,6 @@
 import { lazy, Suspense, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import clsx from "clsx";
-import { CalendarBlankIcon, CurrencyInrIcon, HourglassMediumIcon, PulseIcon, TrendUpIcon, type Icon } from "@phosphor-icons/react";
+import { CurrencyInrIcon, HourglassMediumIcon, ShieldCheckIcon, TrendUpIcon, type Icon } from "@phosphor-icons/react";
 import type { Bucket, InstrumentWeight, PlanResult, ValueProjection } from "@/api/types";
 import { gsapReady, NO_REDUCED_MOTION, REDUCED_MOTION } from "@/lib/gsap";
 import { number, pct, whole } from "@/lib/format";
@@ -19,6 +19,9 @@ const BUCKET_COLOR: Record<Bucket, string> = {
 const BUCKET_ORDER: Bucket[] = ["stock", "mf", "bank"];
 const BUCKET_KEY: Record<Bucket, Key> = { stock: "stocks", mf: "mf", bank: "fd" };
 
+/** 1057410 -> 10.6 L, 12500000 -> 1.25 Cr: the short form used where the full figure sits in a table nearby. */
+const compact = (n: number) => (n >= 1e7 ? `${(n / 1e7).toFixed(2)} Cr` : n >= 1e5 ? `${(n / 1e5).toFixed(1)} L` : whole(n));
+
 /** 2026-10-14 -> 14 Oct */
 const shortDate = (iso: string) => new Date(`${iso}T00:00:00`).toLocaleDateString("en-IN", { day: "numeric", month: "short" });
 
@@ -30,26 +33,6 @@ function Card({ title, aside, className, children }: { title: string; aside?: Re
         {aside}
       </div>
       {children}
-    </div>
-  );
-}
-
-/** A ring with the value in the middle: one number against its 0 to 100 scale. */
-function RingMeter({ value, caption }: { value: number; caption: string }) {
-  const v = Math.max(0, Math.min(100, value));
-  return (
-    <div className="flex flex-col items-center gap-3">
-      <div className="relative size-[148px]">
-        <svg viewBox="0 0 120 120" className="size-full -rotate-90" role="img" aria-label={`${caption}: ${v.toFixed(0)}%`}>
-          <circle cx="60" cy="60" r="48" fill="none" stroke="var(--color-rail)" strokeWidth="12" />
-          <circle cx="60" cy="60" r="48" fill="none" stroke="var(--color-accent)" strokeWidth="12" strokeLinecap="round"
-            pathLength="100" strokeDasharray={`${v} 100`} style={{ transition: "stroke-dasharray 700ms cubic-bezier(0.16,1,0.3,1)" }} />
-        </svg>
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="num text-[28px] font-semibold leading-8">{v.toFixed(0)}%</span>
-        </div>
-      </div>
-      <span className="text-[14px] font-medium leading-5">{caption}</span>
     </div>
   );
 }
@@ -179,6 +162,9 @@ export function PlanView({ result }: { result: PlanResult }) {
     ? (["bear", "base", "bull"] as const).filter((k) => result.scenarios?.[k]).map((k) => ({ k, s: result.scenarios![k]! }))
     : [];
 
+  const expectedCase = result.scenarios?.base;
+  const cautiousCase = result.scenarios?.bear;
+  const optimisticCase = result.scenarios?.bull;
   const [classView, setClassView] = useState<"chart" | "table">("chart");
 
   // One orchestrated moment when a new plan arrives: summary cards first, then the panels, each rising a little.
@@ -210,19 +196,42 @@ export function PlanView({ result }: { result: PlanResult }) {
     <section ref={root} tabIndex={-1} aria-label={t("summary")} data-enter={enter} className="@container scroll-mt-4 outline-none">
       {result.warnings.map((w) => <Alert key={w} tone="warning" className="mb-4">{w}</Alert>)}
 
-      <ul className="grid grid-cols-2 gap-3 @2xl:grid-cols-5">
-        <Kpi label={`${t("invested")} (Rs.)`} icon={CurrencyInrIcon} note={unallocated > 1 ? `of Rs. ${whole(requested)}` : undefined}>
+      <p className="num mb-3 text-[13px] leading-5 text-ink-3">
+        {result.horizon_years} {t("yearsUnit")} · volatility {pct(result.expected_volatility_pct)} {t("perYear")}{latest ? ` · prices as of ${shortDate(latest)} ${latest.slice(0, 4)}` : ""}
+      </p>
+      <ul className="grid grid-cols-2 gap-3 @2xl:grid-cols-4">
+        <Kpi label={`${t("invested")} (Rs.)`} icon={CurrencyInrIcon} note={unallocated > 1 ? `of Rs. ${whole(requested)}` : "today"}>
           <span className="num">{whole(total)}</span>
+        </Kpi>
+        <Kpi label={`In ${result.horizon_years} ${t("yearsUnit")} (Rs.)`} icon={HourglassMediumIcon}
+          note={expectedCase && cautiousCase && optimisticCase ? `${compact(cautiousCase.projected_value)} to ${compact(optimisticCase.projected_value)}` : "expected"}>
+          <span className="num">{whole(expectedCase?.projected_value ?? result.bucket_projections.reduce((a, b) => a + b.projected_value, 0))}</span>
         </Kpi>
         <Kpi label={t("kpiReturn")} icon={TrendUpIcon} note={`${t("perYear")}, ${t("afterTax")}`}>
           <Metric value={result.expected_return_pct} tone="gain" />
         </Kpi>
-        <Kpi label={t("kpiVol")} icon={PulseIcon} note={t("perYear")}><Metric value={result.expected_volatility_pct} /></Kpi>
-        <Kpi label={t("kpiHorizon")} icon={HourglassMediumIcon} note="time frame"><span className="num">{result.horizon_years} {t("yearsUnit")}</span></Kpi>
-        <Kpi label={t("kpiPrices")} icon={CalendarBlankIcon} note={latest ? `as of ${latest.slice(0, 4)}` : undefined}><span className="num">{latest ? shortDate(latest) : "-"}</span></Kpi>
+        <Kpi label="Risk level" icon={ShieldCheckIcon} note={`${Math.round(result.risk_thermometer)} out of 100`}>
+          <span>{riskLabel}</span>
+        </Kpi>
       </ul>
 
       <div className="mt-4 grid gap-4 @2xl:grid-cols-2 @4xl:grid-cols-3">
+        {scenarios.length > 0 && (
+          <Card title={t("scenarios")}>
+            <ul className="flex flex-col gap-2">
+              {scenarios.map(({ k, s }) => (
+                <li key={k} className={clsx("flex items-center justify-between gap-3 rounded-[var(--radius-control)] px-4 py-3", k === "base" ? "bg-accent-container" : "bg-rail")}>
+                  <span>
+                    <span className="block text-[13px] leading-5 text-ink-2">{t(k)}</span>
+                    <span className="num block text-[13px] leading-5 text-ink-2">{pct(s.return_pct)} / yr</span>
+                  </span>
+                  <span className="num whitespace-nowrap text-[20px] font-semibold leading-7">Rs. {whole(s.projected_value)}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-3 text-[12px] leading-4 text-ink-3">{t("scenarioNote")}</p>
+          </Card>
+        )}
         <Card title={t("allocationByClass")}>
           <Donut
             segments={buckets.map((b) => ({
@@ -245,33 +254,14 @@ export function PlanView({ result }: { result: PlanResult }) {
           )}
         </Card>
 
-        {scenarios.length > 0 && (
-          <Card title={t("scenarios")} className="@2xl:col-span-2 @4xl:col-span-1">
-            <ul className="flex flex-col gap-2">
-              {scenarios.map(({ k, s }) => (
-                <li key={k} className={clsx("flex items-center justify-between gap-3 rounded-[var(--radius-control)] px-4 py-3", k === "base" ? "bg-accent-container" : "bg-rail")}>
-                  <span>
-                    <span className="block text-[13px] leading-5 text-ink-2">{t(k)}</span>
-                    <span className="num block text-[13px] leading-5 text-ink-2">{pct(s.return_pct)} / yr</span>
-                  </span>
-                  <span className="num whitespace-nowrap text-[20px] font-semibold leading-7">Rs. {whole(s.projected_value)}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-3 text-[12px] leading-4 text-ink-3">{t("scenarioNote")}</p>
-          </Card>
-        )}
       </div>
 
-      <div className="mt-4 grid gap-4 @2xl:grid-cols-[minmax(0,1fr)_260px]">
+      <div className="mt-4 grid gap-4 @2xl:grid-cols-[minmax(0,1fr)_minmax(0,0.6fr)]">
         <Card title={t("weights")} aside={<ViewToggle value={view} onChange={setView} />}>
           {view === "chart" ? <RankedBars rows={holdingRows} /> : <DataTable caption={t("weights")} columns={weightColumns} rows={result.weights} />}
         </Card>
 
         <div className="flex flex-col gap-4">
-          <Card title={t("risk")}>
-            <RingMeter value={result.risk_thermometer} caption={riskLabel} />
-          </Card>
           <Card title={t("summary")}>
             <p className="text-[14.5px] leading-6 text-ink-2">{result.explanation_text}</p>
             {unallocated > 1 && (

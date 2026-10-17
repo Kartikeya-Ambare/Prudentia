@@ -1,34 +1,38 @@
 import clsx from "clsx";
-import type { ReactNode } from "react";
+import { useId, useState, type ReactNode } from "react";
 import { Toggle } from "@/components/ui/Form";
 
 /**
- * One asset class: a coloured edge, a name, an include switch, and that class's own options underneath.
- * Switched off, the options fold away, so it is always clear which options belong to which class.
+ * One asset class: its colour, a name, an include switch, and an "Options" fold for that class's own choices.
+ * Switched off, there is nothing to fold; the options never show for a class that is not in the plan.
  */
 export function ClassCard({
   color, title, blurb, on, locked, onToggle, children,
 }: { color: string; title: string; blurb: string; on: boolean; locked: boolean; onToggle: () => void; children: ReactNode }) {
+  // The options of a class stay folded until asked for: the first look at the form is three switches, not three forms.
+  const [open, setOpen] = useState(false);
+  const id = useId();
   return (
-    <section
-      className={clsx(
-        "rounded-[var(--radius-panel)] border transition-colors duration-200",
-        on ? "border-line bg-surface" : "border-line bg-rail/60",
-      )}
-      style={{ borderLeft: `4px solid ${on ? color : "var(--color-line)"}` }}
-    >
+    <section className={clsx("rounded-[var(--radius-panel)] border border-line transition-colors duration-200", on ? "bg-surface" : "bg-rail/60")}>
       <div className="flex items-center gap-4 px-4 py-2">
+        <span className="size-3 shrink-0 rounded-[4px] transition-colors duration-200" style={{ background: on ? color : "var(--color-line)" }} aria-hidden />
         <div className="min-w-0 flex-1">
           <h4 className={clsx("text-[16px] font-semibold leading-6", !on && "text-ink-3")}>{title}</h4>
           <p className="text-[13px] leading-5 text-ink-3">{blurb}</p>
         </div>
+        {on && (
+          <button type="button" aria-expanded={open} aria-controls={id} onClick={() => setOpen((v) => !v)}
+            className="sl min-h-[40px] shrink-0 rounded-full px-3 text-[13px] font-medium text-accent">
+            {open ? "Hide options" : "Options"}
+          </button>
+        )}
         <div className={clsx(locked && "opacity-60")}>
           <Toggle checked={on} onChange={() => !locked && onToggle()}>
             <span className="sr-only">{title}</span>
           </Toggle>
         </div>
       </div>
-      {on && <div className="route-panel flex flex-col gap-3 px-4 pb-4 pt-1">{children}</div>}
+      {on && open && <div id={id} className="route-panel flex flex-col gap-3 px-4 pb-4 pt-1">{children}</div>}
     </section>
   );
 }

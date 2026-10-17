@@ -53,6 +53,14 @@ export function AssistantBar() {
   const reply = last?.role === "assistant" && history.length > dismissed ? last : null;
   const phase: AgentPhase = pending ? "thinking" : done ? "done" : focused && draft ? "typing" : "idle";
 
+  // A reply is a notice, not a fixture: it clears itself (a plan update is already visible on the page, so sooner),
+  // and the whole text stays in the conversation panel.
+  useEffect(() => {
+    if (!reply || pending) return;
+    const id = setTimeout(() => setDismissed(history.length), reply.allocation ? 7000 : 14000);
+    return () => clearTimeout(id);
+  }, [reply, pending, history.length]);
+
   function submit(text: string) {
     if (!text.trim() || pending) return;
     setDraft("");
@@ -62,10 +70,10 @@ export function AssistantBar() {
     e.preventDefault();
     submit(draft);
   }
-  const showSuggestions = !!plan && !pending && !draft;
+  const showSuggestions = !!plan && !pending && !draft && !reply;
 
   return (
-    <div className="sticky bottom-0 z-30 -mx-4 mt-auto bg-surface px-4 pb-3 pt-4 max-md:bottom-[calc(4.25rem+env(safe-area-inset-bottom,0px))] sm:-mx-8 sm:px-8 md:pb-4">
+    <div className="z-30 mt-auto bg-surface px-4 pb-3 pt-4 sm:px-8 md:sticky md:bottom-0 md:-mx-8 md:pb-4 max-md:fixed max-md:inset-x-0 max-md:bottom-[calc(4.25rem+env(safe-area-inset-bottom,0px))] max-md:border-t max-md:border-line">
       <div className="mx-auto flex w-full max-w-[860px] flex-col gap-2">
         {(pending || reply) && (
           <div className="msg-in flex items-start gap-3 rounded-[var(--radius-panel)] border border-line bg-rail px-4 py-3" role="status" aria-live="polite">
@@ -118,8 +126,9 @@ export function AssistantBar() {
             onBlur={() => setFocused(false)}
             onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submit(draft); } }}
             name="assistant-message"
+            autoComplete="off"
             aria-label={plan ? "Ask Prudie to change your plan" : "Describe the plan you want"}
-            placeholder={plan ? "Ask Prudie to change your plan, or press /" : "Describe a plan, for example 5 lakh for 5 years, moderate risk"}
+            placeholder={plan ? "Ask Prudie to change your plan" : "Describe a plan, for example 5 lakh for 5 years, moderate risk"}
             className="max-h-32 min-h-[44px] min-w-0 flex-1 resize-none bg-transparent px-2 py-2.5 text-[15px] leading-6 outline-none placeholder:text-ink-3"
           />
           <button type="button" onClick={() => setSheetOpen(true)} aria-label="Open conversation history"

@@ -181,11 +181,12 @@ export function App() {
 
   return (
     <>
+      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-[var(--radius-control)] focus:bg-brand focus:px-4 focus:py-2 focus:text-on-brand">Skip to content</a>
       <div className="flex min-h-dvh bg-page md:h-dvh md:p-4">
         <div className="mx-auto flex w-full max-w-[1760px] overflow-hidden bg-surface md:h-full md:rounded-[24px]">
           <Sidebar hasPlan={!!plan} />
           <div className="flex min-w-0 flex-1 flex-col">
-          <main className="min-w-0 flex-1 px-4 pb-44 pt-5 sm:px-8 md:flex md:flex-col md:overflow-y-auto md:pb-0 md:pt-6">
+          <main id="main" tabIndex={-1} className="min-w-0 flex-1 outline-none px-4 pb-44 pt-5 sm:px-8 md:flex md:flex-col md:overflow-y-auto md:pb-0 md:pt-6">
             <TopBar title={t(page.title)} tagline={page.path === "/"} />
             {chatOnly ? (
               <div className="h-[calc(100dvh-17rem)] min-h-[440px] md:h-auto md:min-h-0 md:flex-1"><StartScreen /></div>

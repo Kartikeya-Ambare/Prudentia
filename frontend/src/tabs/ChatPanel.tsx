@@ -108,6 +108,7 @@ export function Conversation({ variant }: { variant: "full" | "sheet" }) {
               if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submit(draft); }
             }}
             name="message"
+            autoComplete="off"
             aria-label={t("chatPlaceholder")}
             placeholder={t("chatPlaceholder")}
             className="max-h-40 min-h-[44px] min-w-0 flex-1 resize-none bg-transparent px-2 py-2.5 text-[15px] leading-6 outline-none placeholder:text-ink-3"
@@ -227,6 +228,7 @@ export function StartScreen() {
                 }
               }}
               name="message"
+              autoComplete="off"
               aria-label={t("chatPlaceholder")}
               placeholder={t("startPlaceholder")}
               className="max-h-40 min-h-[44px] min-w-0 flex-1 resize-none bg-transparent px-2 py-2.5 text-[15px] leading-6 outline-none placeholder:text-ink-3"

@@ -1,9 +1,11 @@
 import { useMemo, useState } from "react";
+import { CheckIcon } from "@phosphor-icons/react";
 import { useBanks, usePlan } from "@/api/hooks";
 import type { AssetClass, McCategory, PlanRequest } from "@/api/types";
 import { asPlan, useSession } from "@/store/session";
 import { useT } from "@/lib/i18n";
 import { Button } from "@/components/ui/Button";
+import { DotMatrixLoader } from "@/components/viz/DotMatrixLoader";
 import { ClassCard, Segmented } from "@/components/ui/Choice";
 import { Alert } from "@/components/ui/Feedback";
 import { Field, MultiSelect, NumberInput, Slider } from "@/components/ui/Form";
@@ -53,6 +55,7 @@ export function PlanForm({ full }: { full: boolean }) {
   const bankError = full && classes.includes("fd") && bankMode === "pick" && bankNames.length === 0 ? t("banksNeedOne") : null;
   const blocked = !!splitError || !!bankError;
   const [shake, setShake] = useState(0);
+  const [justDone, setJustDone] = useState(false);          // "Plan ready" for a moment after a build, then the button goes back
 
   function submit() {
     if (blocked) { setShake((n) => n + 1); return; }
@@ -70,6 +73,8 @@ export function PlanForm({ full }: { full: boolean }) {
     plan.mutate(req, {
       onSuccess: (r) => {
         setLastResult(r, asked);
+        setJustDone(true);
+        setTimeout(() => setJustDone(false), 1800);
         // Keep every plan in the chat timeline, so a later change from the chat never makes the earlier result disappear.
         addMessage({ role: "assistant", content: current ? "Your plan is updated." : "Here is your plan.", allocation: asPlan(r) }, asked);
       },
@@ -167,7 +172,15 @@ export function PlanForm({ full }: { full: boolean }) {
 
       <div className="mt-6 flex flex-col gap-4">
         <div>
-          <Button onClick={submit} disabled={plan.isPending}>{current ? t("updatePlan") : t("getPlan")}</Button>
+          <Button onClick={submit} disabled={plan.isPending} aria-live="polite" className="w-full sm:min-w-[240px] sm:w-auto">
+            {plan.isPending ? (
+              <><DotMatrixLoader dot={4} gap={2} label="Building your plan" />Building your plan…</>
+            ) : justDone ? (
+              <span key="done" className="swap inline-flex items-center gap-2"><CheckIcon size={18} weight="bold" aria-hidden />Plan ready</span>
+            ) : (
+              current ? t("updatePlan") : t("getPlan")
+            )}
+          </Button>
         </div>
         {plan.isError && <Alert tone="error">{t("failed")}: {plan.error.message}</Alert>}
       </div>

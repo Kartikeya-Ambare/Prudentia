@@ -161,8 +161,6 @@
   body {
     margin: 0;
     background-color: var(--color-page);
-    background-image: var(--page-glow, none);
-    background-attachment: fixed;
     color: var(--color-ink);
     font-family: var(--font-sans);
     font-size: 1rem;
