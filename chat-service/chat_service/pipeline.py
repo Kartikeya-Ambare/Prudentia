@@ -118,6 +118,7 @@ class ChatPipeline:
         fresh = replies.START_OVER_WITH.match(message or "")
         if fresh and not replies.is_start_over(fresh.group("rest")):        # 'start again with 10 lakh': reset, then plan from the rest
             self._start_over(s)
+            self.store.get(session_id).last_ts = 0.0             # this is one user message, not two: do not trip the rate limit
             return self.handle(session_id, fresh.group("rest"), profile_id)
         if s.result is not None and not s.awaiting and replies.is_repeat(message):      # 'repeat that' / 'show everything'
             self.trace.path = "repeat"

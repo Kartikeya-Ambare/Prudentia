@@ -585,3 +585,8 @@ def test_naming_a_stock_in_the_plan_describes_it(make_pipe):
     inst = next(i for i in p.handle(S, "show the plan")["result"]["instruments"] if i["bucket"] == "stock")
     r = p.handle(S, f"what is {inst['label'].split('.')[0]}")
     assert r["intent"] == "ask_result" and inst["display_name"] in r["reply"]
+
+
+def test_what_is_risk_is_explained(make_pipe):
+    r = seeded(make_pipe, judge="in").handle(S, "what is risk")
+    assert r["intent"] == "ask_app" and "risk score" in r["reply"]

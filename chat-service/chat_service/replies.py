@@ -184,7 +184,7 @@ GLOSSARY: list[tuple[str, str, str]] = [
      "Mid cap means mid-sized companies. They can grow faster than large caps, but they carry more risk."),
     ("small cap", r"small\s*caps?",
      "Small cap means small companies. They have the most room to grow, along with the biggest ups and downs."),
-    ("risk score", r"risk\s+(score|level|thermometer)",
+    ("risk score", r"risk\s+(score|level|thermometer)|(?:what\s+is|what'?s|define|meaning\s+of|explain)\s+(?:the\s+)?risk\W*$",
      "The risk score is a number from 0 to 100 showing how much ups and downs you can handle. Here low is 20, "
      "moderate is 50 and high is 80. A higher score means more of your money goes into stocks."),
     ("P5/P95", r"\bp\s?5\b|\bp\s?95\b|\bp5\s*/\s*p95\b",
