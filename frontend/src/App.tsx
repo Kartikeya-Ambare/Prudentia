@@ -218,8 +218,9 @@ export function App() {
             ) : (
               <div className={clsx("grid items-start gap-6", !onSectors && "xl:grid-cols-[minmax(0,1fr)_340px]")}>
                 <div key={`${pathname}-${level}`} className="route-panel flex min-w-0 flex-col gap-4">
+                  {/* At the top and pinned there, so it is seen even when the "Get plan" button is far down a long form. */}
+                  {busy && <div className="sticky top-0 z-20"><EngineLoader /></div>}
                   {home && level === "expert" && <PlanForm full />}
-                  {busy && <EngineLoader />}
                   <div className={clsx("transition-opacity duration-300", busy && plan && "pointer-events-none opacity-40")}>
                     {onSectors && <RoutePanel active><SectorTab /></RoutePanel>}
                     {home && (plan ? <PlanView result={plan} /> : level === "expert" && !busy && (
