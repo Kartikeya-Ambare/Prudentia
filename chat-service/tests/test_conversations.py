@@ -613,3 +613,25 @@ def test_all_money_to_one_class_moves_from_every_other(make_pipe, msg):
 def test_what_is_prudie(make_pipe, msg):
     r = seeded(make_pipe, judge="in").handle(S, msg)
     assert r["intent"] == "smalltalk" and "Prudie" in r["reply"]
+
+
+def test_back_to_my_original_plan_goes_to_the_first_plan(make_pipe):
+    p = seeded(make_pipe, judge="in")
+    first = split(p.handle(S, "show the plan"))
+    p.handle(S, "move all money from stocks to mf")
+    p.handle(S, "move all money from mf to fd")
+    assert split(p.handle(S, "go back to my original plan")) == first
+
+
+def test_going_back_without_saying_original_is_one_step(make_pipe):
+    p = seeded(make_pipe, judge="in")
+    one = split(p.handle(S, "move all money from stocks to mf"))
+    assert split(p.handle(S, "move all money from mf to fd"))["bank"] == 100.0
+    assert split(p.handle(S, "undo that")) == one
+
+
+def test_removing_a_class_keeps_the_moves_made_so_far(make_pipe):
+    p = seeded(make_pipe, judge="in")
+    p.handle(S, "move 30% from stocks to fd")          # stocks 12.5, mf 37.5, fd 50
+    r = p.handle(S, "remove mutual funds")
+    assert "kept your split" in r["reply"] and r["result"]["split_pct"]["bank"] > 70

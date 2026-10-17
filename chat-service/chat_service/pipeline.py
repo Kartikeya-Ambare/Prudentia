@@ -43,6 +43,7 @@ _FUND_GUESS = re.compile(r"\b(?:of|for|in|about|from)\s+((?:[a-z0-9&.']+\s+){1,5
 _MOVE_WORDS = re.compile(r"\b(take|pull|withdraw|put|move|shift|swap|transfer|convert|switch|park|daal\w*|badal\w*)\b", re.I)
 _ALSO = re.compile(r"\b(also|too|as\s+well|bhi|same|again|similarly)\b", re.I)
 _RESTORE = parse.RESTORE
+_ORIGINAL = re.compile(r"\b(original|initial|first|very\s+first|beginning|shuru|pehla|starting)\b", re.I)
 _FUND_STOP = {"fund", "funds", "mutual", "mf", "scheme", "plan", "direct", "growth", "the"}
 _SECTOR_ALIASES = {
     "Financial Services": ["financial", "financials", "banking", "finance", "bank", "banks"],
@@ -158,7 +159,7 @@ class ChatPipeline:
             return self._resp(s, replies.t("conflict", what=clash), "clarify")
         if _RESTORE.search(text):
             self.trace.path = "restore"
-            return self._restore(s) if s.history else self._resp(s, replies.NOTHING_TO_RESTORE, "modify_inputs")
+            return self._restore(s, bool(_ORIGINAL.search(text))) if s.history else self._resp(s, replies.NOTHING_TO_RESTORE, "modify_inputs")
         gl = replies.glossary_answer(text)
         if gl:
             self.trace.path = "glossary"
@@ -486,8 +487,8 @@ class ChatPipeline:
         return self._resp(s, replies.allocation_reply(s.result, self._risk_text(s.params), pend.get("changes")),
                           "modify_inputs" if pend.get("changes") else "provide_inputs", result=s.result)
 
-    def _restore(self, s: Session) -> dict:
-        params, res = s.history[-1]
+    def _restore(self, s: Session, original: bool = False) -> dict:
+        params, res = s.history[0 if original else -1]          # 'go back' = one step; 'back to my original plan' = the first one
         pid = self._pid(s)
         if pid:                                                 # the stored plan is the latest one: write the old inputs back
             try:
@@ -496,7 +497,10 @@ class ChatPipeline:
                 return self._engine_error(s, exc, "modify_inputs")
             res = out["allocation"]
             params = self._params_of(res)
-        s.history.pop()
+        if original:
+            s.history.clear()
+        else:
+            s.history.pop()
         s.params, s.result, s.profile_id, s.awaiting, s.pending = params, res, res.get("profile_id"), [], None
         return self._resp(s, replies.RESTORED + " " + replies.allocation_reply(res, self._risk_text(params)),
                           "modify_inputs", result=res)
@@ -724,8 +728,20 @@ class ChatPipeline:
                 old = self._req_of(s.params)
                 patch = {k: v for k, v in req.items() if old.get(k) != v}
                 if s.params.get("manual_split") and ("risk_score" in patch or "classes" in patch):
-                    patch["manual_split"] = None                # a rebalanced split no longer fits: back to the risk-based one
-                    changes.append("split reset to the risk-based one")
+                    kept = None
+                    if "risk_score" not in patch and set(req.get("classes") or []) < set(old.get("classes") or []):
+                        # a class was removed: keep the user's moves and share its money across the classes that remain
+                        left = {c: v for c, v in s.params["manual_split"].items() if c in req["classes"]}
+                        total = sum(left.values())
+                        if total > 0:
+                            kept = {c: round(v * 100 / total, 4) for c, v in left.items()}
+                            kept[next(iter(kept))] = round(kept[next(iter(kept))] + 100 - sum(kept.values()), 4)
+                    if kept:
+                        patch["manual_split"] = kept
+                        changes.append("kept your split across the remaining classes")
+                    else:
+                        patch["manual_split"] = None            # a rebalanced split no longer fits: back to the risk-based one
+                        changes.append("split reset to the risk-based one")
                 revert = {**old, "manual_split": s.params.get("manual_split")}
                 res = self.engine.update_plan(pid, patch)["allocation"]
             else:
