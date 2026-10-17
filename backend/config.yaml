@@ -56,6 +56,9 @@ optimizer:
   prior_cagr_cap_pct: 40
 
 forecaster:
+  # A cached forecast is reused for 30 days. With the default of 24 hours the first plan of every day retrained every
+  # stock and fund it considered, which took minutes and made the chat time out.
+  cache_max_age_hours: 720
   lookback_days: 1825
   horizon_years_default: 5
   # A small, CPU/GPU-portable Transformer encoder.
