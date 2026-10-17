@@ -171,7 +171,7 @@ class ChatPipeline:
                 move = {**move, **{k: v for k, v in s.last_move.items() if k in ("all", "pct", "amount")}}
             return self._rebalance(s, move)
         ops_now = parse.parse_class_ops(text)
-        if _MOVE_WORDS.search(text) and len(classes_in(text)) >= 2 \
+        if _MOVE_WORDS.search(text) and len(classes_in(text)) >= 2 and not (parse.parse_years(text) is not None and parse.parse_amount(text) is not None) \
                 and not (ops_now["remove"] or ops_now["add"] or (ops_now["only"] and ops_now["explicit"])):
             self.trace.path = "move_unclear"                     # looks like a move between two classes that the rules could not read:
             return self._resp(s, replies.MOVE_UNCLEAR, "rebalance", missing=["move"])   # ask, never guess an amount edit

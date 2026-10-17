@@ -208,6 +208,7 @@ _INJECTION = re.compile(
     r"|(reveal|show|print|repeat|leak)\s+.{0,25}(system\s+prompt|instructions|rules)"
     r"|system\s+prompt|developer\s+mode|jailbreak|\bDAN\b"
     r"|you\s+are\s+now|\bpretend\b|role[- ]?play\w*|\byou\s+can\s+(say|do)\s+anything\b|\bwithout\s+(any\s+)?(rules|restrictions|limits)\b"
+    r"|\b(bad|evil|unethical|rogue|malicious|uncensored)\s+(ai|bot|assistant|chatbot|version)\b"
     r"|\bno\s+restrictions?\b|\bact\s+as\b|forget\s+(everything|your)|override\s+(the\s+)?rules"
     r"|pichhle\s+(saare\s+)?(instructions?|niyam)|(instructions?|rules?|niyam)\s+(bhool|ignore|mat\s+maano)"
     r"|(system\s+prompt|instructions?)\s+(dikhao|batao)|ab\s+tum\s+.{0,20}\s+ho\b",
