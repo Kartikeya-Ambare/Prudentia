@@ -268,6 +268,7 @@ _LESS_MORE = re.compile(rf"\b{_LESS_W}\s+{_CL}\b.{{0,25}}?\b{_MORE_W}\s+{_CL}\b"
 _MORE_LESS = re.compile(rf"\b{_MORE_W}\s+{_CL}\b.{{0,25}}?\b{_LESS_W}\s+{_CL}\b", re.I)
 _LESS_ONE = re.compile(rf"(?<!\bno\s)(?<!\bnot\s)\b{_LESS_W}\s+{_NOT_RISK}\b{_CL}\b|\b{_CL}\s+(?:kam|ghata\w*)\b", re.I)
 _MORE_ONE = re.compile(rf"(?<!\bno\s)(?<!\bnot\s)\b{_MORE_W}\s+{_NOT_RISK}\b{_CL}\b|\b{_CL}\s+(?:badha\w*|zyada)\b", re.I)
+_ALL_TO = re.compile(rf"\b(?:all|everything|entire|whole|sab|saara|sara|poora|pura)\s+(?:of\s+)?(?:my\s+|the\s+)?(?:money|paisa|paise|amount|savings|funds|holdings)?\s*(?:to|into|in)\s+{_CL}\b(?!\s*(?:,|&|\+|\band\b|\baur\b)\s*{_CL})", re.I)
 _QUESTION_START = re.compile(r"^\s*(what|why|which|how|who|when|is|are|was|does|do|did|kya|kaun|kyun|kaise)\b", re.I)
 _ALL_MONEY = re.compile(r"\b(all|everything|entire|whole|sab|saara|sara|poora|pura|sabhi)\b", re.I)
 _MOVE_VERB = re.compile(r"\b(move|shift|transfer|switch|convert|swap)\b", re.I)
@@ -350,6 +351,10 @@ def parse_move(text: str) -> dict:
             src, dst, soft = _bucket(mj.group(1)), _bucket(mj.group(2)), True
         elif mk:
             dst, src, soft = _bucket(mk.group(1)), _bucket(mk.group(2)), True
+    if not src and not dst:
+        ma = _ALL_TO.search(t)
+        if ma:                                           # 'all money to fd': everything held elsewhere goes to that class
+            dst, soft = _bucket(ma.group(1)), True
     if not (src or dst) and not _QUESTION_START.match(t):
         ml, mm = _LESS_ONE.search(t), _MORE_ONE.search(t)
         if ml and not mm:
@@ -375,6 +380,9 @@ def parse_move(text: str) -> dict:
     out = {"from": src, "to": dst, "pct": pct, "amount": amount}
     if pct is None and amount is None and (src or dst) and _ALL_MONEY.search(t):
         out["all"] = True                                    # 'move all money from mutual funds to stocks'
+        if dst and not src:                                  # 'move everything to FD': from every other class
+            others = [b for b in ("stock", "mf", "bank") if b != dst]
+            out["from"], out["sources"] = others[0], others
     elif pct is None and amount is None and (src or dst):
         if _HALF.search(t):
             out["fraction"] = 0.5                            # 'shift half of my FD to stocks'

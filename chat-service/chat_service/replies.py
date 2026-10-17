@@ -353,7 +353,7 @@ _SMALL = [
                             r"(that|this)\s+(is\s+)?not\s+(right|correct|what\s+i\s+(wanted|asked))|(explain|say|tell)(\s+(it|me|that))?\s+(in\s+)?(simple|simpler|easy|easier|plain)"
                             r"(\s+(words|terms|english|language|way))?|(make\s+it\s+)?simpler|give\s+me\s+an?\s+example|example|"
                             r"(samajh|samjha)\s+(nahi|nhi)(\s+aaya|\s+aya)?|(i\s+am|i'?m)\s+(lost|stuck|confused))$", re.I)),
-    ("who", re.compile(r"^(who\s+are\s+you|what\s+are\s+you|what'?s\s+your\s+name|what\s+is\s+your\s+name|your\s+name|tum\s+kaun\s+ho|"
+    ("who", re.compile(r"^((what|who)(\s+is|'s)\s+(prudie|this\s+bot)|who\s+are\s+you|what\s+are\s+you|what'?s\s+your\s+name|what\s+is\s+your\s+name|your\s+name|tum\s+kaun\s+ho|"
                        r"aap\s+kaun\s+ho|tumhara\s+naam\s+kya\s+hai|aapka\s+naam\s+kya\s+hai|introduce\s+yourself|"
                        r"who\s+(made|created|built|developed|designed)\s+you|are\s+you\s+(a\s+|an\s+)?(bot|human|real|ai|robot|person|chat\s?gpt|gpt|alive)|"
                        r"how\s+old\s+are\s+you|what'?s\s+your\s+age|what\s+is\s+your\s+age|are\s+you\s+(a\s+)?real\s+(person|human))$", re.I)),

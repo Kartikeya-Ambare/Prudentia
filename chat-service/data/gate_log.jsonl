@@ -447,3 +447,4 @@
 {"t": 1792210616.1553876, "message": "how much stocks should i have", "action": "unsure", "label": "in", "conf": 0.658}
 {"t": 1792210617.813542, "message": "will i get 15% returns", "action": "block", "label": "advice", "conf": 0.709}
 {"t": 1792210644.8172915, "message": "FD kitna hai", "action": "unsure", "label": "in", "conf": 0.574}
+{"t": 1792214267.531559, "message": "prudie", "action": "unsure", "label": "off_topic", "conf": 0.361}
