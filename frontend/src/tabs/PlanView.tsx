@@ -68,7 +68,7 @@ export function Kpi({ label, icon: Icon, note, children }: { label: string; icon
         <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent"><Icon size={17} weight="bold" aria-hidden /></span>
         <span className="min-w-0 truncate">{label}</span>
       </p>
-      <p className="num mt-1.5 whitespace-nowrap text-[26px] font-semibold leading-8 tracking-[-0.01em]">{children}</p>
+      <p className="num mt-1.5 whitespace-nowrap text-[20px] font-semibold leading-8 tracking-[-0.01em] @2xl:text-[26px]">{children}</p>
       <p className="min-h-4 truncate text-[12.5px] leading-4 text-ink-3">{note}</p>
     </li>
   );
@@ -277,10 +277,10 @@ export function PlanView({ result }: { result: PlanResult }) {
                     </span>
                     <span className="num text-[13px] leading-5 text-gain">{pct(b.projected_return_pct)} a year</span>
                   </div>
-                  <p className="num mt-1 flex items-center gap-2 pl-[22px] text-[13.5px] leading-5 text-ink-2">
-                    Rs. {whole(b.present_value)}
+                  <p className="num mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 pl-[22px] text-[13.5px] leading-5 text-ink-2">
+                    <span className="whitespace-nowrap">Rs. {whole(b.present_value)}</span>
                     <ArrowRightIcon size={14} className="shrink-0 text-ink-3" aria-label="grows to" />
-                    Rs. {whole(b.projected_value)}
+                    <span className="whitespace-nowrap">Rs. {whole(b.projected_value)}</span>
                   </p>
                 </li>
               ))}
