@@ -54,6 +54,16 @@ def _build_diff(old: dict, new: dict) -> list[dict]:
     ]
 
 
+def _restore_stored_row(profile_id: str, stored: dict) -> None:
+    """Put a saved plan row back exactly as it was. The drift check recomputes through allocate(), which stores its own
+    result under the same profile_id: that dropped a rebalanced split, the plan_request and the exact capital, so the next
+    chat move acted on the original plan instead of the moved one."""
+    engine = get_engine()
+    values = {k: v for k, v in stored.items() if k != "profile_id"}
+    with engine.begin() as conn:
+        conn.execute(profile_allocations.update().where(profile_allocations.c.profile_id == profile_id).values(**values))
+
+
 def check_drift(profile_id: str) -> dict:
     """Recomputes the allocation for a stored profile's original inputs and
     compares it against what's stored — used by GET /rebalance-check/{profile_id}."""
@@ -69,7 +79,10 @@ def check_drift(profile_id: str) -> dict:
     fresh_split = _bucket_split_from_allocation(old_alloc)  # keep the user's current bucket split fixed;
     # only instrument-level weights within each bucket should drift from price movement, not the
     # bucket split itself (that's a deliberate user/risk choice, not something drift-checking should undo)
-    fresh_alloc = allocate(profile, bucket_split_override=fresh_split)
+    try:
+        fresh_alloc = allocate(profile, bucket_split_override=fresh_split)
+    finally:
+        _restore_stored_row(profile_id, stored)      # allocate() saves its result; a drift check must not overwrite the saved plan
 
     diff = _build_diff(old_alloc, fresh_alloc.model_dump())
     materially_drifted = any(abs(d["delta"]) > 0.01 * _total_capital(old_alloc) for d in diff)

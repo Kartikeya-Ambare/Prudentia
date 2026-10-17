@@ -87,3 +87,12 @@ def test_banks_and_data_status():
     banks = client.get("/banks").json()
     assert len(banks) >= 5
     assert set(client.get("/data-status").json()) >= {"stocks", "mf"}
+
+
+def test_drift_check_does_not_overwrite_a_rebalanced_plan():
+    """The page calls /rebalance-check after every chat reply. It used to save a fresh risk-based plan over the moved one."""
+    pid = _plan()["profile_id"]
+    moved = client.post(f"/plan/{pid}/rebalance", json={"from": "stock", "to": "mf", "pct": 100}).json()["allocation"]
+    assert client.get(f"/rebalance-check/{pid}").status_code == 200
+    stored = client.get(f"/plan/{pid}").json()
+    assert stored["split_pct"] == moved["split_pct"] and stored["plan_request"]["capital"] == BASE["capital"]
