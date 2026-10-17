@@ -69,7 +69,7 @@ def is_plan_edit(text: str) -> bool:
     return bool(ops["remove"] or (ops["add"] and ops["explicit"]) or parse.parse_risk_pct(text) is not None
                 or parse.parse_years(text) is not None or parse.parse_move(text) or parse.parse_banks(text)
                 or parse.RESTORE.search(text) or parse.parse_amount_delta(text) is not None
-                or parse.parse_years_delta(text) is not None or parse.vague_change(text))
+                or parse.parse_years_delta(text) is not None or parse.vague_change(text) or parse.parse_split(text))
 
 
 # 'i have 2 lakh rupees what should i do with it': a sum of money plus a saving/investing word starts a plan

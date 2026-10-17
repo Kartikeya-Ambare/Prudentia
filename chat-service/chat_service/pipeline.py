@@ -176,6 +176,10 @@ class ChatPipeline:
                 and not (ops_now["remove"] or ops_now["add"] or (ops_now["only"] and ops_now["explicit"])):
             self.trace.path = "move_unclear"                     # looks like a move between two classes that the rules could not read:
             return self._resp(s, replies.MOVE_UNCLEAR, "rebalance", missing=["move"])   # ask, never guess an amount edit
+        split_spec = parse.parse_split(text)
+        if split_spec:
+            self.trace.path = "rule_split"
+            return self._set_split(s, split_spec, text)
         bank_choice = parse.parse_banks(text)
         if bank_choice:
             self.trace.path = "rule_banks"
@@ -800,6 +804,56 @@ class ChatPipeline:
     # ------------------------------------------------------------------ rebalance / drift
     def _pid(self, s: Session) -> Optional[str]:
         return s.profile_id or (s.result or {}).get("profile_id")
+
+    def _set_split(self, s: Session, spec: dict, text: str) -> dict:
+        """'make the split 33 33 33' / 'equal split' / '70% in fd': set the share of each class, on the latest plan."""
+        if not self._pid(s) or not self._ensure_loaded(s):
+            return self._resp(s, replies.t("need_plan"), "rebalance")
+        keys = ("stocks", "mf", "fd")
+        bucket_of = {"stocks": "stock", "mf": "mf", "fd": "bank"}
+        cur = {k: float((s.result.get("split_pct") or {}).get(bucket_of[k], 0.0)) for k in keys}
+        if spec.get("equal"):
+            named = [{"stock": "stocks", "mf": "mf", "bank": "fd"}[b] for b in
+                     (parse._bucket(c) for c in classes_in(text)) if b] if len(classes_in(text)) >= 2 else []
+            among = named or [k for k in keys if k in (s.params.get("classes") or keys)]
+            target = {k: (100.0 / len(among) if k in among else 0.0) for k in keys}
+        else:
+            w = dict(spec["weights"])
+            if spec.get("complete"):
+                total = sum(w.values())
+                if not 98 <= total <= 102:
+                    return self._resp(s, replies.t("split_total", total=replies.num(round(total, 1))), "rebalance")
+                target = {k: w[k] * 100.0 / total for k in keys}
+            else:
+                others = [k for k in keys if k not in w]
+                left = 100.0 - sum(w.values())
+                if left < -0.01:
+                    return self._resp(s, replies.t("split_total", total=replies.num(round(sum(w.values()), 1))), "rebalance")
+                weight = {k: cur[k] for k in others}
+                if sum(weight.values()) <= 0:                      # the others hold nothing right now: share equally among the plan's classes
+                    weight = {k: 1.0 for k in others if k in (s.params.get("classes") or keys)}
+                share = sum(weight.values())
+                if share <= 0 and left > 0.01:
+                    return self._resp(s, replies.t("split_total", total=replies.num(round(sum(w.values()), 1))), "rebalance")
+                target = {k: 0.0 for k in keys}
+                target.update(w)
+                if share > 0:
+                    target.update({k: left * v / share for k, v in weight.items()})
+        target = {k: round(v, 4) for k, v in target.items()}
+        classes = [k for k in keys if target[k] > 0.0001]
+        manual = {k: target[k] for k in classes}
+        manual[classes[0]] = round(manual[classes[0]] + 100.0 - sum(manual.values()), 4)       # adds up to exactly 100
+        try:
+            out = self.engine.update_plan(self._pid(s), {"classes": classes, "manual_split": manual})
+        except EngineError as exc:
+            return self._engine_error(s, exc, "rebalance")
+        s.snapshot()                                                # one undo step
+        res = out["allocation"]
+        self._adopt(s, res)
+        s.awaiting, s.pending_move = [], None
+        shown = " / ".join(f"{replies.CLASS_LABEL[k]} {replies.num(round(manual[k], 1))}%" for k in classes)
+        return self._resp(s, f"Done. The split is now {shown}. " + replies.allocation_reply(res, self._risk_text(s.params)),
+                          "rebalance", result=res, missing=[])
 
     def _rebalance(self, s: Session, mv: dict) -> dict:
         pid = self._pid(s)

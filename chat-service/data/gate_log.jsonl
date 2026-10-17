@@ -452,3 +452,10 @@
 {"t": 1792216033.8626652, "message": "is it safe", "action": "unsure", "label": "in", "conf": 0.471}
 {"t": 1792218065.5935771, "message": "move everything to stocks", "action": "unsure", "label": "in", "conf": 0.432}
 {"t": 1792218093.689663, "message": "undo that", "action": "unsure", "label": "in", "conf": 0.588}
+{"t": 1792218565.827531, "message": "move everything to stocks", "action": "unsure", "label": "in", "conf": 0.432}
+{"t": 1792218593.6551695, "message": "undo that", "action": "unsure", "label": "in", "conf": 0.588}
+{"t": 1792219082.051162, "message": "fd aur stocks ka sab paisa mf me daalo", "action": "unsure", "label": "in", "conf": 0.641}
+{"t": 1792219227.5440056, "message": "set stocks to 60 percent", "action": "unsure", "label": "in", "conf": 0.624}
+{"t": 1792219237.083154, "message": "what is a stock", "action": "unsure", "label": "in", "conf": 0.433}
+{"t": 1792219238.2199638, "message": "what is stock", "action": "unsure", "label": "in", "conf": 0.613}
+{"t": 1792219242.776272, "message": "stock kya hota hai", "action": "unsure", "label": "in", "conf": 0.528}

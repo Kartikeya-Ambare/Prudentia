@@ -58,6 +58,7 @@ M: dict[str, str] = {
     "bank_no_fd": "Your plan has no FD right now, so there are no banks to pick. Say 'add FD' first.",
     "bank_last": "At least one bank has to stay in the plan.",
     "no_money_in": "There is no money in {c} right now, so nothing can be moved out of it.",
+    "split_total": "Those percentages add up to {total}, so I can't use them. The split has to add up to 100, for example 'stocks 50%, mutual funds 30%, FD 20%' or just '70% in FD'.",
     "need_plan": "Let's create a plan first. Tell me the amount, the number of years and your risk level, and then I can do that.",
     "rejected": "That change couldn't be applied: {detail}",
     "years_rounded": "Years are whole numbers here, so {a} became {b}.",
@@ -175,6 +176,9 @@ GLOSSARY: list[tuple[str, str, str]] = [
     ("mutual fund", r"mutual\s+funds?|\bmfs?\b",
      "A mutual fund pools money from many investors, and a fund manager invests it in stocks or bonds. "
      "You get units, and their value moves up and down with the market."),
+    ("stock", r"\b(stocks?|shares?)\b",
+     "A stock (or share) is a small piece of ownership in a company. Its price moves up and down every day, so it can grow "
+     "more than an FD but can also fall, sometimes for years."),
     ("FD", r"\bfds?\b|fixed\s+deposits?",
      "An FD (fixed deposit) is money you keep with a bank for a fixed period at a fixed interest rate. "
      "It carries low risk, and the return is usually lower than stocks."),

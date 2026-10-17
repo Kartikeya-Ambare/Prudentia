@@ -635,3 +635,47 @@ def test_removing_a_class_keeps_the_moves_made_so_far(make_pipe):
     p.handle(S, "move 30% from stocks to fd")          # stocks 12.5, mf 37.5, fd 50
     r = p.handle(S, "remove mutual funds")
     assert "kept your split" in r["reply"] and r["result"]["split_pct"]["bank"] > 70
+
+
+# ------------------------------------------------------------------------------------ requirements from the planning call
+@pytest.mark.parametrize("msg,dst", [("move fd and stocks to mf", "mf"), ("move stocks and mf to fd", "bank"), ("move fd and mf to stocks", "stock"),
+                                     ("fd aur stocks ka sab paisa mf me daalo", "mf"), ("mf aur stocks dono ka paisa fd me daal do", "bank")])
+def test_two_sources_into_one_class_in_one_go(make_pipe, msg, dst):
+    r = seeded(make_pipe, judge="in").handle(S, msg)
+    assert r["intent"] == "rebalance" and r["result"]["split_pct"][dst] == 100.0
+
+
+@pytest.mark.parametrize("msg,want", [("make the split 33 33 33", (33.33, 33.33, 33.33)), ("split 50/30/20", (50, 30, 20)),
+                                      ("stocks 50% mf 30% fd 20%", (50, 30, 20))])
+def test_set_the_whole_split(make_pipe, msg, want):
+    r = seeded(make_pipe, judge="in").handle(S, msg)
+    got = r["result"]["split_pct"]
+    assert r["intent"] == "rebalance" and all(abs(got[k] - x) < 1 for k, x in zip(("stock", "mf", "bank"), want))
+
+
+def test_set_one_class_and_the_others_share_the_rest(make_pipe):
+    r = seeded(make_pipe, judge="in").handle(S, "I want 70% in fd")
+    got = r["result"]["split_pct"]
+    assert round(got["bank"]) == 70 and round(got["stock"] + got["mf"]) == 30
+
+
+def test_equal_split(make_pipe):
+    got = seeded(make_pipe, judge="in").handle(S, "make it an equal split")["result"]["split_pct"]
+    assert all(abs(v - 33.33) < 1 for v in got.values())
+
+
+def test_a_split_that_does_not_add_up_is_refused(make_pipe):
+    r = seeded(make_pipe, judge="in").handle(S, "stocks 80% mf 50% fd 40%")
+    assert "add up" in r["reply"] and r["result"] is None or "add up" in r["reply"]
+
+
+def test_what_is_a_stock(make_pipe):
+    r = seeded(make_pipe, judge="in").handle(S, "what is a stock")
+    assert r["intent"] == "ask_app" and "ownership" in r["reply"]
+
+
+def test_chained_actions_after_setting_the_split(make_pipe):
+    p = seeded(make_pipe, judge="in")
+    p.handle(S, "make the split 50/30/20")
+    r = p.handle(S, "move all money from mf to fd")
+    assert r["result"]["split_pct"]["bank"] == 50.0 and r["result"]["split_pct"]["mf"] == 0.0

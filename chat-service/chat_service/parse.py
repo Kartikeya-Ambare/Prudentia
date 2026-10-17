@@ -286,6 +286,8 @@ def _bucket(word: str) -> Optional[str]:
 
 _SEP = r"(?:,|&|\+|\band\b|\baur\b)"
 _MOVE_MULTI_SRC = re.compile(rf"(?:from\s+)?\b{_CL}\s*{_SEP}\s*{_CL}\s+(?:se|to|into|->|→)\s+{_CL}\b", re.I)
+_MOVE_MULTI_HI = re.compile(rf"\b{_CL}\s*{_SEP}\s*{_CL}\s+(?:dono\s+)?(?:ka|ke|ki)\s+(?:sab\s+|saara\s+|sara\s+|poora\s+|pura\s+|sabhi\s+)?"
+                            rf"(?:paisa|paise|money|amount)?\s*(?:\w+\s+){{0,2}}?{_CL}\s+(?:me|mein|mai|ko)\b", re.I)   # 'fd aur stocks ka sab paisa mf me daalo'
 _MOVE_MULTI_DST = re.compile(rf"\b{_CL}\s+(?:se|to|into|->|→)\s+{_CL}\s*{_SEP}\s*{_CL}\b", re.I)
 
 
@@ -294,7 +296,7 @@ def parse_move(text: str) -> dict:
     and 'multi_dest' is True when it should go to two (not supported: one move at a time). Empty dict if this is not a
     move request."""
     t = words_to_digits(normalise(text))
-    mm = _MOVE_MULTI_SRC.search(t)
+    mm = _MOVE_MULTI_SRC.search(t) or _MOVE_MULTI_HI.search(t)
     if mm:
         srcs = [b for b in (_bucket(mm.group(1)), _bucket(mm.group(2))) if b]
         dst = _bucket(mm.group(3))
@@ -306,7 +308,7 @@ def parse_move(text: str) -> dict:
                 c = _candidates(t, allow_bare=True)
                 amt = c[-1] if c else None
             out = {"from": srcs[0], "sources": srcs, "to": dst, "pct": pct, "amount": amt}
-            if pct is None and amt is None and _ALL_MONEY.search(t):
+            if pct is None and amt is None:                  # two sources with no amount: all of both (the user said so by naming two)
                 out["all"] = True
             return out
     md = _MOVE_MULTI_DST.search(t)
@@ -389,6 +391,42 @@ def parse_move(text: str) -> dict:
         elif _QUARTER.search(t):
             out["fraction"] = 0.25
     return out
+
+
+# ------------------------------------------------------------------------------ setting the split ('33 33 33', '70% in fd')
+_SPLIT_WORD = re.compile(r"\b(split|ratio|allocation|distribution|divide|divided|distribute|baanto|bant\w*|breakdown)\b", re.I)
+_EQUAL = re.compile(r"\b(equal|equally|even|evenly|barabar|samaan|sama)\b", re.I)
+_TRIPLE = re.compile(r"(?<![\d.])(\d+(?:\.\d+)?)\s*%?\s*(?:/|,|:|-|\s)\s*(\d+(?:\.\d+)?)\s*%?\s*(?:/|,|:|-|\s)\s*(\d+(?:\.\d+)?)\s*%?(?![\d.])")
+_CLASS_PCT = re.compile(rf"\b{_CL}\s*(?:to|=|:|at|ko|ho|@|-)?\s*(\d+(?:\.\d+)?)\s*(?:%|percent)|"
+                        rf"(\d+(?:\.\d+)?)\s*(?:%|percent)\s*(?:of\s+(?:it|my\s+money|the\s+plan|everything)\s+)?(?:in|into|to|on|me|mein|mai)\s+{_CL}\b", re.I)
+_KEY_OF = {"stock": "stocks", "mf": "mf", "bank": "fd"}
+
+
+def parse_split(text: str) -> dict:
+    """The user is setting the split between the asset classes. {} if not; otherwise one of
+    {'equal': True} | {'weights': {'stocks': 50, 'mf': 30, 'fd': 20}, 'complete': True} (all three given, in the plan's order
+    when they are bare numbers) | {'weights': {'fd': 70}, 'complete': False} (the rest is shared by the others)."""
+    t = words_to_digits(normalise(text))
+    if re.search(r"\brisk\b", t, re.I) or parse_move(t) or _REMOVE.search(t):
+        return {}
+    if _QUESTION_START.match(t) or re.search(r"\b(what\s+if|if\s+i|safe|safer|should|would|better|good)\b", t, re.I):
+        return {}                                          # a question or a what-if is answered, not applied
+    if _EQUAL.search(t) and (_SPLIT_WORD.search(t) or classes_in(t)):
+        return {"equal": True}
+    m = _TRIPLE.search(t)
+    if m and (_SPLIT_WORD.search(t) or "%" in t or re.search(r"\b(percent|pratishat)\b", t, re.I)):
+        a, b, c = (float(m.group(i)) for i in (1, 2, 3))
+        if 98 <= a + b + c <= 102 and not re.search(r"\b(years?|saal|lakhs?|lacs?|crores?)\b", t, re.I):
+            return {"weights": {"stocks": a, "mf": b, "fd": c}, "complete": True}
+    found: dict[str, float] = {}
+    for mm in _CLASS_PCT.finditer(t):
+        cls, val = (mm.group(1), mm.group(2)) if mm.group(1) else (mm.group(4), mm.group(3))
+        b = _bucket(cls)
+        if b:
+            found[_KEY_OF[b]] = float(val)
+    if not found or any(not 0 <= v <= 100 for v in found.values()):
+        return {}
+    return {"weights": found, "complete": len(found) == 3}
 
 
 _HALF = re.compile(r"\b(half|aadha|adha|aadhe|adhe)\b", re.I)
