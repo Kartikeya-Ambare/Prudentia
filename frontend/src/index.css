@@ -158,6 +158,11 @@
     -webkit-text-size-adjust: 100%;
   }
   html[data-theme="dark"] { color-scheme: dark; }
+  /* On desktop the app is one frame the height of the window, and its content scrolls inside it. The page itself never scrolls:
+     at fractional zoom (125%, 150%) that frame can round a pixel taller than the window, which drew a second scrollbar. */
+  @media (min-width: 768px) {
+    html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
+  }
   body {
     margin: 0;
     background-color: var(--color-page);
