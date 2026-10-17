@@ -25,6 +25,8 @@ def load_config(path: Path = CONFIG_PATH) -> SimpleNamespace:
         cfg.engine.mode = os.environ["CHAT_ENGINE_MODE"]
     if os.environ.get("CHAT_ENGINE_URL"):
         cfg.engine.base_url = os.environ["CHAT_ENGINE_URL"]
+    if os.environ.get("CHAT_OLLAMA_HOST"):                      # e.g. http://ollama:11434 when Ollama runs in its own container
+        cfg.chat.ollama_host = os.environ["CHAT_OLLAMA_HOST"]
     return cfg
 
 

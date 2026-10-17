@@ -56,3 +56,33 @@ jobs:
         with:
           name: logs-${{ matrix.os }}-py${{ matrix.python }}
           path: logs/
+
+  deploy-bundle:
+    # Proves the Docker deployment builds and serves: the images build, and through the one public address the page loads,
+    # the backend answers and the chat replies (small talk needs no language model, so Ollama is left out here).
+    name: docker compose build and smoke test
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the images
+        run: docker compose build
+
+      - name: Start backend, chat and web
+        run: docker compose up -d --no-deps backend chat web
+
+      - name: Check it through the public address
+        run: |
+          for i in $(seq 1 60); do curl -fs http://localhost/api/health >/dev/null && break; sleep 5; done
+          curl -fs http://localhost/api/health
+          curl -fs http://localhost/ | grep -qi "<div id=\"root\""
+          curl -fs http://localhost/stocks | grep -qi "<div id=\"root\""
+          curl -fs -X POST http://localhost/chat-api/chat -H 'content-type: application/json' \
+            -d '{"session_id":"ci","message":"hi"}' | grep -qi "Prudie"
+          curl -fs -X POST http://localhost/api/plan -H 'content-type: application/json' \
+            -d '{"capital":500000,"horizon_years":5,"risk_thermometer":50}' | grep -q "profile_id"
+
+      - name: Show the logs if something failed
+        if: failure()
+        run: docker compose logs --no-color --tail=100

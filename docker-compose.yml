@@ -1,0 +1,84 @@
+# The whole app on one machine:   docker compose up -d --build
+# Then open  http://<the server's address>   (see "Deploy" in README.md)
+services:
+  ollama:                              # the local language model server
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    volumes:
+      - ollama:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  ollama-init:                         # downloads the two models once, then exits
+    image: ollama/ollama:latest
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    entrypoint: ["/bin/sh", "-c", "ollama pull qwen2.5:1.5b-instruct && ollama pull llama3.2:1b"]
+    restart: "no"
+
+  backend:
+    build:
+      context: .
+      dockerfile: deploy/backend.Dockerfile
+    restart: unless-stopped
+    volumes:
+      - appdata:/app/backend/data      # the database and forecasts: kept across restarts and updates
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:8000/health', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  chat:
+    build:
+      context: .
+      dockerfile: deploy/chat.Dockerfile
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+      ollama-init:                     # first start only: waits until the models are downloaded
+        condition: service_completed_successfully
+
+  scheduler:                           # refreshes prices, NAVs and forecasts on weekday evenings, by itself
+    build:
+      context: .
+      dockerfile: deploy/backend.Dockerfile
+    restart: unless-stopped
+    command: ["python", "scripts/scheduler.py"]
+    environment:
+      REFRESH_TIME: ${REFRESH_TIME:-20:30}
+      REFRESH_TZ: ${REFRESH_TZ:-Asia/Kolkata}
+    volumes:
+      - appdata:/app/backend/data
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  web:                                 # the only public service: the frontend plus the routes to backend and chat
+    build:
+      context: .
+      dockerfile: deploy/web.Dockerfile
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+    volumes:
+      - caddy_data:/data
+    depends_on:
+      - backend
+      - chat
+
+volumes:
+  ollama:
+  appdata:
+  caddy_data:

@@ -343,6 +343,35 @@ Defaults work out of the box. Override only if you need to.
 | `VITE_API_URL`, `VITE_CHAT_URL` | environment or `frontend/.env` (see `frontend/.env.example`) | set automatically by `run.py` |
 | Models and limits (amount 10,000 to 10 crore, 1 to 40 years, 300 characters, 1 message per second) | `chat-service/config.yaml` | as listed |
 
+## ☁️ Deploy it (free Oracle Cloud VM)
+
+The whole app runs from one `docker compose` file and looks after itself: a scheduler container refreshes prices, fund NAVs and
+forecasts every weekday at 20:30 India time, so nobody has to open the site or run anything.
+
+1. **Create the machine.** On [Oracle Cloud's Always Free tier](https://www.oracle.com/cloud/free/) create an *Ampere A1* VM (Ubuntu 22.04, up to 4 cores and 24 GB RAM). In its network settings (the VCN security list) allow incoming TCP on ports **80** and **443**.
+2. **Open the machine's own firewall** (the Ubuntu image blocks ports by default) and install Docker:
+   ```bash
+   sudo iptables -I INPUT -p tcp --dport 80 -j ACCEPT && sudo iptables -I INPUT -p tcp --dport 443 -j ACCEPT
+   curl -fsSL https://get.docker.com | sudo sh && sudo usermod -aG docker $USER   # then log out and back in
+   ```
+3. **Get the code and start everything:**
+   ```bash
+   git clone https://github.com/Kartikeya-Ambare/Prudentia.git && cd Prudentia
+   docker compose up -d --build
+   ```
+   The first start builds the images and downloads the two language models, which takes 10 to 20 minutes. Follow it with `docker compose logs -f`.
+4. **Open** `http://<the VM's public IP>`. For a name and HTTPS, point a domain at the IP and start with `SITE_ADDRESS=your.domain docker compose up -d`.
+
+| Service | What it does |
+|---|---|
+| `web` | The only public service: the frontend, with `/api` forwarded to the backend and `/chat-api` to the chat service |
+| `backend`, `chat` | The allocation engine and the chat service |
+| `ollama`, `ollama-init` | The local language model server, and a one-time download of its models |
+| `scheduler` | Runs `backend/scripts/refresh_data.py` on weekdays (change with `REFRESH_TIME` and `REFRESH_TZ`); forecasts are fully recomputed on Fridays |
+
+Data lives in Docker volumes, so it survives restarts and updates. Update the app with `git pull && docker compose up -d --build`.
+Check the refresh with `docker compose logs scheduler`, or run one now with `docker compose exec backend python scripts/refresh_data.py`.
+
 ## 🔌 API at a glance
 
 | Method and path | Purpose |

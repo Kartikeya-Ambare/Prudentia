@@ -1,0 +1,31 @@
+# One address for everything. Set SITE_ADDRESS to a domain name (for example prudentia.example.com) and Caddy gets a free
+# HTTPS certificate by itself. Left empty, it serves plain HTTP on the server's IP address.
+{$SITE_ADDRESS::80} {
+	encode gzip
+
+	# Backend: /api/plan -> backend /plan   (the same rule the Vite dev server uses)
+	handle_path /api/* {
+		reverse_proxy backend:8000 {
+			transport http {
+				read_timeout 120s
+			}
+		}
+	}
+
+	# Chat service: /chat-api/chat -> chat service /api/chat
+	handle /chat-api/* {
+		uri replace /chat-api /api
+		reverse_proxy chat:8001 {
+			transport http {
+				read_timeout 120s
+			}
+		}
+	}
+
+	# The built frontend, with the page routes (/stocks, /sectors ...) falling back to index.html
+	handle {
+		root * /srv
+		try_files {path} /index.html
+		file_server
+	}
+}

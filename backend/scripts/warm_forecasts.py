@@ -23,7 +23,11 @@ from backend.forecasting.forecaster import forecast_ticker
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--force", action="store_true", help="recompute even when a recent forecast is cached")
-    force = ap.parse_args().force
+    warm(ap.parse_args().force)
+
+
+def warm(force: bool = False) -> tuple[int, int]:
+    """Make sure every stock and fund has a forecast. Returns (ready, skipped). Also used by refresh_data.py."""
     with get_engine().connect() as conn:
         tickers = sorted({r[0] for r in conn.execute(select(prices.c.ticker).distinct())})
         codes = sorted({str(r[0]) for r in conn.execute(select(mf_nav.c.scheme_code).distinct())})
@@ -44,6 +48,7 @@ def main() -> None:
         if i % 20 == 0 or i == len(jobs):
             print(f"{i}/{len(jobs)} done, {time.time() - start:.0f}s", flush=True)
     print(f"warm-up finished: {ok} forecasts ready, {bad} skipped, {time.time() - start:.0f}s", flush=True)
+    return ok, bad
 
 
 if __name__ == "__main__":
