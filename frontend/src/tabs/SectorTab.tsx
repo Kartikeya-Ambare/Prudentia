@@ -112,7 +112,14 @@ function CombinedSectors({ funds }: { funds: { name: string; weight: number }[] 
 
   const ranked = Object.entries(totals).map(([name, v]) => ({ name, share: (v / covered) * 100 })).sort((a, b) => b.share - a.share);
   const top = ranked;
-  const segments = ranked.map((r) => ({ key: r.name, label: r.name, value: r.share, color: sectorColor(r.name) }));
+  // A donut stays readable up to about six slices: the five biggest sectors, and the rest together.
+  const MAX_SLICES = 6;
+  const head = ranked.length > MAX_SLICES ? ranked.slice(0, MAX_SLICES - 1) : ranked;
+  const rest = ranked.length > MAX_SLICES ? ranked.slice(MAX_SLICES - 1) : [];
+  const segments = [
+    ...head.map((r) => ({ key: r.name, label: r.name, value: r.share, color: sectorColor(r.name) })),
+    ...(rest.length ? [{ key: "other-sectors", label: `Other sectors (${rest.length})`, value: rest.reduce((a, r) => a + r.share, 0), color: "var(--sector-diversified)" }] : []),
+  ];
 
   return (
     <div data-enter-item className="panel p-5 sm:p-6">

@@ -55,6 +55,7 @@ export function PlanForm({ full }: { full: boolean }) {
   const bankError = full && classes.includes("fd") && bankMode === "pick" && bankNames.length === 0 ? t("banksNeedOne") : null;
   const blocked = !!splitError || !!bankError;
   const [shake, setShake] = useState(0);
+  const [editing, setEditing] = useState(false);          // with a plan on screen the form folds into one line; "Edit inputs" opens it
   const [justDone, setJustDone] = useState(false);          // "Plan ready" for a moment after a build, then the button goes back
 
   function submit() {
@@ -74,11 +75,38 @@ export function PlanForm({ full }: { full: boolean }) {
       onSuccess: (r) => {
         setLastResult(r, asked);
         setJustDone(true);
+        setEditing(false);
         setTimeout(() => setJustDone(false), 1800);
         // Keep every plan in the chat timeline, so a later change from the chat never makes the earlier result disappear.
         addMessage({ role: "assistant", content: current ? "Your plan is updated." : "Here is your plan.", allocation: asPlan(r) }, asked);
       },
     });
+  }
+
+  function openEditor() {
+    // The plan may have been changed from the chat: start the form from what is on screen now.
+    if (current) {
+      const sum = current.bucket_projections.reduce((a, b) => a + b.present_value, 0);
+      setCapital(Math.round(current.plan_request?.capital ?? sum));
+      setHorizon(current.horizon_years);
+      setRisk(Math.round(current.risk_thermometer));
+      if (current.classes?.length) setClasses(current.classes as AssetClass[]);
+    }
+    setEditing(true);
+  }
+
+  if (full && current && !editing) {
+    const sum = current.bucket_projections.reduce((a, b) => a + b.present_value, 0);
+    return (
+      <div className="panel flex flex-wrap items-center justify-between gap-3 px-5 py-4">
+        <p className="num min-w-0 text-[14.5px] leading-6">
+          <span className="font-semibold">Rs. {Math.round(current.plan_request?.capital ?? sum).toLocaleString("en-IN")}</span>
+          {` for ${current.horizon_years} ${current.horizon_years === 1 ? "year" : "years"}, risk ${Math.round(current.risk_thermometer)} out of 100`}
+          <span className="text-ink-3">{`, in ${(current.classes ?? []).map((c) => label(c as AssetClass)).join(", ")}`}</span>
+        </p>
+        <Button variant="secondary" onClick={openEditor}>Edit inputs</Button>
+      </div>
+    );
   }
 
   return (
@@ -161,7 +189,7 @@ export function PlanForm({ full }: { full: boolean }) {
                     </Field>
                   ))}
                   <p key={splitError ? shake : "ok"} className={`num text-[13px] leading-5 sm:col-span-3 ${splitError ? `text-loss ${shake ? "shake" : ""}` : "text-ink-3"}`} role={splitError ? "alert" : undefined}>
-                    {t("splitTotal")}: {splitTotal}% {splitError && `— ${splitError}`}
+                    {t("splitTotal")}: {splitTotal}%{splitError && `. ${splitError}`}
                   </p>
                 </div>
               )}
@@ -171,7 +199,7 @@ export function PlanForm({ full }: { full: boolean }) {
       )}
 
       <div className="mt-6 flex flex-col gap-4">
-        <div>
+        <div className="flex flex-wrap items-center gap-3">
           <Button onClick={submit} disabled={plan.isPending} aria-live="polite" className="w-full sm:min-w-[240px] sm:w-auto">
             {plan.isPending ? (
               <><DotMatrixLoader dot={4} gap={2} label="Building your plan" />Building your plan…</>
@@ -181,6 +209,7 @@ export function PlanForm({ full }: { full: boolean }) {
               current ? t("updatePlan") : t("getPlan")
             )}
           </Button>
+          {full && current && <Button variant="secondary" onClick={() => setEditing(false)} disabled={plan.isPending}>Cancel</Button>}
         </div>
         {plan.isError && <Alert tone="error">{t("failed")}: {plan.error.message}</Alert>}
       </div>

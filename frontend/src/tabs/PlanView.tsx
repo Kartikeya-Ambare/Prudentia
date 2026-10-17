@@ -1,6 +1,6 @@
 import { lazy, Suspense, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import clsx from "clsx";
-import { CurrencyInrIcon, HourglassMediumIcon, ShieldCheckIcon, TrendUpIcon, type Icon } from "@phosphor-icons/react";
+import { ArrowRightIcon, CurrencyInrIcon, HourglassMediumIcon, ShieldCheckIcon, TrendUpIcon, type Icon } from "@phosphor-icons/react";
 import type { Bucket, InstrumentWeight, PlanResult, ValueProjection } from "@/api/types";
 import { gsapReady, NO_REDUCED_MOTION, REDUCED_MOTION } from "@/lib/gsap";
 import { number, pct, whole } from "@/lib/format";
@@ -63,13 +63,13 @@ function Metric({ value, tone }: { value: number; tone?: "gain" }) {
 
 export function Kpi({ label, icon: Icon, note, children }: { label: string; icon: Icon; note?: string; children: ReactNode }) {
   return (
-    <li data-enter-item className="panel flex min-w-0 flex-col gap-2 px-4 py-3">
-      <p className="flex items-center gap-2 text-[13px] leading-5 text-ink-2">
-        <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent"><Icon size={16} weight="bold" aria-hidden /></span>
+    <li data-enter-item className="panel flex min-w-0 flex-col gap-1 px-4 py-3.5">
+      <p className="flex items-center gap-2.5 text-[13px] leading-5 text-ink-2">
+        <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent"><Icon size={17} weight="bold" aria-hidden /></span>
         <span className="min-w-0 truncate">{label}</span>
       </p>
-      <p className="whitespace-nowrap text-center text-[22px] font-semibold leading-8 tracking-[-0.01em]">{children}</p>
-      <p className="h-4 text-center text-[12px] leading-4 text-ink-3">{note}</p>
+      <p className="num mt-1.5 whitespace-nowrap text-[26px] font-semibold leading-8 tracking-[-0.01em]">{children}</p>
+      <p className="min-h-4 truncate text-[12.5px] leading-4 text-ink-3">{note}</p>
     </li>
   );
 }
@@ -197,15 +197,15 @@ export function PlanView({ result }: { result: PlanResult }) {
       {result.warnings.map((w) => <Alert key={w} tone="warning" className="mb-4">{w}</Alert>)}
 
       <p className="num mb-3 text-[13px] leading-5 text-ink-3">
-        {result.horizon_years} {t("yearsUnit")} · volatility {pct(result.expected_volatility_pct)} {t("perYear")}{latest ? ` · prices as of ${shortDate(latest)} ${latest.slice(0, 4)}` : ""}
+        {result.horizon_years} {t("yearsUnit")}, volatility {pct(result.expected_volatility_pct)} {t("perYear")}{latest ? `. Prices as of ${shortDate(latest)} ${latest.slice(0, 4)}.` : "."}
       </p>
       <ul className="grid grid-cols-2 gap-3 @2xl:grid-cols-4">
-        <Kpi label={`${t("invested")} (Rs.)`} icon={CurrencyInrIcon} note={unallocated > 1 ? `of Rs. ${whole(requested)}` : "today"}>
-          <span className="num">{whole(total)}</span>
+        <Kpi label={t("invested")} icon={CurrencyInrIcon} note={unallocated > 1 ? `of Rs. ${whole(requested)}` : "today"}>
+          <span className="mr-1 text-[15px] font-medium text-ink-3">Rs.</span><span className="num">{whole(total)}</span>
         </Kpi>
-        <Kpi label={`In ${result.horizon_years} ${t("yearsUnit")} (Rs.)`} icon={HourglassMediumIcon}
+        <Kpi label={`After ${result.horizon_years} ${t("yearsUnit")}`} icon={HourglassMediumIcon}
           note={expectedCase && cautiousCase && optimisticCase ? `${compact(cautiousCase.projected_value)} to ${compact(optimisticCase.projected_value)}` : "expected"}>
-          <span className="num">{whole(expectedCase?.projected_value ?? result.bucket_projections.reduce((a, b) => a + b.projected_value, 0))}</span>
+          <span className="mr-1 text-[15px] font-medium text-ink-3">Rs.</span><span className="num">{whole(expectedCase?.projected_value ?? result.bucket_projections.reduce((a, b) => a + b.projected_value, 0))}</span>
         </Kpi>
         <Kpi label={t("kpiReturn")} icon={TrendUpIcon} note={`${t("perYear")}, ${t("afterTax")}`}>
           <Metric value={result.expected_return_pct} tone="gain" />
@@ -248,7 +248,7 @@ export function PlanView({ result }: { result: PlanResult }) {
 
         <Card title={t("byClass")} aside={<ViewToggle value={classView} onChange={setClassView} />}>
           {classView === "chart" ? (
-            <Suspense fallback={<ChartFallback />}><BucketBars rows={live} /></Suspense>
+            <Suspense fallback={<ChartFallback />}><BucketBars rows={live} years={result.horizon_years} /></Suspense>
           ) : (
             <DataTable caption={t("byClass")} columns={projColumns} rows={live} />
           )}
@@ -262,8 +262,30 @@ export function PlanView({ result }: { result: PlanResult }) {
         </Card>
 
         <div className="flex flex-col gap-4">
-          <Card title={t("summary")}>
-            <p className="text-[14.5px] leading-6 text-ink-2">{result.explanation_text}</p>
+          <Card title="How your plan works">
+            <dl className="grid grid-cols-2 gap-x-4 gap-y-3 border-b border-line pb-4 text-[13px] leading-5">
+              <div><dt className="text-ink-3">Risk level</dt><dd className="num mt-0.5 text-[15px] font-semibold">{Math.round(result.risk_thermometer)} out of 100</dd></div>
+              <div><dt className="text-ink-3">Time frame</dt><dd className="num mt-0.5 text-[15px] font-semibold">{result.horizon_years} {t("yearsUnit")}</dd></div>
+            </dl>
+            <ul className="divide-y divide-line">
+              {result.bucket_projections.map((b, i) => ({ ...b, bucket: BUCKET_ORDER[i] })).filter((b) => b.present_value > 0).map((b) => (
+                <li key={b.bucket} className="py-3.5 first:pt-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="flex items-center gap-2.5 text-[14.5px] font-semibold leading-5">
+                      <span className="size-3 shrink-0 rounded-[4px]" style={{ background: BUCKET_COLOR[b.bucket] }} aria-hidden />
+                      {t(BUCKET_KEY[b.bucket])}
+                    </span>
+                    <span className="num text-[13px] leading-5 text-gain">{pct(b.projected_return_pct)} a year</span>
+                  </div>
+                  <p className="num mt-1 flex items-center gap-2 pl-[22px] text-[13.5px] leading-5 text-ink-2">
+                    Rs. {whole(b.present_value)}
+                    <ArrowRightIcon size={14} className="shrink-0 text-ink-3" aria-label="grows to" />
+                    Rs. {whole(b.projected_value)}
+                  </p>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-1 text-[12px] leading-4 text-ink-3">Returns are after tax. Estimates from past data and a model.</p>
             {unallocated > 1 && (
               <p className="num mt-3 text-[12.5px] leading-5 text-ink-3">
                 Rs. {whole(unallocated)} of the Rs. {whole(requested)} you entered is left unallocated by the engine's own limits.
