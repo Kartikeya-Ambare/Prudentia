@@ -364,7 +364,11 @@ class ChatPipeline:
             return Screen("allow", "in", None, cleaned)
         if self.gate is None:
             self.gate = ScopeGate()
-        return screen(message, awaiting=s.awaiting, gate=self.gate, judge=self.judge if self.use_judge else None)
+        judge = self.judge if self.use_judge else None
+        if judge is not None and s.result is not None and any(
+                rx.search(message) for rx in (self._R_ASSESS, self._R_SHOULD, self._R_SHOW, self._R_RESULT, self._R_LIST, self._R_BANKQ)):
+            judge = None           # a rule answers this about the plan: skip the slow model call (the tier-0 refusals still run)
+        return screen(message, awaiting=s.awaiting, gate=self.gate, judge=judge)
 
     # ------------------------------------------------------------------ response helpers
     def _params_out(self, s: Session) -> dict:
