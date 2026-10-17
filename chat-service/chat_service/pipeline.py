@@ -200,6 +200,7 @@ class ChatPipeline:
         r"\b(stocks?|fds?|mf|mutual\s+funds?|bank)\b.{0,25}\b(kitne|kitna|how\s+much|percent)\b|"
         r"\b(kitne|kitna|how\s+much)\b.{0,25}\b(stocks?|fds?|mf|mutual\s+funds?|bank)\b|"
         r"\bhow\s+many\s+(stocks?|shares?|funds?|mutual\s+funds?|mfs?|banks?|instruments?|holdings?)\b|\bkitne\s+(stocks?|funds?|banks?|mf)\b|"
+        r"\breturns?\b.{0,25}\b(stocks?|funds?|mutual\s+funds?|mf|fds?|banks?)\b|\b(stocks?|funds?|mutual\s+funds?|mf|fds?)\b.{0,20}\breturns?\b|"
         r"\bdata\b.{0,25}\b(from|date|latest|fresh|updated|old)\b|\bwhen\b.{0,20}\b(data|prices?|updated)\b|\bhow\s+(old|fresh|recent)\b|"
         r"\b(worth|become|grow\s+to|turn\s+into|end\s+up|final\s+(value|amount))\b.{0,40}\b(after|in|over|years?)\b|"
         r"\bafter\s+\d+\s+years?\b.{0,25}\b(worth|value|amount)\b|\bkitna\s+(ho\s+jayega|ban\s+jayega|badhega|badh\s+jayega)\b", re.I)

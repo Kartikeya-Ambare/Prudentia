@@ -189,7 +189,7 @@ def risk_from_words(text: str) -> str | None:
 _CLASS_SYNONYMS = {
     "stocks": re.compile(r"\b(stocks?|shares?|equit(?:y|ies)|share\s+market)\b|शेयर", re.I),
     "mf": re.compile(r"\b(mutual\s+funds?|mfs?|funds?)\b|म्यूचुअल", re.I),
-    "fd": re.compile(r"\b(fds?|fixed\s+deposits?|deposits?|bank)\b|एफडी", re.I),
+    "fd": re.compile(r"\b(fds?|fixed\s+deposits?|deposits?|banks?)\b|एफडी", re.I),
 }
 
 
