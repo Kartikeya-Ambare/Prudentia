@@ -354,11 +354,22 @@
   @keyframes icon-swap { from { opacity: 0; transform: scale(0.6) rotate(-30deg); filter: blur(3px); } to { opacity: 1; transform: none; filter: blur(0); } }
   .icon-swap { animation: icon-swap 300ms var(--ease-out) both; }
 
+  /* The conversation panel: the scrim fades, the panel slides in from its own edge (Ionic's drawer curve), 260 ms. */
+  @keyframes sheet-fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes sheet-slide { from { transform: translateX(32px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .sheet-scrim { animation: sheet-fade 200ms ease-out both; }
+  .sheet-panel { animation: sheet-slide 260ms cubic-bezier(0.32, 0.72, 0, 1) both; }
+
+  /* Press feedback on anything pressable that opts in with .press: it compresses a little and springs back. */
+  .press { transition: transform 160ms var(--ease-out); }
+  .press:active { transform: scale(0.97); }
+
   /* Dashboard cards wait invisibly until GSAP staggers them in (PlanView); a timeout reveals them if GSAP is slow. */
   [data-enter="pending"] [data-enter-item] { opacity: 0; }
 
   @media (prefers-reduced-motion: reduce) {
-    .rise, .msg-in, .swap, .shake, .unlock, .icon-swap { animation: none !important; }
+    .rise, .msg-in, .swap, .shake, .unlock, .icon-swap, .sheet-panel { animation: none !important; }
+    .sheet-scrim { animation-duration: 1ms !important; }
     .shimmer-text { animation: none; background: none; color: var(--color-ink-2); }
     [data-enter="pending"] [data-enter-item] { opacity: 1; }
   }

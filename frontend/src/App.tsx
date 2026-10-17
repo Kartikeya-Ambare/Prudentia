@@ -2,14 +2,13 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Navigate, NavLink, useLocation } from "react-router";
 import { useIsMutating } from "@tanstack/react-query";
 import {
-  BankIcon, ChartDonutIcon, ChartLineUpIcon, ChartPieSliceIcon, ChatCircleDotsIcon, LockSimpleIcon, SquaresFourIcon, XIcon,
+  BankIcon, ChartDonutIcon, ChartLineUpIcon, ChartPieSliceIcon, LockSimpleIcon, SquaresFourIcon,
 } from "@phosphor-icons/react";
 import clsx from "clsx";
-import { useHealth } from "@/api/hooks";
+import { useDrift, useHealth } from "@/api/hooks";
 import type { Bucket } from "@/api/types";
 import { useSession } from "@/store/session";
 import { useLevel } from "@/store/ui";
-import { useMedia } from "@/lib/useMedia";
 import { useT, type Key } from "@/lib/i18n";
 import { RoutePanel } from "@/components/ui/RoutePanel";
 import { Alert } from "@/components/ui/Feedback";
@@ -19,7 +18,8 @@ import { EngineLoader } from "@/components/viz/DotMatrixLoader";
 import { PlanForm } from "@/tabs/PlanForm";
 import { PlanView } from "@/tabs/PlanView";
 import { ClassPage } from "@/tabs/ClassPage";
-import { ChatPanel } from "@/tabs/ChatPanel";
+import { StartScreen } from "@/tabs/ChatPanel";
+import { AssistantBar, AssistantSheet } from "@/tabs/Assistant";
 import { SectorTab } from "@/tabs/SectorTab";
 
 // Page URLs. Backend calls live under /api/ (see src/api/live.ts), so these never collide with them.
@@ -142,38 +142,12 @@ function TopBar({ title, tagline }: { title: string; tagline: boolean }) {
   );
 }
 
-/** On screens too narrow for a side panel, the chat lives behind a floating button and opens as a sheet. */
-function ChatDrawer() {
+/** Shown above the results when prices have moved since the plan was made. */
+function DriftNotice() {
   const t = useT();
-  const [open, setOpen] = useState(false);
-  return (
-    <>
-      {!open && (
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          className="sl sl-fill fixed bottom-[5.5rem] right-4 z-40 inline-flex min-h-[52px] items-center gap-2 rounded-full bg-brand px-5 text-[14px] font-medium text-on-brand shadow-[0_6px_20px_rgba(20,24,50,0.25)] md:bottom-14"
-        >
-          <ChatCircleDotsIcon size={20} weight="fill" aria-hidden />{t("chatOpen")}
-        </button>
-      )}
-      {open && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 md:items-stretch md:justify-end" onClick={() => setOpen(false)}>
-          <div
-            role="dialog" aria-modal="true" aria-label={t("chat")}
-            className="route-panel relative flex h-[88dvh] w-full flex-col rounded-t-[24px] bg-surface p-3 md:h-auto md:w-[420px] md:rounded-none md:rounded-l-[24px]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button type="button" aria-label={t("chatClose")} onClick={() => setOpen(false)}
-              className="sl absolute right-3 top-3 z-10 flex size-[44px] items-center justify-center rounded-full bg-rail text-ink">
-              <XIcon size={18} aria-hidden />
-            </button>
-            <div className="min-h-0 flex-1"><ChatPanel variant="dock" /></div>
-          </div>
-        </div>
-      )}
-    </>
-  );
+  const plan = useSession((s) => s.lastResult);
+  const drift = useDrift(plan?.profile_id);
+  return drift.data?.drifted ? <Alert tone="warning">{t("drifted")}</Alert> : null;
 }
 
 export function App() {
@@ -183,7 +157,6 @@ export function App() {
   const plan = useSession((s) => s.lastResult);
   const level = useLevel((s) => s.level);
   const busy = useIsMutating({ mutationKey: ["plan"] }) > 0;      // chat messages show their own small "Working on it"
-  const wide = useMedia("(min-width: 1280px)");
 
   const page = PAGES.find((p) => p.path === pathname);
   // Unknown addresses (including the old /overview, /starter, /builder) go home. Locked pages do too.
@@ -202,7 +175,8 @@ export function App() {
 
   const home = page.path === "/";
   const onSectors = page.path === "/sectors";
-  // Beginner with no plan yet: the whole screen is the conversation. Otherwise results with the chat docked.
+  // Beginner with no plan yet: the whole screen is the conversation. Otherwise the results take the full width and the
+  // assistant is a bar at the bottom, with the whole conversation one tap away in a panel.
   const chatOnly = level === "beginner" && !plan && home;
 
   return (
@@ -211,15 +185,16 @@ export function App() {
         <div className="mx-auto flex w-full max-w-[1760px] overflow-hidden bg-surface md:h-full md:rounded-[24px]">
           <Sidebar hasPlan={!!plan} />
           <div className="flex min-w-0 flex-1 flex-col">
-          <main className="min-w-0 flex-1 px-4 pb-44 pt-5 sm:px-8 md:flex md:flex-col md:overflow-y-auto md:pb-6 md:pt-6">
+          <main className="min-w-0 flex-1 px-4 pb-44 pt-5 sm:px-8 md:flex md:flex-col md:overflow-y-auto md:pb-0 md:pt-6">
             <TopBar title={t(page.title)} tagline={page.path === "/"} />
             {chatOnly ? (
-              <div className="h-[calc(100dvh-17rem)] min-h-[440px] md:h-auto md:min-h-0 md:flex-1"><ChatPanel variant="full" /></div>
+              <div className="h-[calc(100dvh-17rem)] min-h-[440px] md:h-auto md:min-h-0 md:flex-1"><StartScreen /></div>
             ) : (
-              <div className={clsx("grid items-start gap-6", !onSectors && "xl:grid-cols-[minmax(0,1fr)_340px]")}>
+              <div className="mx-auto flex w-full max-w-[1180px] flex-1 flex-col">
                 <div key={`${pathname}-${level}`} className="route-panel flex min-w-0 flex-col gap-4">
                   {/* At the top and pinned there, so it is seen even when the "Get plan" button is far down a long form. */}
                   {busy && <div className="sticky top-0 z-20"><EngineLoader /></div>}
+                  {plan && !onSectors && <DriftNotice />}
                   {home && level === "expert" && <PlanForm full />}
                   <div className={clsx("transition-opacity duration-300", busy && plan && "pointer-events-none opacity-40")}>
                     {onSectors && <RoutePanel active><SectorTab /></RoutePanel>}
@@ -229,18 +204,16 @@ export function App() {
                     {page.bucket && <ClassPage bucket={page.bucket} />}
                   </div>
                 </div>
-                {!onSectors && wide && (
-                  <div className="xl:sticky xl:top-6 xl:h-[calc(100dvh-8rem)]"><ChatPanel variant="dock" /></div>
-                )}
+                <AssistantBar />
               </div>
             )}
-            {!chatOnly && !wide && !onSectors && <ChatDrawer />}
             <p className="mt-10 text-center text-[12px] leading-4 text-ink-3 md:hidden">{t("disclaimer")}</p>
           </main>
           <footer className="shrink-0 px-8 pb-4 pt-1 text-center text-[12px] leading-4 text-ink-3 max-md:hidden">{t("disclaimer")}</footer>
           </div>
         </div>
       </div>
+      <AssistantSheet />
     </>
   );
 }
